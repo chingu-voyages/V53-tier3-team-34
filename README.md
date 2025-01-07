@@ -35,7 +35,7 @@ your repo access and to practice PR'ing with your team *before* you start
 coding!
 
 - Benjamin Tibardoe: [GitHub](https://github.com/Tibardoe) / [LinkedIn](https://www.linkedin.com/in/tibardoe-benjamin)
-- Teammate name #2: [GitHub](https://github.com/ghaccountname) / [LinkedIn](https://linkedin.com/in/liaccountname)
+- Kaia Cai(Product Designer): [GitHub](https://github.com/Kaiaovo)) / [LinkedIn](https://linkedin.com/in/liaccountname)
 
    ...
 - Teammate name #n: [GitHub](https://github.com/ghaccountname) / [LinkedIn](https://linkedin.com/in/liaccountname)
