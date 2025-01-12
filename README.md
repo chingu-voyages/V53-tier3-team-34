@@ -36,7 +36,7 @@ coding!
 
 - Benjamin Tibardoe: [GitHub](https://github.com/Tibardoe) / [LinkedIn](https://www.linkedin.com/in/tibardoe-benjamin)
 - Kaia Cai(Product Designer): [GitHub](https://github.com/Kaiaovo)) / [LinkedIn](https://linkedin.com/in/liaccountname)
-
+- Oluwatobi Adewuyi (Scrum Master) : [GitHub](https://github.com/Oluwatobbyloba) / [LinkedIn](https://www.linkedin.com/in/oluwatobiadewuyi)
    ...
 - Teammate name #n: [GitHub](https://github.com/ghaccountname) / [LinkedIn](https://linkedin.com/in/liaccountname)
 
