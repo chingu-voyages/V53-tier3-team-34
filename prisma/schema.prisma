@@ -13,15 +13,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users {
-  id Int @id @default(autoincrement())
+model User {
+  id String @id @default(uuid())
   email String @unique
   password String
-  events Events[]
+  events Event[]
+  sessions Session[]
 }
 
-model Events {
-  id Int @id @default(autoincrement())
+model Event {
+  id String @id @default(uuid())
   title String
   date DateTime
   description String?
@@ -34,8 +35,16 @@ model Events {
   eventFee Float?
   publicEvent Boolean @default(false)
   requireGuestApproval Boolean @default(false)
-  author Users @relation(fields: [authorId], references: [id])
-  authorId Int
+  author User @relation(fields: [authorId], references: [id])
+  authorId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Session {
+  id String @id @default(uuid())
+  sessionToken String @unique
+  expires DateTime
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
 }
