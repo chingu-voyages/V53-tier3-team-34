@@ -35,12 +35,10 @@ your repo access and to practice PR'ing with your team *before* you start
 coding!
 
 - Benjamin Tibardoe: [GitHub](https://github.com/Tibardoe) / [LinkedIn](https://www.linkedin.com/in/tibardoe-benjamin)
-- Kaia Cai(Product Designer): [GitHub](https://github.com/Kaiaovo)) / [LinkedIn](https://linkedin.com/in/liaccountname)
+- Kaia Cai(Product Designer): [GitHub](https://github.com/Kaiaovo) / [LinkedIn](https://linkedin.com/in/liaccountname)
 - Oluwatobi Adewuyi (Scrum Master) : [GitHub](https://github.com/Oluwatobbyloba) / [LinkedIn](https://www.linkedin.com/in/oluwatobiadewuyi)
 - Maryam Hazrati (Web Developer) : [GitHub](https://github.com/Maryamh12) / [LinkedIn](https://www.linkedin.com/in/maryam-hazratiii)
-   ...
-- Teammate name #n: [GitHub](https://github.com/ghaccountname) / [LinkedIn](https://linkedin.com/in/liaccountname)
-
+- Murali Singh (Developer) : [GitHub](https://github.com/muraliSingh7) / [LinkedIn](https://www.linkedin.com/in/murali-singh)
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
