@@ -1,4 +1,5 @@
-import React, { type ChangeEvent } from "react";
+import type React from "react";
+import { type ChangeEvent, useRef } from "react";
 import { useCreateEventTheme } from "../create/provider";
 import Tooltip from "./ToolTip";
 
@@ -29,35 +30,29 @@ const Input: React.FC<InputProps> = ({
   isRequired = false,
   className,
 }) => {
-  const [isFocussed, setIsFocussed] = React.useState(false);
+  const ref = useRef<HTMLInputElement>(null);
   const { theme } = useCreateEventTheme();
 
-  const ref = (ref: HTMLDivElement | null) => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (!ref?.contains(event.target as Node)) {
-        setIsFocussed(false);
-      }
-    };
-
-    // Add event listener for outside clicks
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+  const handleClick = () => {
+    if (ref.current) {
+      ref.current.focus();
+    }
   };
 
   return (
     <Tooltip toolTipContent={toolTipContent} isRequired={isRequired}>
       <div
-        ref={ref}
         className={`
-          flex items-center gap-3 p-4 rounded-lg
+          flex items-center gap-3
           ${theme.inputBgColor}
-          ${isFocussed && `border ${theme.focusInputBorderColor}`}
+          ${
+            ref.current &&
+            ref.current === document.activeElement &&
+            `border ${theme.focusInputBorderColor}`
+          }
           backdrop-blur-sm transition-all duration-200 group
         `}
-        onClick={() => setIsFocussed(true)}
+        onClick={handleClick}
       >
         {/* Left icon */}
         {icon && (
@@ -75,14 +70,13 @@ const Input: React.FC<InputProps> = ({
 
         {/* Input field */}
         <input
+          ref={ref}
           type={type}
           name={name}
           value={value}
           onChange={onChange}
           placeholder={placeholder}
           required={isRequired}
-          autoFocus={isFocussed}
-          onFocus={() => setIsFocussed(true)}
           min={type === "number" ? 0 : undefined} // Only set min if type is number
           max={type === "number" ? undefined : undefined} // No max for number type (remove or leave as undefined)
           className={`

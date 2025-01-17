@@ -5,7 +5,7 @@ import Tooltip from "./ToolTip";
 
 interface TextAreaProps {
   name: string;
-  value: string | number;
+  value: string;
   toolTipContent: string;
   placeholder: string;
   onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
@@ -30,11 +30,10 @@ const TextArea: React.FC<TextAreaProps> = ({
         maxLength={1000}
         className={`
         ${theme.inputBgColor}
-        ${theme.inputTextColor}
+        ${theme.textColor}
         ${theme.placeholderTextColor}
-        border-none
         focus:border focus:${theme.focusInputBorderColor}
-        w-full p-2 rounded-md
+        w-full py-2
         outline-none
         `}
       />
