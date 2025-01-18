@@ -1,16 +1,25 @@
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 
-type FileUploadProps = React.ComponentProps<"input">;
+type FileUploadProps = React.ComponentProps<"input"> & {
+  onUpload: () => void;
+};
 type FileUploadPreviewProps = {
   src: string;
   width?: number;
   height?: number;
   imageSize?: number;
+  imageName?: string;
 };
 
 const FileUpload = (props: FileUploadProps) => {
-  return <Input {...props} />;
+  return (
+    <div className="flex gap-3 items-center">
+      <Input {...props} />
+      <Button onClick={() => props.onUpload()}>Upload</Button>
+    </div>
+  );
 };
 
 const FileUploadPreview = ({

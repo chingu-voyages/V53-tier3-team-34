@@ -1,31 +1,55 @@
 "use client";
 import FileUpload, { FileUploadPreview } from "@/components/FileUpload";
-import { type ReactNode, useState } from "react";
+import { useState } from "react";
 
 const FileUploadExample = ({ withPreview }: { withPreview?: boolean }) => {
-  const [src, setSrc] = useState("");
-  const [Preview, setPreview] = useState<ReactNode>(null);
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const [file, setFile] = useState<File | null>(null);
+
+  const showPreview = file && withPreview;
+
+  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const [file] = event.target.files || [];
+
+    if (!file) {
+      return;
+    }
 
     if (file.type.indexOf("image") === -1) {
       alert("Please upload an image file");
       return;
     }
 
-    if (file) {
-      setSrc(URL.createObjectURL(file));
+    setFile(file);
+  };
+
+  const handleUpload = async () => {
+    console.log("Uploading file...");
+
+    if (!file) {
+      return;
     }
 
-    if (withPreview) {
-      setPreview(<FileUploadPreview src={src} imageSize={file.size} />);
-    }
+    const reader = new FileReader();
+    await reader.readAsArrayBuffer(file);
+    reader.onloadend = () => {
+      const arrayBuffer = reader.result as ArrayBuffer;
+      const blob = new Blob([arrayBuffer], { type: file.type });
+    };
   };
 
   return (
     <>
-      <FileUpload type="file" onChange={handleChange} />
-      {Preview}
+      <FileUpload
+        type="file"
+        onChange={handleImageSelect}
+        onUpload={handleUpload}
+      />
+      {showPreview && (
+        <FileUploadPreview
+          src={URL.createObjectURL(file)}
+          imageSize={file.size}
+        />
+      )}
     </>
   );
 };
