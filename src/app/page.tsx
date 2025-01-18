@@ -1,8 +1,27 @@
+import { getServerSession } from "next-auth";
 import Image from "next/image";
+import Link from "next/link";
+import { AuthConfig } from "./api/auth/[...nextauth]/route";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession(AuthConfig);
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      <div className="flex flex-col gap-4 row-start-1 items-center">
+        {session ? (
+          <>
+            <div>{session.user?.email}</div>
+            <Link href="/api/auth/signout">Sign out</Link>
+          </>
+        ) : (
+          <>
+            <Link href="/register">Register</Link>
+            <Link href="/api/auth/signin">Sign in</Link>
+          </>
+        )}
+      </div>
+
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <Image
           className="dark:invert"
