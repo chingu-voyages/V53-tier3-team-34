@@ -1,0 +1,56 @@
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
+import type { AuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
+
+const prisma = new PrismaClient();
+
+if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+  throw new Error("Missing environment variables for Google OAuth");
+}
+
+export const AuthConfig: AuthOptions = {
+  adapter: PrismaAdapter(prisma),
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials.password) {
+          throw new Error("Email and password are required.");
+        }
+
+        const { email, password } = credentials;
+
+        const user = await prisma.user.findUnique({
+          where: { email },
+        });
+
+        if (!user) {
+          throw new Error("No user fround with this email.");
+        }
+
+        const isValid = await bcrypt.compare(password, user.password);
+
+        if (!isValid) {
+          throw new Error("Incorrect password!");
+        }
+
+        return user;
+      },
+    }),
+  ],
+
+  session: {
+    strategy: "jwt",
+  },
+};
