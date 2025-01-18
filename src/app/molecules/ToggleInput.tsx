@@ -19,13 +19,13 @@ const ToggleInput: React.FC<ToggleInputProps> = ({
 }) => {
   const { theme } = useCreateEventTheme();
   return (
-    <div className={`flex items-center space-x-2 ${theme.inputBgColor}`}>
+    <div className={`flex items-center space-x-2 py-2 ${theme.inputBgColor}`}>
       <Switch
         checked={isToggled}
         onCheckedChange={() => {
           onChange(name);
         }}
-        color={theme.toggleSwitchColor}
+        className={theme.toggleSwitchColor}
       />
       <ToolTip toolTipContent={toolTipContent}>
         <span

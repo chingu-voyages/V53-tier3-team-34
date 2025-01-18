@@ -42,7 +42,7 @@ const RSVPMoodEmojiPicker: React.FC<RSVPMoodEmojiPickerProps> = ({
           <EmojiPicker
             previewConfig={{ showPreview: false }}
             onEmojiClick={onEmojiClick}
-            className={`![--epr-hover-bg-color:${theme.emojiPickerHoverBgColor}] ![--epr-bg-color:${theme.emojiPickerBgColor}] ![--epr-category-label-bg-color:${theme.emojiPickerCategoryLabelBgColor}] ![--epr-text-color:${theme.emojiPickerTextColor}]`}
+            className={`${theme.emojiPickerTextColor} ${theme.emojiPickerBgColor} ${theme.emojiPickerHoverBgColor} ${theme.emojiPickerCategoryLabelBgColor}`}
           />
         </PopoverContent>
       </Popover>

@@ -4,7 +4,7 @@ import { LuCrown, LuDollarSign, LuMapPin, LuUsers } from "react-icons/lu"; // As
 import Input from "../molecules/Input";
 import TextArea from "../molecules/TextArea";
 import ToggleInput from "../molecules/ToggleInput";
-import EventChips from "../oragnisms/EventChips";
+import ChipsList from "../oragnisms/ChipsList";
 import { RSVP } from "../oragnisms/RSVP";
 
 interface EventFormData {
@@ -21,6 +21,7 @@ interface EventFormData {
   isPublic: boolean;
   requireGuestApproval: boolean;
   rsvpMoods: RSVPMood[];
+  chips: string[];
 }
 
 export type MoodType = "Attending" | "Maybe" | "Regretfully";
@@ -58,6 +59,7 @@ const EventForm = () => {
         emoji: null,
       },
     ],
+    chips: [],
   });
 
   const handleChange = (
@@ -87,6 +89,17 @@ const EventForm = () => {
         mood.name === name ? { ...mood, emoji } : mood,
       ),
     }));
+  };
+
+  const handleChipsChange = (value: string) => {
+    let chips = formData.chips;
+    if (!chips.includes(value)) {
+      chips = [...chips, value];
+      setFormData((prevState) => ({
+        ...prevState,
+        chips,
+      }));
+    }
   };
 
   return (
@@ -133,8 +146,8 @@ const EventForm = () => {
 
         <Input
           icon={<LuUsers size={18} />}
-          placeholder="Unlimited"
-          postText="spots"
+          placeholder="Number"
+          preText="Bring Guest"
           value={formData.guestCount || ""}
           onChange={handleChange}
           name="guestCount"
@@ -161,7 +174,10 @@ const EventForm = () => {
           onChange={handleToggleChange}
         />
 
-        <EventChips />
+        <ChipsList
+          selectedChips={formData.chips}
+          onChange={handleChipsChange}
+        />
 
         <TextArea
           name="description"
