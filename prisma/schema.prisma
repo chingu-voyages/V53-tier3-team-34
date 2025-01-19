@@ -26,14 +26,14 @@ model Event {
   title String
   date DateTime
   description String?
-  eventReason String?
+  reason String?
   guestHonor String?
   host String?
-  guestsNumber Int?
-  eventAddress String?
-  outdoor Boolean @default(false)
-  eventFee Float?
-  publicEvent Boolean @default(false)
+  guestCount Int?
+  address String?
+  isOutdoor Boolean @default(false)
+  costPerPerson Float?
+  isPublic Boolean @default(false)
   requireGuestApproval Boolean @default(false)
   author User @relation(fields: [authorId], references: [id])
   authorId String

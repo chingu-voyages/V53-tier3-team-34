@@ -9,13 +9,13 @@ import { GoPlus } from "react-icons/go";
 import type { Theme } from "../create/themeConfig";
 import type { RSVPMood } from "../templates/EventForm";
 
-interface RSVPMoodEmojiPickerProps {
+interface RVSPEmojiPickerProps {
   mood: RSVPMood;
   theme: Theme;
   onChange: (name: string, emoji: string | null) => void;
 }
 
-const RSVPMoodEmojiPicker: React.FC<RSVPMoodEmojiPickerProps> = ({
+const RVSPEmojiPicker: React.FC<RVSPEmojiPickerProps> = ({
   mood,
   theme,
   onChange,
@@ -53,4 +53,4 @@ const RSVPMoodEmojiPicker: React.FC<RSVPMoodEmojiPickerProps> = ({
   );
 };
 
-export default RSVPMoodEmojiPicker;
+export default RVSPEmojiPicker;

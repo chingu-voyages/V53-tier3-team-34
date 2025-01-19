@@ -16,7 +16,7 @@ interface EventFormData {
   host: string | null;
   guestCount: number | null;
   address: string | null;
-  outdoor: boolean;
+  isOutdoor: boolean;
   costPerPerson: number;
   isPublic: boolean;
   requireGuestApproval: boolean;
@@ -41,7 +41,7 @@ const EventForm = () => {
     host: null,
     guestCount: null,
     address: null,
-    outdoor: false,
+    isOutdoor: false,
     costPerPerson: 0,
     isPublic: false,
     requireGuestApproval: false,
@@ -67,7 +67,7 @@ const EventForm = () => {
   ) => {
     const { name, value } = e.target;
 
-    // Handle checkboxes differently (for `outdoor`, `isPublic`, and `requireGuestApproval`)
+    // Handle switches differently (for `isOutdoor`, `isPublic`, and `requireGuestApproval`)
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
@@ -170,7 +170,7 @@ const EventForm = () => {
           text="Outdoor"
           name="outdoor"
           toolTipContent="(Optional) Outdoor Event"
-          isToggled={formData.outdoor}
+          isToggled={formData.isOutdoor}
           onChange={handleToggleChange}
         />
 

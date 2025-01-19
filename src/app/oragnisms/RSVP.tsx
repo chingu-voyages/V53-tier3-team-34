@@ -1,5 +1,5 @@
 import type React from "react";
-import RSVPMoodEmojiPicker from "../molecules/RSVPMoodEmojiPicker";
+import RSVPEmojiPicker from "../molecules/RSVPEmojiPicker";
 
 import { useCreateEventTheme } from "../create/provider";
 import type { RSVPMood } from "../templates/EventForm";
@@ -14,7 +14,7 @@ export const RSVP: React.FC<RSVPProps> = ({ rvspMoods, onChange }) => {
       <p className={`${theme.textColor} text-2xl font-medium`}>RVSP</p>
       <div className="px-10 flex gap-10">
         {rvspMoods.map((mood) => (
-          <RSVPMoodEmojiPicker
+          <RSVPEmojiPicker
             key={mood.name}
             mood={mood}
             theme={theme}
