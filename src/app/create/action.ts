@@ -44,12 +44,12 @@ export async function createEvent(eventFormData: EventFormData) {
       costPerPerson: eventFormData.costPerPerson,
       isPublic: eventFormData.isPublic,
       requireGuestApproval: eventFormData.requireGuestApproval,
-      rsvpMoods: eventFormData.rsvpMoods.map((mood) => ({
-        name: mood.name,
-        emoji: mood.emoji,
-        eventID: null,
-      })),
       authorId: session.userID,
+      rsvpMoods: {
+        createMany: {
+          data: eventFormData.rsvpMoods,
+        },
+      },
     },
   });
 }
