@@ -15,17 +15,39 @@ export default async function Home() {
           Spend less time on logistics and more time enjoying your event. Host
           private events in seconds with our easy-to-use Partiyo
         </p>
-        <a href="/create" target="_blank" rel="noopener noreferrer">
+        <div className="flex flex-col items-center justify-center gap-2">
           {session ? (
             <>
               <div>{session.user?.email}</div>
-              <Link href="/api/auth/signout">Sign out</Link>
+              <Link href="/api/auth/signout">
+                <button
+                  className="px-6 py-2 bg-black rounded-3xl text-center text-white text-base font-bold leading-normal"
+                  type="button"
+                >
+                  Sign out
+                </button>
+              </Link>
             </>
           ) : (
-            <>
-              <Link href="/register">Register</Link>
-              <Link href="/api/auth/signin">Sign in</Link>
-            </>
+            <div className="flex gap-2">
+              <Link href="/register">
+                <button
+                  className="px-6 py-2 bg-black rounded-3xl text-center text-white text-base font-bold leading-normal"
+                  type="button"
+                >
+                  Register
+                </button>
+              </Link>
+              <Link href="/api/auth/signin">
+                {" "}
+                <button
+                  className="px-6 py-2 bg-black rounded-3xl text-center text-white text-base font-bold leading-normal"
+                  type="button"
+                >
+                  Sign in
+                </button>
+              </Link>
+            </div>
           )}
           <Link href="/create">
             <button
@@ -35,7 +57,7 @@ export default async function Home() {
               Create Event
             </button>
           </Link>
-        </a>
+        </div>
       </div>
     </div>
   );

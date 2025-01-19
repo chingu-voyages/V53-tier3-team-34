@@ -1,6 +1,6 @@
 import type React from "react";
 import type { ChangeEvent } from "react";
-import { useCreateEventTheme } from "../create/provider";
+import { useCreateEventTheme } from "../../app/create/provider";
 import Tooltip from "./ToolTip";
 
 interface TextAreaProps {

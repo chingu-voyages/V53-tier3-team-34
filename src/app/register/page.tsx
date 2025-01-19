@@ -1,4 +1,5 @@
 "use client";
+import { headers } from "next/headers";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -20,8 +21,14 @@ const Register = () => {
       return alert("Error creating user");
     }
 
+    const referer = (await headers()).get("referer");
+
+    if (referer?.includes("/create")) {
+      return router.push(referer);
+    }
     return router.push("/");
   };
+
   return (
     <div className="p-24 flex flex-col gap-8 items-center">
       <h2 className="font-semibold text-3xl">Register</h2>

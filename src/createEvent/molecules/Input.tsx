@@ -1,6 +1,6 @@
 import type React from "react";
 import { type ChangeEvent, useRef } from "react";
-import { useCreateEventTheme } from "../create/provider";
+import { useCreateEventTheme } from "../../app/create/provider";
 import Tooltip from "./ToolTip";
 
 interface InputProps {
@@ -53,6 +53,7 @@ const Input: React.FC<InputProps> = ({
           backdrop-blur-sm transition-all duration-200 group
         `}
         onClick={handleClick}
+        onKeyDown={handleClick}
       >
         {/* Left icon */}
         {icon && (

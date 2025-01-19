@@ -6,7 +6,7 @@ import {
 import EmojiPicker, { Emoji, type EmojiClickData } from "emoji-picker-react";
 import type React from "react";
 import { GoPlus } from "react-icons/go";
-import type { Theme } from "../create/themeConfig";
+import type { Theme } from "../config/themeConfig";
 import type { RSVPMood } from "../templates/EventForm";
 
 interface RVSPEmojiPickerProps {

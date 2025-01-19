@@ -1,6 +1,10 @@
 import type React from "react";
 import { type ReactNode, createContext, useContext, useState } from "react";
-import { type Theme, type ThemeName, themeStyles } from "./themeConfig"; // Import the theme styles and types
+import {
+  type Theme,
+  type ThemeName,
+  themeStyles,
+} from "../../createEvent/config/themeConfig"; // Import the theme styles and types
 
 interface ThemeContextType {
   theme: Theme;

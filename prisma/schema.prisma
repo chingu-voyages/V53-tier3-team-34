@@ -14,37 +14,47 @@ datasource db {
 }
 
 model User {
-  id String @id @default(uuid())
-  email String @unique
+  id       String    @id @default(uuid())
+  email    String    @unique
   password String
-  events Event[]
+  events   Event[]
   sessions Session[]
 }
 
 model Event {
-  id String @id @default(uuid())
-  title String
-  date DateTime
-  description String?
-  reason String?
-  guestHonor String?
-  host String?
-  guestCount Int?
-  address String?
-  isOutdoor Boolean @default(false)
-  costPerPerson Float?
-  isPublic Boolean @default(false)
-  requireGuestApproval Boolean @default(false)
-  author User @relation(fields: [authorId], references: [id])
-  authorId String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                   String     @id @default(uuid())
+  title                String
+  date                 DateTime
+  image                Bytes?
+  style                String?
+  description          String?
+  reason               String?
+  guestHonor           String?
+  host                 String?
+  guestCount           Int?
+  address              String?
+  isOutdoor            Boolean    @default(false)
+  costPerPerson        Float?
+  isPublic             Boolean    @default(false)
+  requireGuestApproval Boolean    @default(false)
+  rsvpMoods            RVSPMood[]
+  author               User       @relation(fields: [authorId], references: [id])
+  authorId             String
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+}
+
+model RVSPMood {
+  name    String  @unique
+  emoji   String?
+  Event   Event?  @relation(fields: [eventId], references: [id])
+  eventId String?
 }
 
 model Session {
-  id String @id @default(uuid())
-  sessionToken String @unique
-  expires DateTime
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
 }

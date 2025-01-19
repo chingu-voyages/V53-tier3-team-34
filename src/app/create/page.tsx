@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import EventForm from "../templates/EventForm";
+import EventForm from "../../createEvent/templates/EventForm";
 import { ThemeProvider } from "./provider";
 
 const CreateEvent = () => {

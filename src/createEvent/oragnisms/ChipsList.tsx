@@ -1,7 +1,7 @@
 import type React from "react";
 import { useEffect, useState } from "react";
-import { type ChipModel, chips } from "../create/chipConfig";
-import { useCreateEventTheme } from "../create/provider";
+import { useCreateEventTheme } from "../../app/create/provider";
+import { type ChipModel, chips } from "../config/chipConfig";
 import Chip from "../molecules/Chip";
 
 interface ChipsListProps {
