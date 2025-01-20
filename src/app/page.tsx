@@ -1,66 +1,56 @@
 import PageWrapper from "@/components/PageWrapper";
-import { getServerSession } from "next-auth";
-import Link from "next/link";
-import { AuthConfig } from "./api/auth/[...nextauth]/config";
+import Image from "next/image";
 
 export default async function Home() {
-  const session = await getServerSession(AuthConfig);
-
   return (
     <PageWrapper>
-      <div className="flex flex-col items-center justify-center w-screen h-screen">
-        <div className="flex flex-col items-center justify-center gap-14">
-          <p className="md:w-3/4 text-center text-black text-6xl font-semibold leading-[75px]">
-            Host private events in seconds
-          </p>
-          <p className="md:w-3/4 text-center text-[#4d4d4d] text-2xl font-semibold leading-loose">
-            Spend less time on logistics and more time enjoying your event. Host
-            private events in seconds with our easy-to-use Partiyo
-          </p>
-          <div className="flex flex-col items-center justify-center gap-2">
-            {session ? (
-              <>
-                <div>{session.user?.email}</div>
-                <Link href="/api/auth/signout">
-                  <button
-                    className="px-6 py-2 bg-black rounded-3xl text-center text-white text-base font-bold leading-normal"
-                    type="button"
-                  >
-                    Sign out
-                  </button>
-                </Link>
-              </>
-            ) : (
-              <div className="flex gap-2">
-                <Link href="/register">
-                  <button
-                    className="px-6 py-2 bg-black rounded-3xl text-center text-white text-base font-bold leading-normal"
-                    type="button"
-                  >
-                    Register
-                  </button>
-                </Link>
-                <Link href="/api/auth/signin">
-                  {" "}
-                  <button
-                    className="px-6 py-2 bg-black rounded-3xl text-center text-white text-base font-bold leading-normal"
-                    type="button"
-                  >
-                    Sign in
-                  </button>
-                </Link>
-              </div>
-            )}
-            <Link href="/create">
-              <button
-                className="px-6 py-2 bg-black rounded-3xl text-center text-white text-base font-bold leading-normal"
-                type="button"
-              >
-                Create Event
-              </button>
-            </Link>
+      <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+        <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+          <Image
+            className="dark:invert"
+            src="/next.svg"
+            alt="Next.js logo"
+            width={180}
+            height={38}
+            priority
+          />
+          <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
+            <li className="mb-2">
+              Get started by editing{" "}
+              <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
+                src/app/page.tsx
+              </code>
+              .
+            </li>
+            <li>Save and see your changes instantly.</li>
+          </ol>
+
+          <div className="flex gap-4 items-center flex-col sm:flex-row">
+            <a
+              className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
+              href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image
+                className="dark:invert"
+                src="/vercel.svg"
+                alt="Vercel logomark"
+                width={20}
+                height={20}
+              />
+              Deploy now
+            </a>
+            <a
+              className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
+              href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Read our docs
+            </a>
           </div>
-        </div>
+        </main>
       </div>
     </PageWrapper>
   );
