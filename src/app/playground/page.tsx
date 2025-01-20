@@ -5,7 +5,7 @@ export default function Playground() {
   return (
     <ContentLayout>
       <h1>Playground</h1>
-      <FileUploadExample withPreview />
+      <FileUploadExample />
     </ContentLayout>
   );
 }
