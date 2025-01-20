@@ -1,10 +1,8 @@
 "use server";
 
-import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
+import prisma from "../../../prisma/client";
 
 export async function RegisterUser({
   email,
@@ -13,14 +11,6 @@ export async function RegisterUser({
   email: string;
   password: string;
 }) {
-  console.log(
-    {
-      email,
-      password,
-    },
-    "DATA",
-  );
-
   try {
     if (!email) {
       return {
