@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Mona_Sans } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/utils/themeContext";
+import DesktopHeader from "@/components/header/DesktopHeader";
 
 const monoSans = Mona_Sans({
   variable: "--font-mona-sans",
@@ -20,7 +22,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${monoSans.className} antialiased`}>{children}</body>
+      <body className={`${monoSans.className} antialiased`}>
+        <ThemeProvider>
+          <DesktopHeader />
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
