@@ -25,6 +25,7 @@ const TextArea: React.FC<TextAreaProps> = ({
       rows={4}
       maxLength={1000}
       className={`
+        backdrop-blur-2xl
         ${theme.inputBgColor}
         ${theme.textColor}
         ${theme.placeholderTextColor}

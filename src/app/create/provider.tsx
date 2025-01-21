@@ -1,5 +1,12 @@
 import type React from "react";
-import { type ReactNode, createContext, useContext, useState } from "react";
+import {
+  type ReactNode,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import {
   type Theme,
   type ThemeName,
@@ -23,12 +30,22 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [themeName, setThemeName] = useState<ThemeName>("dark");
+  const [themeName, setThemeName] = useState<ThemeName>("light");
   const currentTheme = themeStyles[themeName];
 
-  const changeTheme = (newThemeName: ThemeName) => {
+  const changeTheme = useCallback((newThemeName: ThemeName) => {
     setThemeName(newThemeName);
-  };
+    localStorage.setItem("theme", newThemeName);
+  }, []);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      setThemeName(savedTheme as ThemeName);
+    } else {
+      changeTheme("light");
+    }
+  }, [changeTheme]);
 
   return (
     <ThemeContext.Provider

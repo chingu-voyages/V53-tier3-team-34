@@ -6,9 +6,11 @@ import ToggleInput from "../molecules/ToggleInput";
 import ChipsList from "../oragnisms/ChipsList";
 import { RSVP } from "../oragnisms/RSVP";
 
+import { useCreateEventTheme } from "@/app/create/provider";
 import { z } from "zod";
 import { createEvent } from "../../app/create/action";
 import { icons } from "../config/icons";
+import TopMenu from "../oragnisms/TopMenu";
 
 const eventFormSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -162,133 +164,157 @@ const EventForm = () => {
     }
   };
 
+  const { theme } = useCreateEventTheme();
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="w-full flex flex-col md:flex-row justify-center space-y-3 md:space-y-0 md:space-x-3 p-4 bg-black">
-        <div className="flex flex-col space-y-3">
-          <Input
-            name="title"
-            placeholder="Untitled Event"
-            value={formData.title}
-            onChange={handleChange}
-            isRequired={true}
-            className="text-6xl placeholder:text-6xl leading-10 h-24"
-          />
+    <>
+      <header className="flex justify-between items-center bg-red-600 py-9 px-16">
+        <h1 className="text-white text-4xl font-normal font-['Peralta'] leading-tight">
+          Partiyo
+        </h1>
+        <button
+          className="px-6 py-2 h-16 bg-[#084be7] text-center text-white text-base font-bold leading-normal"
+          type="button"
+        >
+          Sign In
+        </button>
+      </header>
+      <form
+        onSubmit={handleSubmit}
+        className={`p-4 flex flex-col gap-3 ${theme.pageBgImage} bg-cover`}
+      >
+        <div className="w-full flex flex-col md:flex-row justify-center space-y-3 md:space-y-0 md:space-x-3">
+          <div className="flex flex-col space-y-3">
+            <TopMenu />
+            <Input
+              name="title"
+              placeholder="Untitled Event"
+              value={formData.title}
+              onChange={handleChange}
+              isRequired={true}
+              className="text-6xl placeholder:text-6xl leading-10 h-24"
+            />
 
-          <Input
-            icon={icons.cake}
-            name="reason"
-            placeholder="Reason to Celebrate"
-            value={formData.reason || ""}
-            onChange={handleChange}
-            isRequired={true}
-            className="text-xl placeholder:text-xl font-medium leading-loose"
-          />
+            <Input
+              icon={icons.cake}
+              name="reason"
+              placeholder="Reason to Celebrate"
+              value={formData.reason || ""}
+              onChange={handleChange}
+              isRequired={true}
+              className="text-xl placeholder:text-xl font-medium leading-loose"
+            />
 
-          <Input
-            icon={icons.person}
-            name="guestHonor"
-            value={formData.guestHonor || ""}
-            onChange={handleChange}
-            preText="Guest of Honor"
-            placeholder="(Maria Tash)"
-            className="text-xl placeholder:text-xl font-medium leading-loose"
-          />
+            <Input
+              icon={icons.person}
+              name="guestHonor"
+              value={formData.guestHonor || ""}
+              onChange={handleChange}
+              preText="Guest of Honor"
+              placeholder="(Maria Tash)"
+              className="text-xl placeholder:text-xl font-medium leading-loose"
+            />
 
-          <Input
-            icon={icons.host}
-            preText="Hosted by"
-            placeholder="(Kaia)"
-            value={formData.host || ""}
-            onChange={handleChange}
-            name="host"
-            className="text-xl placeholder:text-xl font-medium leading-loose"
-          />
+            <Input
+              icon={icons.host}
+              preText="Hosted by"
+              placeholder="(Kaia)"
+              value={formData.host || ""}
+              onChange={handleChange}
+              name="host"
+              className="text-xl placeholder:text-xl font-medium leading-loose"
+            />
 
-          <Input
-            icon={icons.chair}
-            placeholder="(Maximum)"
-            postText="Attendance"
-            value={formData.userGuestLimit || ""}
-            onChange={handleChange}
-            name="maxGuestLimit"
-            type="number"
-            className="text-xl placeholder:text-xl font-medium leading-loose"
-          />
+            <Input
+              icon={icons.chair}
+              placeholder="(Maximum)"
+              postText="Attendance"
+              value={formData.userGuestLimit || ""}
+              onChange={handleChange}
+              name="maxGuestLimit"
+              type="number"
+              className="text-xl placeholder:text-xl font-medium leading-loose"
+            />
 
-          <Input
-            icon={icons.addPeople}
-            placeholder="(0)"
-            preText="Bring Guest"
-            value={formData.userGuestLimit || ""}
-            onChange={handleChange}
-            name="userGuestLimit"
-            type="number"
-            className="text-xl placeholder:text-xl font-medium leading-loose"
-          />
+            <Input
+              icon={icons.addPeople}
+              placeholder="(0)"
+              preText="Bring Guest"
+              value={formData.userGuestLimit || ""}
+              onChange={handleChange}
+              name="userGuestLimit"
+              type="number"
+              className="text-xl placeholder:text-xl font-medium leading-loose"
+            />
 
-          <Input
-            icon={icons.location}
-            name="address"
-            placeholder="MInistry Of Sound, 103 Gaunt ST, LONDON, SE1 6DP"
-            value={formData.address || ""}
-            onChange={handleChange}
-            className="text-xl placeholder:text-xl font-medium leading-loose"
-          />
+            <Input
+              icon={icons.location}
+              name="address"
+              placeholder="MInistry Of Sound, 103 Gaunt ST, LONDON, SE1 6DP"
+              value={formData.address || ""}
+              onChange={handleChange}
+              className="text-xl placeholder:text-xl font-medium leading-loose"
+            />
 
-          <Input
-            icon={icons.cost}
-            placeholder="Add Cost Per Person"
-            value={formData.costPerPerson || ""}
-            onChange={handleChange}
-            name="costPerPerson"
-            type="number"
-            className="text-xl placeholder:text-xl font-medium leading-loose"
-          />
+            <Input
+              icon={icons.cost}
+              placeholder="Add Cost Per Person"
+              value={formData.costPerPerson || ""}
+              onChange={handleChange}
+              name="costPerPerson"
+              type="number"
+              className="text-xl placeholder:text-xl font-medium leading-loose"
+            />
 
-          <ToggleInput
-            icon={icons.sunrise}
-            text="Outdoor"
-            name="outdoor"
-            isToggled={formData.isOutdoor}
-            onChange={handleToggleChange}
-          />
+            <ToggleInput
+              icon={icons.sunrise}
+              text="Outdoor"
+              name="outdoor"
+              isToggled={formData.isOutdoor}
+              onChange={handleToggleChange}
+            />
 
-          <ChipsList
-            selectedChips={formData.chips}
-            onChange={handleChipsChange}
-          />
+            <ChipsList
+              selectedChips={formData.chips}
+              onChange={handleChipsChange}
+            />
 
-          <TextArea
-            name="description"
-            value={formData.description || ""}
-            onChange={handleChange}
-            placeholder="Add a description of your event"
-          />
+            <TextArea
+              name="description"
+              value={formData.description || ""}
+              onChange={handleChange}
+              placeholder="Add a description of your event"
+            />
+          </div>
+
+          <div className="flex flex-col space-y-3">
+            <ToggleInput
+              name="isPublic"
+              text="Public Event"
+              isToggled={formData.isPublic}
+              onChange={handleToggleChange}
+            />
+
+            <ToggleInput
+              name="requireGuestApproval"
+              text="Require Guest Approval"
+              isToggled={formData.requireGuestApproval}
+              onChange={handleToggleChange}
+            />
+
+            <RSVP
+              rvspMoods={formData.rsvpMoods}
+              onChange={handleRSVPMoodChange}
+            />
+          </div>
         </div>
-
-        <div className="flex flex-col space-y-3">
-          <ToggleInput
-            name="isPublic"
-            text="Public Event"
-            isToggled={formData.isPublic}
-            onChange={handleToggleChange}
-          />
-
-          <ToggleInput
-            name="requireGuestApproval"
-            text="Require Guest Approval"
-            isToggled={formData.requireGuestApproval}
-            onChange={handleToggleChange}
-          />
-
-          <RSVP
-            rvspMoods={formData.rsvpMoods}
-            onChange={handleRSVPMoodChange}
-          />
-        </div>
-      </div>
-    </form>
+        <button
+          type="submit"
+          className="px-6 py-2 h-16 bg-[#084be7] text-white text-center text-base font-bold leading-normal w-max inline self-end"
+        >
+          Done
+        </button>
+      </form>
+    </>
   );
 };
 
