@@ -1,5 +1,4 @@
 import PageWrapper from "@/components/PageWrapper";
-import ThemesIcon from "@/components/themes/ThemesIcon";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
@@ -26,7 +25,6 @@ export default async function Home() {
         </div>
 
         <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-          <ThemesIcon />
           <Image
             className="dark:invert"
             src="/next.svg"

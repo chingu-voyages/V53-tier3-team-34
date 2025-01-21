@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 type ThemeContextType = {
   background: string;
@@ -10,7 +10,16 @@ type ThemeContextType = {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [background, setBackground] = useState<string>("");
+  const [background, setBackground] = useState<string>(() => {
+    const savedBackground = localStorage.getItem("background");
+    return savedBackground || "";
+  });
+
+  useEffect(() => {
+    if (background) {
+      localStorage.setItem("background", background);
+    }
+  }, [background]);
 
   return (
     <ThemeContext.Provider value={{ background, setBackground }}>
