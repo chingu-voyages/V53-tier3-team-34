@@ -1,5 +1,5 @@
 import { useCreateEventTheme } from "@/app/create/provider";
-import { moods } from "@/createEvent/config/mood";
+import { type StyleMood, styleMoods } from "@/createEvent/config/styleMoods";
 import { type ThemeName, themeStyles } from "../config/themeConfig";
 export default function ThemesMenu() {
   const { setThemeName } = useCreateEventTheme();
@@ -11,7 +11,7 @@ export default function ThemesMenu() {
           Pick A Style
         </h1>
         <div className="flex flex-wrap gap-2">
-          {moods.map((mood) => (
+          {styleMoods.map((mood: StyleMood) => (
             <div
               key={mood.mood}
               className="px-3 py-2 bg-slate-400 rounded-full text-sm"

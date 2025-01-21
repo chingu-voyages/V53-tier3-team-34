@@ -28,6 +28,14 @@ export async function createEvent(eventFormData: EventFormData) {
     ? Buffer.from(await eventFormData.image.arrayBuffer())
     : null;
 
+  const filteredRVSPMoods = eventFormData.rsvpMoods.filter((mood) => {
+    return mood.value && mood.emoji;
+  });
+
+  const filteredChips = eventFormData.chips.filter((chip) => {
+    return chip.value && chip.inputValue;
+  });
+
   await prisma.event.create({
     data: {
       title: eventFormData.title,
@@ -38,7 +46,7 @@ export async function createEvent(eventFormData: EventFormData) {
       reason: eventFormData.reason || "",
       guestHonor: eventFormData.guestHonor,
       host: eventFormData.host,
-      guestCount: eventFormData.userGuestLimit,
+      userGuestLimit: eventFormData.userGuestLimit,
       maxGuestLimit: eventFormData.maxGuestLimit,
       address: eventFormData.address,
       isOutdoor: eventFormData.isOutdoor,
@@ -48,7 +56,12 @@ export async function createEvent(eventFormData: EventFormData) {
       authorId: session.userID,
       rsvpMoods: {
         createMany: {
-          data: eventFormData.rsvpMoods,
+          data: filteredRVSPMoods,
+        },
+      },
+      chips: {
+        createMany: {
+          data: filteredChips,
         },
       },
     },

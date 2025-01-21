@@ -14,14 +14,14 @@ interface ChipsListProps {
     isSelected: boolean,
   ) => void;
 }
+
 const ChipsList: React.FC<ChipsListProps> = ({ selectedChips, onChange }) => {
   const [displayedChips, setDisplayedChips] = useState(chips);
   const [showLess, setShowLess] = useState(false);
   const { theme } = useCreateEventTheme();
 
   const isSelected = (selectedChip: ChipModel) =>
-    selectedChips.findIndex((chip) => chip.chipValue === selectedChip.value) !==
-    -1;
+    selectedChips.findIndex((chip) => chip.value === selectedChip.value) !== -1;
 
   useEffect(() => {
     setDisplayedChips(chips.slice(0, showLess ? 3 : chips.length));

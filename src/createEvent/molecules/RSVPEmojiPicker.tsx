@@ -5,23 +5,24 @@ import {
 } from "@/components/ui/popover";
 import EmojiPicker, { Emoji, type EmojiClickData } from "emoji-picker-react";
 import type React from "react";
-import { GoPlus } from "react-icons/go";
+import type { MoodType, RSVPMood } from "../config/rvspMood";
 import type { Theme } from "../config/themeConfig";
-import type { RSVPMood } from "../templates/EventForm";
 
 interface RVSPEmojiPickerProps {
-  mood: RSVPMood;
+  mood: Omit<RSVPMood, "name">;
   theme: Theme;
-  onChange: (name: string, emoji: string) => void;
+  onChange: (value: MoodType, emoji: string) => void;
+  selectedRSVPEmoji?: string;
 }
 
 const RVSPEmojiPicker: React.FC<RVSPEmojiPickerProps> = ({
   mood,
   theme,
   onChange,
+  selectedRSVPEmoji,
 }) => {
   const onEmojiClick = (emojiData: EmojiClickData) => {
-    onChange(mood.name, emojiData.unified);
+    onChange(mood.value, emojiData.unified);
   };
 
   return (
@@ -31,11 +32,10 @@ const RVSPEmojiPicker: React.FC<RVSPEmojiPickerProps> = ({
           <div
             className={`flex items-center justify-center w-28 h-28 rounded-full cursor-pointer border ${theme.focusInputBorderColor}`}
           >
-            {mood.emoji ? (
-              <Emoji unified={mood.emoji} size={50} />
-            ) : (
-              <GoPlus size={25} className={`${theme.iconColor}`} />
-            )}
+            <Emoji
+              unified={selectedRSVPEmoji ? selectedRSVPEmoji : mood.emoji}
+              size={50}
+            />
           </div>
         </PopoverTrigger>
         <PopoverContent className="w-0 h-0 p-0 bg-none border-0">
@@ -47,7 +47,7 @@ const RVSPEmojiPicker: React.FC<RVSPEmojiPickerProps> = ({
         </PopoverContent>
       </Popover>
       <p className={`${theme.textColor} text-xl font-medium text-center p-2`}>
-        {mood.name}
+        {mood.value}
       </p>
     </div>
   );

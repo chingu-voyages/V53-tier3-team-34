@@ -10,6 +10,7 @@ import { useCreateEventTheme } from "@/app/create/provider";
 import { z } from "zod";
 import { createEvent } from "../../app/create/action";
 import { icons } from "../config/icons";
+import type { MoodType } from "../config/rvspMood";
 import TopMenu from "../oragnisms/TopMenu";
 
 const eventFormSchema = z.object({
@@ -39,21 +40,14 @@ const eventFormSchema = z.object({
   requireGuestApproval: z.boolean().default(false),
   rsvpMoods: z.array(
     z.object({
-      name: z.enum(["Attending", "Maybe", "Regretfully"]),
+      value: z.enum(["attending", "maybe", "regretfully"]),
       emoji: z.string(),
     }),
   ),
-  chips: z.array(z.object({ chipValue: z.string(), inputValue: z.string() })),
+  chips: z.array(z.object({ value: z.string(), inputValue: z.string() })),
 });
 
 export type EventFormData = z.infer<typeof eventFormSchema>;
-
-export type MoodType = "Attending" | "Maybe" | "Regretfully";
-
-export interface RSVPMood {
-  name: MoodType;
-  emoji: string;
-}
 
 const EventForm = () => {
   const [formData, setFormData] = useState<EventFormData>({
@@ -72,20 +66,7 @@ const EventForm = () => {
     costPerPerson: null,
     isPublic: false,
     requireGuestApproval: false,
-    rsvpMoods: [
-      {
-        name: "Attending",
-        emoji: "1f970",
-      },
-      {
-        name: "Maybe",
-        emoji: "1f9d0",
-      },
-      {
-        name: "Regretfully",
-        emoji: "1f614",
-      },
-    ],
+    rsvpMoods: [],
     chips: [],
   });
 
@@ -109,11 +90,11 @@ const EventForm = () => {
       }));
     }
   };
-  const handleRSVPMoodChange = (name: string, emoji: string) => {
+  const handleRSVPMoodChange = (value: MoodType, emoji: string) => {
     setFormData((prevState) => ({
       ...prevState,
       rsvpMoods: prevState.rsvpMoods.map((mood) =>
-        mood.name === name ? { ...mood, emoji } : mood,
+        mood.value === value ? { ...mood, emoji } : mood,
       ),
     }));
   };
@@ -126,13 +107,13 @@ const EventForm = () => {
     const chips = formData.chips;
 
     const existingChipIndex = chips.findIndex(
-      (chip) => chip.chipValue === chipValue,
+      (chip) => chip.value === chipValue,
     );
 
     if (!isSelected) {
       chips.splice(existingChipIndex, 1);
     } else if (existingChipIndex === -1) {
-      chips.push({ chipValue, inputValue });
+      chips.push({ value: chipValue, inputValue });
     } else {
       const chip = chips[existingChipIndex];
       chip.inputValue = inputValue;
@@ -302,7 +283,7 @@ const EventForm = () => {
             />
 
             <RSVP
-              rvspMoods={formData.rsvpMoods}
+              selectedRVSPMoods={formData.rsvpMoods}
               onChange={handleRSVPMoodChange}
             />
           </div>

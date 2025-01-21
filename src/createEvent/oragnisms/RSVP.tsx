@@ -2,12 +2,13 @@ import type React from "react";
 import RSVPEmojiPicker from "../molecules/RSVPEmojiPicker";
 
 import { useCreateEventTheme } from "../../app/create/provider";
-import type { RSVPMood } from "../templates/EventForm";
+import { type MoodType, type RSVPMood, rsvpMoods } from "../config/rvspMood";
+
 interface RSVPProps {
-  rvspMoods: RSVPMood[];
-  onChange: (name: string, emoji: string) => void;
+  selectedRVSPMoods: Omit<RSVPMood, "name">[];
+  onChange: (value: MoodType, emoji: string) => void;
 }
-export const RSVP: React.FC<RSVPProps> = ({ rvspMoods, onChange }) => {
+export const RSVP: React.FC<RSVPProps> = ({ selectedRVSPMoods, onChange }) => {
   const { theme } = useCreateEventTheme();
   return (
     <div
@@ -15,12 +16,17 @@ export const RSVP: React.FC<RSVPProps> = ({ rvspMoods, onChange }) => {
     >
       <p className={`${theme.textColor} text-2xl font-medium`}>RVSP</p>
       <div className="px-10 flex gap-10">
-        {rvspMoods.map((mood) => (
+        {rsvpMoods.map((mood) => (
           <RSVPEmojiPicker
-            key={mood.name}
+            key={mood.value}
             mood={mood}
             theme={theme}
             onChange={onChange}
+            selectedRSVPEmoji={
+              selectedRVSPMoods.find(
+                (selectedMood) => selectedMood.value === mood.value,
+              )?.emoji
+            }
           />
         ))}
       </div>

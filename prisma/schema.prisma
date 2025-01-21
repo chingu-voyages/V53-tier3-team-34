@@ -38,18 +38,26 @@ model Event {
   costPerPerson        Float?
   isPublic             Boolean    @default(false)
   requireGuestApproval Boolean    @default(false)
-  rsvpMoods            RVSPMood[]
+  rsvpMoods            RSVPMood[]
+  chips                Chip[]
   author               User       @relation(fields: [authorId], references: [id])
   authorId             String
   createdAt            DateTime   @default(now())
   updatedAt            DateTime   @updatedAt
 }
 
-model RVSPMood {
-  name    String  @unique
+model RSVPMood {
+  value    String  @unique
   emoji   String?
   Event   Event?  @relation(fields: [eventId], references: [id])
   eventId String?
+}
+
+model Chip {
+  value      String  @unique
+  inputValue String
+  Event      Event?  @relation(fields: [eventId], references: [id])
+  eventId    String?
 }
 
 model Session {
