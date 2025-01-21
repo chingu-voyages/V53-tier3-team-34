@@ -10,10 +10,14 @@ type ThemeContextType = {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [background, setBackground] = useState<string>(() => {
+  const [background, setBackground] = useState<string>("");
+
+  useEffect(() => {
     const savedBackground = localStorage.getItem("background");
-    return savedBackground || "";
-  });
+    if (savedBackground) {
+      setBackground(savedBackground);
+    }
+  }, []);
 
   useEffect(() => {
     if (background) {
