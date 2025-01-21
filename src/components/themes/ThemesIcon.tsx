@@ -1,7 +1,5 @@
 "use client";
 import { useTheme } from "@/utils/themeContext";
-import { useState } from "react";
-import ThemesMenu from "./ThemesMenu";
 
 type clickProp = {
   onclick: () => void;
