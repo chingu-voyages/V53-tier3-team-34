@@ -12,7 +12,7 @@ import type { RSVPMood } from "../templates/EventForm";
 interface RVSPEmojiPickerProps {
   mood: RSVPMood;
   theme: Theme;
-  onChange: (name: string, emoji: string | null) => void;
+  onChange: (name: string, emoji: string) => void;
 }
 
 const RVSPEmojiPicker: React.FC<RVSPEmojiPickerProps> = ({
@@ -29,7 +29,7 @@ const RVSPEmojiPicker: React.FC<RVSPEmojiPickerProps> = ({
       <Popover>
         <PopoverTrigger>
           <div
-            className={`flex items-center justify-center w-24 h-24 rounded-full cursor-pointer border ${theme.focusInputBorderColor}`}
+            className={`flex items-center justify-center w-28 h-28 rounded-full cursor-pointer border ${theme.focusInputBorderColor}`}
           >
             {mood.emoji ? (
               <Emoji unified={mood.emoji} size={50} />
@@ -40,7 +40,7 @@ const RVSPEmojiPicker: React.FC<RVSPEmojiPickerProps> = ({
         </PopoverTrigger>
         <PopoverContent className="w-0 h-0 p-0 bg-none border-0">
           <EmojiPicker
-            previewConfig={{ showPreview: false }}
+            previewConfig={{ defaultEmoji: mood.emoji, showPreview: false }}
             onEmojiClick={onEmojiClick}
             className={`${theme.emojiPickerTextColor} ${theme.emojiPickerBgColor} ${theme.emojiPickerHoverBgColor} ${theme.emojiPickerCategoryLabelBgColor}`}
           />

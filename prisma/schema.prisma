@@ -31,7 +31,8 @@ model Event {
   reason               String?
   guestHonor           String?
   host                 String?
-  guestCount           Int?
+  userGuestLimit       Int?
+  maxGuestLimit        Int?
   address              String?
   isOutdoor            Boolean    @default(false)
   costPerPerson        Float?

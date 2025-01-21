@@ -1,17 +1,16 @@
 import { Switch } from "@/components/ui/switch";
-import { useCreateEventTheme } from "../create/provider";
-import ToolTip from "./ToolTip";
+import { useCreateEventTheme } from "../../app/create/provider";
 
 interface ToggleInputProps {
+  icon?: React.ReactNode;
   text: string;
   name: string;
   isToggled: boolean;
   onChange: (value: string) => void;
-  toolTipContent: string;
 }
 
 const ToggleInput: React.FC<ToggleInputProps> = ({
-  toolTipContent,
+  icon,
   isToggled,
   text,
   name,
@@ -19,7 +18,10 @@ const ToggleInput: React.FC<ToggleInputProps> = ({
 }) => {
   const { theme } = useCreateEventTheme();
   return (
-    <div className={`flex items-center space-x-2 py-2 ${theme.inputBgColor}`}>
+    <div
+      className={`flex items-center space-x-2 p-2 backdrop-blur-2xl ${theme.inputBgColor}`}
+    >
+      {icon && <div className={`${theme.iconColor} flex-shrink-0`}>{icon}</div>}
       <Switch
         checked={isToggled}
         onCheckedChange={() => {
@@ -27,13 +29,9 @@ const ToggleInput: React.FC<ToggleInputProps> = ({
         }}
         className={theme.toggleSwitchColor}
       />
-      <ToolTip toolTipContent={toolTipContent}>
-        <span
-          className={`text-xl font-medium leading-normal ${theme.textColor}`}
-        >
-          {text}
-        </span>
-      </ToolTip>
+      <span className={`text-xl font-medium leading-normal ${theme.textColor}`}>
+        {text}
+      </span>
     </div>
   );
 };

@@ -2,6 +2,9 @@ export interface ChipModel {
   icon: React.ReactNode;
   text: string;
   value: string;
+  maxCountCharacters: number;
+  placeholderText?: string;
+  preText?: string;
 }
 
 export const chips: ChipModel[] = [
@@ -15,7 +18,7 @@ export const chips: ChipModel[] = [
         className="fill-current"
         aria-labelledby="Music Styled"
       >
-        <title id="Music Styled">Music Styled</title>
+        <title>Music Styled</title>
         <path
           fillRule="evenodd"
           clipRule="evenodd"
@@ -32,6 +35,8 @@ export const chips: ChipModel[] = [
     ),
     text: "Music Styled",
     value: "musicStyled",
+    maxCountCharacters: 200,
+    placeholderText: "Www.Spotify.com",
   },
   {
     icon: (
@@ -43,7 +48,7 @@ export const chips: ChipModel[] = [
         className="fill-current"
         aria-labelledby="Food Served"
       >
-        <title id="Food Served">Food Served</title>
+        <title>Food Served</title>
         <path
           fillRule="evenodd"
           clipRule="evenodd"
@@ -60,6 +65,8 @@ export const chips: ChipModel[] = [
     ),
     text: "Food Served",
     value: "foodServed",
+    maxCountCharacters: 200,
+    placeholderText: "Chinese Food like Dumplings",
   },
   {
     icon: (
@@ -71,7 +78,7 @@ export const chips: ChipModel[] = [
         className="fill-current"
         aria-labelledby="BYOY"
       >
-        <title id="BYOY">BYOY</title>
+        <title>BYOY</title>
         <path
           fillRule="evenodd"
           clipRule="evenodd"
@@ -83,6 +90,9 @@ export const chips: ChipModel[] = [
     ),
     text: "BYOY",
     value: "byoy",
+    maxCountCharacters: 200,
+    placeholderText:
+      "Yes, it's BYOB! Feel free to bring whatever you’d like to drink.",
   },
   {
     icon: (
@@ -94,7 +104,7 @@ export const chips: ChipModel[] = [
         className="fill-current"
         aria-labelledby="Dress Code"
       >
-        <title id="Dress Code">Dress Code</title>
+        <title>Dress Code</title>
         <path
           d="M16.0722 21.7006C15.9771 23.1833 8.02338 23.0991 7.92236 21.7006C7.63066 14.0682 8.79639 11.19 9.16483 8.56434C9.25398 7.92998 8.46906 6.80236 8.27345 6.01795C7.85547 4.36045 8.4542 2.91192 7.85547 1.54514L8.71914 1.21875C9.20645 3.12038 10.4921 4.47877 12.0015 4.47877C13.5109 4.47877 14.7965 3.12038 15.2838 1.21875L16.1475 1.54509C15.5487 2.91192 16.1475 4.36041 15.7295 6.01791C15.5314 6.80236 14.747 7.92994 14.8381 8.56434C15.1981 11.1905 16.3639 14.0687 16.0722 21.7006Z"
           fill="currentColor"
@@ -103,6 +113,8 @@ export const chips: ChipModel[] = [
     ),
     text: "Dress Code",
     value: "dressCode",
+    maxCountCharacters: 200,
+    placeholderText: "It’s a red theme—get creative with your outfit!",
   },
   {
     icon: (
@@ -114,7 +126,7 @@ export const chips: ChipModel[] = [
         className="fill-current"
         aria-labelledby="Registry"
       >
-        <title id="Registry">Registry</title>
+        <title>Registry</title>
         <path
           fillRule="evenodd"
           clipRule="evenodd"
@@ -129,6 +141,9 @@ export const chips: ChipModel[] = [
     ),
     text: "Registry",
     value: "registry",
+    maxCountCharacters: 200,
+    placeholderText: "",
+    preText: "Find it here:",
   },
   {
     icon: (
@@ -140,7 +155,7 @@ export const chips: ChipModel[] = [
         className="fill-current"
         aria-labelledby="Special Group"
       >
-        <title id="Special Group">Special Group</title>
+        <title>Special Group</title>
         <path
           fillRule="evenodd"
           clipRule="evenodd"
@@ -157,5 +172,8 @@ export const chips: ChipModel[] = [
     ),
     text: "Special Group",
     value: "specialGroup",
+    maxCountCharacters: 200,
+    placeholderText:
+      "No, this is a casual get-together for friends and family.",
   },
 ];

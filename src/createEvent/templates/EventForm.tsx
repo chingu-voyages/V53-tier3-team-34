@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { LuCrown, LuDollarSign, LuMapPin, LuUsers } from "react-icons/lu"; // Assuming these are the correct imports for your icons
 import Input from "../molecules/Input";
 import TextArea from "../molecules/TextArea";
 import ToggleInput from "../molecules/ToggleInput";
@@ -9,6 +8,7 @@ import { RSVP } from "../oragnisms/RSVP";
 
 import { z } from "zod";
 import { createEvent } from "../../app/create/action";
+import { icons } from "../config/icons";
 
 const eventFormSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -28,7 +28,8 @@ const eventFormSchema = z.object({
   reason: z.string().nullable(),
   guestHonor: z.string().nullable(),
   host: z.string().nullable(),
-  guestCount: z.number().nullable(),
+  userGuestLimit: z.number().nullable(),
+  maxGuestLimit: z.number().nullable(),
   address: z.string().nullable(),
   isOutdoor: z.boolean().default(false),
   costPerPerson: z.number().nullable(),
@@ -37,10 +38,10 @@ const eventFormSchema = z.object({
   rsvpMoods: z.array(
     z.object({
       name: z.enum(["Attending", "Maybe", "Regretfully"]),
-      emoji: z.string().nullable(),
+      emoji: z.string(),
     }),
   ),
-  chips: z.array(z.string()),
+  chips: z.array(z.object({ chipValue: z.string(), inputValue: z.string() })),
 });
 
 export type EventFormData = z.infer<typeof eventFormSchema>;
@@ -49,7 +50,7 @@ export type MoodType = "Attending" | "Maybe" | "Regretfully";
 
 export interface RSVPMood {
   name: MoodType;
-  emoji: string | null;
+  emoji: string;
 }
 
 const EventForm = () => {
@@ -62,7 +63,8 @@ const EventForm = () => {
     image: null,
     guestHonor: null,
     host: null,
-    guestCount: null,
+    userGuestLimit: null,
+    maxGuestLimit: null,
     address: null,
     isOutdoor: false,
     costPerPerson: null,
@@ -71,15 +73,15 @@ const EventForm = () => {
     rsvpMoods: [
       {
         name: "Attending",
-        emoji: null,
+        emoji: "1f970",
       },
       {
         name: "Maybe",
-        emoji: null,
+        emoji: "1f9d0",
       },
       {
         name: "Regretfully",
-        emoji: null,
+        emoji: "1f614",
       },
     ],
     chips: [],
@@ -105,7 +107,7 @@ const EventForm = () => {
       }));
     }
   };
-  const handleRSVPMoodChange = (name: string, emoji: string | null) => {
+  const handleRSVPMoodChange = (name: string, emoji: string) => {
     setFormData((prevState) => ({
       ...prevState,
       rsvpMoods: prevState.rsvpMoods.map((mood) =>
@@ -114,15 +116,30 @@ const EventForm = () => {
     }));
   };
 
-  const handleChipsChange = (value: string) => {
-    let chips = formData.chips;
-    if (!chips.includes(value)) {
-      chips = [...chips, value];
-      setFormData((prevState) => ({
-        ...prevState,
-        chips,
-      }));
+  const handleChipsChange = (
+    chipValue: string,
+    inputValue: string,
+    isSelected: boolean,
+  ) => {
+    const chips = formData.chips;
+
+    const existingChipIndex = chips.findIndex(
+      (chip) => chip.chipValue === chipValue,
+    );
+
+    if (!isSelected) {
+      chips.splice(existingChipIndex, 1);
+    } else if (existingChipIndex === -1) {
+      chips.push({ chipValue, inputValue });
+    } else {
+      const chip = chips[existingChipIndex];
+      chip.inputValue = inputValue;
     }
+
+    setFormData({
+      ...formData,
+      chips,
+    });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -155,65 +172,84 @@ const EventForm = () => {
             value={formData.title}
             onChange={handleChange}
             isRequired={true}
-            toolTipContent="(Required) Event Title"
-            className="text-6xl leading-10"
+            className="text-6xl placeholder:text-6xl leading-10 h-24"
           />
 
           <Input
+            icon={icons.cake}
+            name="reason"
+            placeholder="Reason to Celebrate"
+            value={formData.reason || ""}
+            onChange={handleChange}
+            isRequired={true}
+            className="text-xl placeholder:text-xl font-medium leading-loose"
+          />
+
+          <Input
+            icon={icons.person}
             name="guestHonor"
             value={formData.guestHonor || ""}
             onChange={handleChange}
             preText="Guest of Honor"
-            toolTipContent="(Optional) Guest Honor"
-            placeholder="(Optional) Name"
+            placeholder="(Maria Tash)"
+            className="text-xl placeholder:text-xl font-medium leading-loose"
           />
 
           <Input
-            icon={<LuCrown size={18} />}
+            icon={icons.host}
             preText="Hosted by"
-            placeholder="(Optional) Name"
+            placeholder="(Kaia)"
             value={formData.host || ""}
             onChange={handleChange}
             name="host"
-            toolTipContent="(Optional) Organizer"
-            className="text-[#dbd8d8] text-xl font-medium font-['Mona Sans'] leading-loose"
+            className="text-xl placeholder:text-xl font-medium leading-loose"
           />
 
           <Input
-            icon={<LuMapPin size={18} />}
-            placeholder="Place name, address, or link"
+            icon={icons.chair}
+            placeholder="(Maximum)"
+            postText="Attendance"
+            value={formData.userGuestLimit || ""}
+            onChange={handleChange}
+            name="maxGuestLimit"
+            type="number"
+            className="text-xl placeholder:text-xl font-medium leading-loose"
+          />
+
+          <Input
+            icon={icons.addPeople}
+            placeholder="(0)"
+            preText="Bring Guest"
+            value={formData.userGuestLimit || ""}
+            onChange={handleChange}
+            name="userGuestLimit"
+            type="number"
+            className="text-xl placeholder:text-xl font-medium leading-loose"
+          />
+
+          <Input
+            icon={icons.location}
+            name="address"
+            placeholder="MInistry Of Sound, 103 Gaunt ST, LONDON, SE1 6DP"
             value={formData.address || ""}
             onChange={handleChange}
-            name="address"
-            toolTipContent="(Optional) Location"
+            className="text-xl placeholder:text-xl font-medium leading-loose"
           />
 
           <Input
-            icon={<LuUsers size={18} />}
-            placeholder="Number"
-            preText="Bring Guest"
-            value={formData.guestCount || ""}
-            onChange={handleChange}
-            name="guestCount"
-            toolTipContent="(Optional) Max Capacity"
-            type="number"
-          />
-
-          <Input
-            icon={<LuDollarSign size={18} />}
-            placeholder="Number"
+            icon={icons.cost}
+            placeholder="Add Cost Per Person"
             value={formData.costPerPerson || ""}
             onChange={handleChange}
             name="costPerPerson"
             type="number"
-            toolTipContent="(Optional) Cost per person"
-            postText="cost per person"
+            className="text-xl placeholder:text-xl font-medium leading-loose"
           />
 
           <ToggleInput
+            icon={icons.sunrise}
             text="Outdoor"
             name="outdoor"
-            toolTipContent="(Optional) Outdoor Event"
             isToggled={formData.isOutdoor}
             onChange={handleToggleChange}
           />
@@ -227,7 +263,6 @@ const EventForm = () => {
             name="description"
             value={formData.description || ""}
             onChange={handleChange}
-            toolTipContent="(Optional) Description"
             placeholder="Add a description of your event"
           />
         </div>
@@ -236,7 +271,6 @@ const EventForm = () => {
           <ToggleInput
             name="isPublic"
             text="Public Event"
-            toolTipContent="(Optional) Public Event"
             isToggled={formData.isPublic}
             onChange={handleToggleChange}
           />
@@ -244,7 +278,6 @@ const EventForm = () => {
           <ToggleInput
             name="requireGuestApproval"
             text="Require Guest Approval"
-            toolTipContent="(Optional) Require Guest Approval"
             isToggled={formData.requireGuestApproval}
             onChange={handleToggleChange}
           />
