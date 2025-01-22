@@ -64,21 +64,3 @@ export async function createEvent(eventFormData: EventFormData) {
     },
   });
 }
-
-export const getEventByID = async (session: Session, eventId: string) => {
-  if (!session || !session.user) {
-    return {
-      status: 401,
-      body: "Unauthorized",
-    };
-  }
-
-  const events = await prisma.event.findUnique({
-    where: {
-      id: eventId,
-      authorId: session.userID,
-    },
-  });
-
-  return events;
-};

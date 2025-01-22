@@ -8,11 +8,10 @@ const UserEvents = async ({
 }: {
   params: Promise<{
     eventId: string;
-    userId: string;
   }>;
 }) => {
-  const { eventId, userId } = await params;
-  const event = await getEvent(eventId, userId);
+  const { eventId } = await params;
+  const event = await getEvent(eventId);
 
   if (!event) {
     return <div>Event not found</div>;

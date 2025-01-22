@@ -1,9 +1,9 @@
 import prisma from "../../prisma/client";
-import getUser from "./getUser";
+import getUserSession from "./getUserSession";
 
 const getEvents = async () => {
   try {
-    const user = await getUser();
+    const user = await getUserSession();
 
     if (!user) {
       return null;
@@ -11,7 +11,7 @@ const getEvents = async () => {
 
     const events = await prisma.event.findMany({
       where: {
-        authorId: user.id,
+        authorId: user.userID,
       },
       select: {
         id: true,

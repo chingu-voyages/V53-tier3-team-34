@@ -1,11 +1,18 @@
 import prisma from "../../prisma/client";
+import getUserSession from "./getUserSession";
 
-const getEvent = async (eventId: string, userId: string) => {
+const getEvent = async (eventId: string) => {
+  const session = await getUserSession();
+
+  if (!session?.user) {
+    return null;
+  }
+
   try {
     const event = await prisma.event.findUnique({
       where: {
         id: eventId,
-        authorId: userId,
+        authorId: session.userID,
       },
     });
     return event;
