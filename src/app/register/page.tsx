@@ -1,11 +1,11 @@
 "use client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { RegisterUser } from "./action";
 
 const Register = () => {
-  const router = useRouter();
+  // const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,8 +20,14 @@ const Register = () => {
       return alert("Error creating user");
     }
 
-    return router.push("/");
+    // const referer = (await headers()).get("referer");
+
+    // if (referer?.includes("/create")) {
+    //   return router.push(referer);
+    // }
+    // return router.push("/");
   };
+
   return (
     <div className="p-24 flex flex-col gap-8 items-center">
       <h2 className="font-semibold text-3xl">Register</h2>
