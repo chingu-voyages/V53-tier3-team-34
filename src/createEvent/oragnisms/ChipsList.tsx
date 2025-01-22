@@ -1,7 +1,8 @@
+import { Button } from "@/components/ui/button";
+import { useCreateEventTheme } from "@/providers/themeProvider";
 import { Inter } from "next/font/google";
 import type React from "react";
 import { type ChangeEvent, useEffect, useState } from "react";
-import { useCreateEventTheme } from "../../app/create/provider";
 import { type ChipModel, chips } from "../config/chipConfig";
 import Chip from "../molecules/Chip";
 import Input from "../molecules/Input";
@@ -92,13 +93,13 @@ const ChipsList: React.FC<ChipsListProps> = ({ selectedChips, onChange }) => {
             onChange={() => onSelected(chip)}
           />
         ))}
-        <button
+        <Button
           className="bg-none text-base font-medium text-white"
           type="button"
           onClick={() => setShowLess(!showLess)}
         >
           {showLess ? "Show more" : "Show less"}
-        </button>
+        </Button>
       </div>
     </>
   );

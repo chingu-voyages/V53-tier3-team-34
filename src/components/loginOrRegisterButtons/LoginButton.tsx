@@ -5,7 +5,7 @@ import { signIn } from "next-auth/react";
 
 const LoginButton = () => {
   return (
-    <Button onClick={() => signIn("email", { callbackUrl: "/events" })}>
+    <Button onClick={() => signIn("email", { callbackUrl: "/events/create" })}>
       Login
     </Button>
   );

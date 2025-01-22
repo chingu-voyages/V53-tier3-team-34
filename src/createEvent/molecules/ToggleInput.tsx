@@ -1,5 +1,5 @@
 import { Switch } from "@/components/ui/switch";
-import { useCreateEventTheme } from "../../app/create/provider";
+import { useCreateEventTheme } from "@/providers/themeProvider";
 
 interface ToggleInputProps {
   icon?: React.ReactNode;

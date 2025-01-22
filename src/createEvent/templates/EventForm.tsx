@@ -1,17 +1,18 @@
 "use client";
+import { useSession } from "next-auth/react";
+import { Peralta } from "next/font/google";
 import { useState } from "react";
+import { z } from "zod";
 import Input from "../molecules/Input";
 import TextArea from "../molecules/TextArea";
 import ToggleInput from "../molecules/ToggleInput";
 import ChipsList from "../oragnisms/ChipsList";
 import { RSVP } from "../oragnisms/RSVP";
 
-import { saveEventToIndexedDB } from "@/app/create/indexedDBActions";
-import { useCreateEventTheme } from "@/app/create/provider";
-import { useSession } from "next-auth/react";
-import { Peralta } from "next/font/google";
-import { z } from "zod";
-import { createEvent } from "../../app/create/action";
+import { createEvent } from "@/actions/createEvent";
+import { saveEventToIndexedDB } from "@/app/(pages)/events/create/indexedDBActions";
+import { Button } from "@/components/ui/button";
+import { useCreateEventTheme } from "@/providers/themeProvider";
 import { icons } from "../config/icons";
 import type { MoodType } from "../config/rvspMood";
 import TopMenu from "../oragnisms/TopMenu";
@@ -144,18 +145,10 @@ const EventForm = () => {
         return;
       }
       console.log("Form is valid! Submitting...");
-      createEvent(session, formData);
+      createEvent(formData);
       // Proceed with submission logic
     } catch (e) {
       console.log(e);
-      //   if (e instanceof z.ZodError) {
-      //     // Map the errors to a user-friendly format
-      //     const errorMap = e.errors.reduce((acc, curr) => {
-      //       acc[curr.path[0]] = curr.message; // Map field to error message
-      //       return acc;
-      //     }, {});
-      //     setErrors(errorMap); // Update errors state
-      //   }
     }
   };
 
@@ -315,12 +308,12 @@ const EventForm = () => {
           </div>
         </div>
 
-        <button
+        <Button
           type="submit"
           className="px-6 py-2 h-16 bg-[#084be7] text-white text-center text-base font-bold leading-normal w-max inline self-end"
         >
           Done
-        </button>
+        </Button>
       </form>
     </>
   );

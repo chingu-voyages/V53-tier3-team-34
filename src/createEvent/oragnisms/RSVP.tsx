@@ -1,7 +1,7 @@
 import type React from "react";
 import RSVPEmojiPicker from "../molecules/RSVPEmojiPicker";
 
-import { useCreateEventTheme } from "../../app/create/provider";
+import { useCreateEventTheme } from "@/providers/themeProvider";
 import { type MoodType, type RSVPMood, rsvpMoods } from "../config/rvspMood";
 
 interface RSVPProps {

@@ -11,7 +11,6 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
 
 export const AuthConfig: AuthOptions = {
   adapter: PrismaAdapter(prisma),
-  callbacks: {},
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -23,7 +22,6 @@ export const AuthConfig: AuthOptions = {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
-
       async authorize(credentials) {
         if (!credentials?.email || !credentials.password) {
           throw new Error("Email and password are required.");
@@ -35,6 +33,7 @@ export const AuthConfig: AuthOptions = {
           where: { email },
         });
 
+        console.log("Hello, World!", credentials);
         if (!user) {
           throw new Error("No user fround with this email.");
         }

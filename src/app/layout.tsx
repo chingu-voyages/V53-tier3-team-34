@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Mona_Sans } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/utils/themeContext";
+
 import DesktopHeader from "@/components/header/DesktopHeader";
+import { ThemeProvider } from "@/providers/themeProvider";
 
 const monoSans = Mona_Sans({
   variable: "--font-mona-sans",

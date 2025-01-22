@@ -1,6 +1,3 @@
-// import bgDark from "../../images/background/dark.jpg";
-// import bgLight from "../../../public/assets/images/background/light.jpg";
-
 export interface Theme {
   pageBgImage: string;
   iconColor: string;

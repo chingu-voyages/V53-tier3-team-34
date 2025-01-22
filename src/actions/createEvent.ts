@@ -1,15 +1,12 @@
 "use server";
 
-import { PrismaClient } from "@prisma/client";
-import type { Session } from "next-auth";
-import type { EventFormData } from "../../createEvent/templates/EventForm";
+import prisma from "@/../prisma/client";
+import getUserSession from "@/actions/getUserSession";
+import type { EventFormData } from "@/createEvent/templates/EventForm";
 
-const prisma = new PrismaClient();
+export async function createEvent(eventFormData: EventFormData) {
+  const session = await getUserSession();
 
-export async function createEvent(
-  session: Session,
-  eventFormData: EventFormData,
-) {
   if (!eventFormData) {
     return {
       status: 400,
@@ -17,7 +14,7 @@ export async function createEvent(
     };
   }
 
-  if (!session || !session.user) {
+  if (!session?.user) {
     return {
       status: 401,
       body: "Unauthorized",
