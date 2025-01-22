@@ -168,12 +168,14 @@ const EventForm = () => {
         >
           Partiyo
         </h1>
-        <button
-          className="px-6 py-2 h-16 bg-[#084be7] text-center text-white text-base font-bold leading-normal"
-          type="button"
-        >
-          Sign In
-        </button>
+        {!session && (
+          <button
+            className="px-6 py-2 h-16 bg-[#084be7] text-center text-white text-base font-bold leading-normal"
+            type="button"
+          >
+            Sign In
+          </button>
+        )}
       </header>
       <form
         onSubmit={handleSubmit}
