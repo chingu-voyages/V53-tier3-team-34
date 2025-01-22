@@ -6,12 +6,20 @@ import ToggleInput from "../molecules/ToggleInput";
 import ChipsList from "../oragnisms/ChipsList";
 import { RSVP } from "../oragnisms/RSVP";
 
+import { saveEventToIndexedDB } from "@/app/create/indexedDBActions";
 import { useCreateEventTheme } from "@/app/create/provider";
+import { useSession } from "next-auth/react";
+import { Peralta } from "next/font/google";
 import { z } from "zod";
 import { createEvent } from "../../app/create/action";
 import { icons } from "../config/icons";
 import type { MoodType } from "../config/rvspMood";
 import TopMenu from "../oragnisms/TopMenu";
+
+const peralta = Peralta({
+  weight: "400",
+  subsets: ["latin"],
+});
 
 const eventFormSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -50,6 +58,8 @@ const eventFormSchema = z.object({
 export type EventFormData = z.infer<typeof eventFormSchema>;
 
 const EventForm = () => {
+  const { data: session } = useSession();
+
   const [formData, setFormData] = useState<EventFormData>({
     title: "",
     date: new Date(),
@@ -129,8 +139,12 @@ const EventForm = () => {
     try {
       e.preventDefault();
       eventFormSchema.parse(formData); // Will throw an error if validation fails
+      if (!session) {
+        saveEventToIndexedDB(formData);
+        return;
+      }
       console.log("Form is valid! Submitting...");
-      createEvent(formData);
+      createEvent(session, formData);
       // Proceed with submission logic
     } catch (e) {
       console.log(e);
@@ -149,7 +163,9 @@ const EventForm = () => {
   return (
     <>
       <header className="flex justify-between items-center bg-red-600 py-9 px-16">
-        <h1 className="text-white text-4xl font-normal font-['Peralta'] leading-tight">
+        <h1
+          className={`text-white text-4xl font-normal ${peralta.className} leading-tight`}
+        >
           Partiyo
         </h1>
         <button
@@ -161,9 +177,9 @@ const EventForm = () => {
       </header>
       <form
         onSubmit={handleSubmit}
-        className={`p-4 flex flex-col gap-3 ${theme.pageBgImage} bg-cover`}
+        className={`pb-9 px-16 flex flex-col gap-3 ${theme.pageBgImage} bg-cover`}
       >
-        <div className="w-full flex flex-col md:flex-row justify-center space-y-3 md:space-y-0 md:space-x-3">
+        <div className="w-full flex flex-col md:flex-row justify-center space-y-3 md:space-y-0 md:space-x-11">
           <div className="flex flex-col space-y-3">
             <TopMenu />
             <Input
@@ -172,6 +188,7 @@ const EventForm = () => {
               value={formData.title}
               onChange={handleChange}
               isRequired={true}
+              parentClassName="h-24"
               className="text-6xl placeholder:text-6xl leading-10 h-24"
             />
 
@@ -182,6 +199,7 @@ const EventForm = () => {
               value={formData.reason || ""}
               onChange={handleChange}
               isRequired={true}
+              parentClassName="h-10"
               className="text-xl placeholder:text-xl font-medium leading-loose"
             />
 
@@ -192,6 +210,7 @@ const EventForm = () => {
               onChange={handleChange}
               preText="Guest of Honor"
               placeholder="(Maria Tash)"
+              parentClassName="h-10"
               className="text-xl placeholder:text-xl font-medium leading-loose"
             />
 
@@ -202,6 +221,7 @@ const EventForm = () => {
               value={formData.host || ""}
               onChange={handleChange}
               name="host"
+              parentClassName="h-10"
               className="text-xl placeholder:text-xl font-medium leading-loose"
             />
 
@@ -213,6 +233,7 @@ const EventForm = () => {
               onChange={handleChange}
               name="maxGuestLimit"
               type="number"
+              parentClassName="h-10"
               className="text-xl placeholder:text-xl font-medium leading-loose"
             />
 
@@ -224,6 +245,7 @@ const EventForm = () => {
               onChange={handleChange}
               name="userGuestLimit"
               type="number"
+              parentClassName="h-10"
               className="text-xl placeholder:text-xl font-medium leading-loose"
             />
 
@@ -233,6 +255,7 @@ const EventForm = () => {
               placeholder="MInistry Of Sound, 103 Gaunt ST, LONDON, SE1 6DP"
               value={formData.address || ""}
               onChange={handleChange}
+              parentClassName="h-10"
               className="text-xl placeholder:text-xl font-medium leading-loose"
             />
 
@@ -243,6 +266,7 @@ const EventForm = () => {
               onChange={handleChange}
               name="costPerPerson"
               type="number"
+              parentClassName="h-10"
               className="text-xl placeholder:text-xl font-medium leading-loose"
             />
 
@@ -288,6 +312,7 @@ const EventForm = () => {
             />
           </div>
         </div>
+
         <button
           type="submit"
           className="px-6 py-2 h-16 bg-[#084be7] text-white text-center text-base font-bold leading-normal w-max inline self-end"

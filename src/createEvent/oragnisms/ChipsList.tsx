@@ -1,3 +1,4 @@
+import { Inter } from "next/font/google";
 import type React from "react";
 import { type ChangeEvent, useEffect, useState } from "react";
 import { useCreateEventTheme } from "../../app/create/provider";
@@ -14,6 +15,8 @@ interface ChipsListProps {
     isSelected: boolean,
   ) => void;
 }
+
+const inter = Inter({ subsets: ["latin"] });
 
 const ChipsList: React.FC<ChipsListProps> = ({ selectedChips, onChange }) => {
   const [displayedChips, setDisplayedChips] = useState(chips);
@@ -53,6 +56,8 @@ const ChipsList: React.FC<ChipsListProps> = ({ selectedChips, onChange }) => {
               placeholder={chip.placeholderText}
               preText={chip.preText}
               maxCount={chip.maxCountCharacters}
+              parentClassName={`h-10 bg-white/40 ${inter.className}`}
+              className="text-xl placeholder:text-xl font-medium font-['Inter'] leading-loose"
               postButton={
                 <button type="button" onClick={() => onClose(chip)}>
                   <svg

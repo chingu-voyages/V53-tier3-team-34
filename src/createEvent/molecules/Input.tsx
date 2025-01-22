@@ -12,6 +12,7 @@ interface InputProps {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   type?: "text" | "number";
   isRequired?: boolean;
+  parentClassName?: string;
   className?: string;
   maxCount?: number;
   postButton?: React.ReactNode;
@@ -27,6 +28,7 @@ const Input: React.FC<InputProps> = ({
   onChange,
   type = "text",
   isRequired = false,
+  parentClassName,
   className,
   maxCount,
   postButton,
@@ -50,6 +52,7 @@ const Input: React.FC<InputProps> = ({
             ref.current === document.activeElement &&
             `border ${theme.focusInputBorderColor}`
           }
+          ${parentClassName}
         `}
       onClick={handleClick}
       onKeyDown={handleClick}

@@ -9,7 +9,7 @@ import type { MoodType, RSVPMood } from "../config/rvspMood";
 import type { Theme } from "../config/themeConfig";
 
 interface RVSPEmojiPickerProps {
-  mood: Omit<RSVPMood, "name">;
+  mood: RSVPMood;
   theme: Theme;
   onChange: (value: MoodType, emoji: string) => void;
   selectedRSVPEmoji?: string;
@@ -30,7 +30,7 @@ const RVSPEmojiPicker: React.FC<RVSPEmojiPickerProps> = ({
       <Popover>
         <PopoverTrigger>
           <div
-            className={`flex items-center justify-center w-28 h-28 rounded-full cursor-pointer border ${theme.focusInputBorderColor}`}
+            className={`flex items-center justify-center w-28 h-28 rounded-full border-none cursor-pointer border backdrop-blur-2xl ${theme.focusInputBorderColor}`}
           >
             <Emoji
               unified={selectedRSVPEmoji ? selectedRSVPEmoji : mood.emoji}
@@ -47,7 +47,7 @@ const RVSPEmojiPicker: React.FC<RVSPEmojiPickerProps> = ({
         </PopoverContent>
       </Popover>
       <p className={`${theme.textColor} text-xl font-medium text-center p-2`}>
-        {mood.value}
+        {mood.name}
       </p>
     </div>
   );
