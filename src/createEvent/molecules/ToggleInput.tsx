@@ -19,7 +19,7 @@ const ToggleInput: React.FC<ToggleInputProps> = ({
   const { theme } = useCreateEventTheme();
   return (
     <div
-      className={`flex items-center space-x-2 p-2 backdrop-blur-2xl h-10 ${theme.inputBgColor}`}
+      className={`flex items-center space-x-2 p-2 backdrop-blur-2xl h-10 ${theme.inputBgColor} ${theme.inputHoverBgColor}`}
     >
       {icon && <div className={`${theme.iconColor} flex-shrink-0`}>{icon}</div>}
       <Switch

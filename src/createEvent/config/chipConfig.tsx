@@ -2,6 +2,7 @@ export interface ChipModel {
   icon: React.ReactNode;
   text: string;
   value: string;
+  inputValue?: string;
   maxCountCharacters: number;
   placeholderText?: string;
   preText?: string;

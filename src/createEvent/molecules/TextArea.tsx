@@ -29,6 +29,7 @@ const TextArea: React.FC<TextAreaProps> = ({
         ${theme.inputBgColor}
         ${theme.textColor}
         ${theme.placeholderTextColor}
+        ${theme.inputHoverBgColor}
         placeholder:text-xl
         focus:border focus:${theme.focusInputBorderColor}
         w-full p-2

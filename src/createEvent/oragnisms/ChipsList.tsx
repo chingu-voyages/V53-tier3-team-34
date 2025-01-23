@@ -24,12 +24,14 @@ const ChipsList: React.FC<ChipsListProps> = ({ selectedChips, onChange }) => {
   const [showLess, setShowLess] = useState(false);
   const { theme } = useCreateEventTheme();
 
-  const isSelected = (selectedChip: ChipModel) =>
-    selectedChips.findIndex((chip) => chip.value === selectedChip.value) !== -1;
+  const selectedChipMap = new Map(
+    selectedChips.map((chip) => [chip.value, chip]),
+  );
 
-  useEffect(() => {
-    setDisplayedChips(chips.slice(0, showLess ? 3 : chips.length));
-  }, [showLess]);
+  const isSelected = (chip: ChipModel) => selectedChipMap.has(chip.value);
+
+  const getInputValue = (chip: ChipModel) =>
+    selectedChipMap.get(chip.value)?.inputValue || "";
 
   const onClose = (chip: ChipModel) => {
     onChange(chip.value, "", false);
@@ -39,9 +41,20 @@ const ChipsList: React.FC<ChipsListProps> = ({ selectedChips, onChange }) => {
     onChange(chip.value, e.target.value, true);
   };
 
-  const onSelected = (chip: ChipModel) => {
-    onChange(chip.value, "", true);
+  const onSelected = (chip: ChipModel, isSelected: boolean) => {
+    onChange(chip.value, "", isSelected);
   };
+
+  useEffect(() => {
+    if (selectedChips.length > 3) {
+      setShowLess(false);
+      setDisplayedChips(chips);
+    } else if (showLess) {
+      setDisplayedChips(chips.slice(0, 3));
+    } else {
+      setDisplayedChips(chips);
+    }
+  }, [showLess, selectedChips]);
 
   return (
     <>
@@ -52,7 +65,7 @@ const ChipsList: React.FC<ChipsListProps> = ({ selectedChips, onChange }) => {
               icon={chip.icon}
               key={`input${chip.value}`}
               name={chip.text}
-              value={""}
+              value={getInputValue(chip)}
               onChange={(e) => onInputChange(chip, e)}
               placeholder={chip.placeholderText}
               preText={chip.preText}
@@ -83,6 +96,7 @@ const ChipsList: React.FC<ChipsListProps> = ({ selectedChips, onChange }) => {
             />
           ),
       )}
+
       <div className="flex flex-wrap gap-2">
         {displayedChips.map((chip) => (
           <Chip
@@ -90,17 +104,19 @@ const ChipsList: React.FC<ChipsListProps> = ({ selectedChips, onChange }) => {
             chip={chip}
             theme={theme}
             isSelected={isSelected(chip)}
-            onChange={() => onSelected(chip)}
+            onChange={() => onSelected(chip, !isSelected(chip))}
           />
         ))}
-        <Button
-          className="bg-none text-base font-medium text-white hover:bg-transparent hover:text-white"
-          type="button"
-          variant="ghost"
-          onClick={() => setShowLess(!showLess)}
-        >
-          {showLess ? "Show more" : "Show less"}
-        </Button>
+        {selectedChips.length <= 3 && (
+          <Button
+            className="bg-none text-base font-medium text-white hover:bg-transparent hover:text-white"
+            type="button"
+            variant="ghost"
+            onClick={() => setShowLess(!showLess)}
+          >
+            {showLess ? "Show more" : "Show less"}
+          </Button>
+        )}
       </div>
     </>
   );

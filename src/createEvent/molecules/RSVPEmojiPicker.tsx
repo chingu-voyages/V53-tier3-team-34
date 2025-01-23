@@ -3,7 +3,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import EmojiPicker, { Emoji, type EmojiClickData } from "emoji-picker-react";
+import EmojiPicker, {
+  Emoji,
+  EmojiStyle,
+  type EmojiClickData,
+} from "emoji-picker-react";
 import type React from "react";
 import type { Theme } from "../../providers/themeConfig";
 import type { MoodType, RSVPMood } from "../config/rvspMood";
@@ -13,6 +17,7 @@ interface RVSPEmojiPickerProps {
   theme: Theme;
   onChange: (value: MoodType, emoji: string) => void;
   selectedRSVPEmoji?: string;
+  popOverPosition?: string;
 }
 
 const RVSPEmojiPicker: React.FC<RVSPEmojiPickerProps> = ({
@@ -40,9 +45,10 @@ const RVSPEmojiPicker: React.FC<RVSPEmojiPickerProps> = ({
         </PopoverTrigger>
         <PopoverContent className="w-0 h-0 p-0 bg-none border-0">
           <EmojiPicker
+            emojiStyle={EmojiStyle.APPLE}
             previewConfig={{ defaultEmoji: mood.emoji, showPreview: false }}
             onEmojiClick={onEmojiClick}
-            className={`${theme.emojiPickerTextColor} ${theme.emojiPickerBgColor} ${theme.emojiPickerHoverBgColor} ${theme.emojiPickerCategoryLabelBgColor}`}
+            // className={`${theme.emojiPickerTextColor} ${theme.emojiPickerBgColor} ${theme.emojiPickerHoverBgColor} ${theme.emojiPickerCategoryLabelBgColor}`}
           />
         </PopoverContent>
       </Popover>

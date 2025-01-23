@@ -123,6 +123,7 @@ const EventForm = () => {
       chip.inputValue = inputValue;
     }
 
+    console.log(chips);
     setFormData({
       ...formData,
       chips,
@@ -189,7 +190,7 @@ const EventForm = () => {
               onChange={handleChange}
               isRequired={true}
               parentClassName="h-24"
-              className="text-6xl placeholder:text-6xl leading-10 h-24"
+              className="text-6xl placeholder:text-6xl leading-10 h-24 font-semibold"
             />
 
             <Input
@@ -229,7 +230,7 @@ const EventForm = () => {
               icon={icons.chair}
               placeholder="(Maximum)"
               postText="Attendance"
-              value={formData.userGuestLimit || ""}
+              value={formData.maxGuestLimit || ""}
               onChange={handleChange}
               name="maxGuestLimit"
               type="number"
@@ -273,7 +274,7 @@ const EventForm = () => {
             <ToggleInput
               icon={icons.sunrise}
               text="Outdoor"
-              name="outdoor"
+              name="isOutdoor"
               isToggled={formData.isOutdoor}
               onChange={handleToggleChange}
             />
@@ -291,7 +292,7 @@ const EventForm = () => {
             />
           </div>
 
-          <div className="flex flex-col space-y-3 pt-28">
+          <div className="flex flex-col space-y-3 pt-0 md:pt-28">
             <ImageUpload
               onChange={handleImageChange}
               imageURL={formData.imageUrl}
@@ -312,6 +313,7 @@ const EventForm = () => {
             />
 
             <RSVP
+              requireGuestApproval={formData.requireGuestApproval}
               selectedRVSPMoods={formData.rsvpMoods}
               onChange={handleRSVPMoodChange}
             />

@@ -7,7 +7,7 @@ import { ThemeProvider } from "@/providers/themeProvider";
 const monoSans = Mona_Sans({
   variable: "--font-mona-sans",
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["500", "700"],
 });
 
 export const metadata: Metadata = {
