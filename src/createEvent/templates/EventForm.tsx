@@ -129,6 +129,15 @@ const EventForm = () => {
     });
   };
 
+  const handleImageChange = (imageURL?: string) => {
+    if (imageURL) {
+      setFormData((prevState) => ({
+        ...prevState,
+        imageUrl: imageURL,
+      }));
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     try {
       e.preventDefault();
@@ -146,6 +155,7 @@ const EventForm = () => {
   };
 
   const { theme } = useCreateEventTheme();
+
   return (
     <div className="flex flex-col min-h-screen">
       <header className="flex justify-between items-center bg-red-600 py-9 px-16">
@@ -282,7 +292,10 @@ const EventForm = () => {
           </div>
 
           <div className="flex flex-col space-y-3 pt-28">
-            <ImageUpload eventId={""} />
+            <ImageUpload
+              onChange={handleImageChange}
+              imageURL={formData.imageUrl}
+            />
 
             <ToggleInput
               name="isPublic"

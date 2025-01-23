@@ -1,24 +1,38 @@
 "use client";
 
-import addImageToDb from "@/actions/uploadImage";
 import { Button } from "@/components/ui/button";
-import { CldUploadWidget } from "next-cloudinary";
+import {
+  CldUploadWidget,
+  type CloudinaryUploadWidgetResults,
+} from "next-cloudinary";
 import EventImage from "../molecules/EventImage";
 
-const ImageUpload = ({ eventId }: { eventId: string }) => {
+interface ImageUploadProps {
+  imageURL: string | null;
+  onChange: (url: string) => void; // The onChange function expects a string URL
+}
+
+const ImageUpload: React.FC<ImageUploadProps> = ({ imageURL, onChange }) => {
+  // Handle successful upload
+  const handleUploadSuccess = async (res: CloudinaryUploadWidgetResults) => {
+    // Ensure the response has a valid URL
+    if (res.info?.url) {
+      onChange(res.info.url);
+    }
+  };
+
   return (
     <CldUploadWidget
-      onSuccess={async (res) => {
-        await addImageToDb({
-          res,
-          eventId,
-        });
-      }}
+      onSuccess={handleUploadSuccess}
       uploadPreset="ml_default"
+      options={{
+        maxFiles: 1, // Optional: Limit number of files uploaded
+        cropping: true, // Optional: Enable cropping feature
+      }}
     >
-      {({ open }) => (
+      {({ open }: { open: () => void }) => (
         <div className="relative inline-block">
-          <EventImage />
+          <EventImage image={imageURL} />
           <Button
             onClick={() => open()}
             className="absolute bottom-0 right-0 z-10 h-16 px-6 py-2 bg-[#084be7] text-center text-base font-bold leading-normal rounded-none"

@@ -21,10 +21,6 @@ export async function createEvent(eventFormData: EventFormData) {
     };
   }
 
-  const image = eventFormData.image
-    ? Buffer.from(await eventFormData.image.arrayBuffer())
-    : null;
-
   const filteredRVSPMoods = eventFormData.rsvpMoods.filter((mood) => {
     return mood.value && mood.emoji;
   });
@@ -38,7 +34,7 @@ export async function createEvent(eventFormData: EventFormData) {
       title: eventFormData.title,
       date: eventFormData.date,
       description: eventFormData.description,
-      image: image,
+      imageUrl: eventFormData.imageUrl,
       style: eventFormData.style,
       reason: eventFormData.reason || "",
       guestHonor: eventFormData.guestHonor,
