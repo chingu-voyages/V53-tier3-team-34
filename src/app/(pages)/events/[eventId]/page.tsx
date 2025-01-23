@@ -1,7 +1,7 @@
 import getEvent from "@/actions/getEvent";
-import EventImage from "@/components/eventImage/EventImage";
-import ImageUpload from "@/components/imageUpload";
-import RemoveEventImage from "@/components/removeEventImage";
+import EventImage from "@/createEvent/molecules/EventImage";
+import RemoveEventImage from "@/createEvent/molecules/RemoveEventImage";
+import ImageUpload from "@/createEvent/oragnisms/ImageUpload";
 
 const UserEvents = async ({
   params,

@@ -13,8 +13,10 @@ import { createEvent } from "@/actions/createEvent";
 import { saveEventToIndexedDB } from "@/app/(pages)/events/create/indexedDBActions";
 import { Button } from "@/components/ui/button";
 import { useCreateEventTheme } from "@/providers/themeProvider";
+import Link from "next/link";
 import { icons } from "../config/icons";
 import type { MoodType } from "../config/rvspMood";
+import ImageUpload from "../oragnisms/ImageUpload";
 import TopMenu from "../oragnisms/TopMenu";
 
 const peralta = Peralta({
@@ -27,16 +29,7 @@ const eventFormSchema = z.object({
   date: z.date(),
   description: z.string().nullable(),
   style: z.string().nullable(),
-  image: z
-    .custom<FileList>()
-    .transform((file) => file.length > 0 && file.item(0))
-    .refine((file) => !file || (!!file && file.size <= 10 * 1024 * 1024), {
-      message: "The event picture must be a maximum of 10MB.",
-    })
-    .refine((file) => !file || (!!file && file.type?.startsWith("image")), {
-      message: "Only images are allowed to be sent.",
-    })
-    .nullable(),
+  imageUrl: z.string().url().nullable(),
   reason: z.string().nullable(),
   guestHonor: z.string().nullable(),
   host: z.string().nullable(),
@@ -67,7 +60,7 @@ const EventForm = () => {
     description: null,
     style: null,
     reason: null,
-    image: null,
+    imageUrl: null,
     guestHonor: null,
     host: null,
     userGuestLimit: null,
@@ -154,7 +147,7 @@ const EventForm = () => {
 
   const { theme } = useCreateEventTheme();
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <header className="flex justify-between items-center bg-red-600 py-9 px-16">
         <h1
           className={`text-white text-4xl font-normal ${peralta.className} leading-tight`}
@@ -162,17 +155,19 @@ const EventForm = () => {
           Partiyo
         </h1>
         {!session && (
-          <button
-            className="px-6 py-2 h-16 bg-[#084be7] text-center text-white text-base font-bold leading-normal"
-            type="button"
-          >
-            Sign In
-          </button>
+          <Link href="/register">
+            <button
+              className="px-6 py-2 h-16 bg-[#084be7] text-center text-white text-base font-bold leading-normal"
+              type="button"
+            >
+              Sign In
+            </button>
+          </Link>
         )}
       </header>
       <form
         onSubmit={handleSubmit}
-        className={`pb-9 px-16 flex flex-col gap-3 ${theme.pageBgImage} bg-cover`}
+        className={`pb-9 px-16 flex-1 flex flex-col gap-3 ${theme.pageBgImage} bg-cover bg-center `}
       >
         <div className="w-full flex flex-col md:flex-row justify-center space-y-3 md:space-y-0 md:space-x-11">
           <div className="flex flex-col space-y-3">
@@ -286,7 +281,9 @@ const EventForm = () => {
             />
           </div>
 
-          <div className="flex flex-col space-y-3">
+          <div className="flex flex-col space-y-3 pt-28">
+            <ImageUpload eventId={""} />
+
             <ToggleInput
               name="isPublic"
               text="Public Event"
@@ -310,12 +307,12 @@ const EventForm = () => {
 
         <Button
           type="submit"
-          className="px-6 py-2 h-16 bg-[#084be7] text-white text-center text-base font-bold leading-normal w-max inline self-end"
+          className="px-6 py-2 h-16 bg-[#084be7] text-white text-center text-base font-bold leading-normal w-max inline self-end rounded-none"
         >
           Done
         </Button>
       </form>
-    </>
+    </div>
   );
 };
 

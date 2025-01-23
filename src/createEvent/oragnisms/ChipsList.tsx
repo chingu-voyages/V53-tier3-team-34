@@ -94,8 +94,9 @@ const ChipsList: React.FC<ChipsListProps> = ({ selectedChips, onChange }) => {
           />
         ))}
         <Button
-          className="bg-none text-base font-medium text-white"
+          className="bg-none text-base font-medium text-white hover:bg-transparent hover:text-white"
           type="button"
+          variant="ghost"
           onClick={() => setShowLess(!showLess)}
         >
           {showLess ? "Show more" : "Show less"}
