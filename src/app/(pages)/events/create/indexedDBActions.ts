@@ -1,4 +1,4 @@
-import type { EventFormData } from "../../../createEvent/templates/EventForm";
+import type { EventFormData } from "@/createEvent/templates/EventForm";
 
 interface IndexedDBEventData extends EventFormData {
   id: number;
