@@ -15,14 +15,16 @@ const addImageToDb = async ({
     throw new Error("Image upload failed");
   }
 
-  const event = await prisma.event.update({
-    where: {
-      id: eventId,
-    },
-    data: {
-      image: res.info?.url,
-    },
-  });
+  // We need to decide on saving the image to the database or the url
+
+  // const event = await prisma.event.update({
+  //   where: {
+  //     id: eventId,
+  //   },
+  //   data: {
+  //     image: res.info?.url,
+  //   },
+  // });
 
   revalidatePath("/[userId]/events/[eventId]");
 
