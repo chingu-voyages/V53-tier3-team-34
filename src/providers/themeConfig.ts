@@ -1,6 +1,3 @@
-// import bgDark from "../../images/background/dark.jpg";
-// import bgLight from "../../../public/assets/images/background/light.jpg";
-
 export interface Theme {
   pageBgImage: string;
   iconColor: string;
@@ -39,7 +36,7 @@ export const themeStyles: Record<ThemeName, Theme> = {
     emojiPickerCategoryLabelBgColor: "![--epr-category-label-bg-color:#d6ff04]",
     chipUnselectedBgColor: "bg-white/10",
     chipUnselectedTextColor: "text-white",
-    chipSelectedBgColor: "bg-[#aeaaaa]/30",
+    chipSelectedBgColor: "bg-white/40",
     chipSelectedTextColor: "text-white",
   },
   dark: {
@@ -57,7 +54,7 @@ export const themeStyles: Record<ThemeName, Theme> = {
     emojiPickerCategoryLabelBgColor: "![--epr-category-label-bg-color:#d6ff04]",
     chipUnselectedBgColor: "bg-white/10",
     chipUnselectedTextColor: "text-white",
-    chipSelectedBgColor: "bg-[#aeaaaa]/30",
+    chipSelectedBgColor: "bg-white/40",
     chipSelectedTextColor: "text-white",
   },
 };

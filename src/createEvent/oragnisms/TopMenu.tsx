@@ -1,5 +1,5 @@
-import { useCreateEventTheme } from "@/app/create/provider";
 import ThemesMenu from "@/createEvent/molecules/ThemesMenu";
+import { useCreateEventTheme } from "@/providers/themeProvider";
 import React from "react";
 
 const TopMenu: React.FC = () => {

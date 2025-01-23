@@ -26,6 +26,7 @@ model Event {
   title                String
   date                 DateTime
   image                Bytes?
+  imageUrl             String?
   style                String?
   description          String?
   reason               String?
@@ -47,7 +48,7 @@ model Event {
 }
 
 model RSVPMood {
-  value    String  @unique
+  value   String  @unique
   emoji   String?
   Event   Event?  @relation(fields: [eventId], references: [id])
   eventId String?

@@ -1,15 +1,12 @@
 "use client";
+import EventForm from "@/createEvent/templates/EventForm";
 import { SessionProvider } from "next-auth/react";
 import React from "react";
-import EventForm from "../../createEvent/templates/EventForm";
-import { ThemeProvider } from "./provider";
 
 const CreateEvent = () => {
   return (
     <SessionProvider>
-      <ThemeProvider>
-        <EventForm />
-      </ThemeProvider>
+      <EventForm />
     </SessionProvider>
   );
 };

@@ -1,11 +1,9 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import type { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-
-const prisma = new PrismaClient();
+import prisma from "../../../../../prisma/client";
 
 if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
   throw new Error("Missing environment variables for Google OAuth");
@@ -35,6 +33,7 @@ export const AuthConfig: AuthOptions = {
           where: { email },
         });
 
+        console.log("Hello, World!", credentials);
         if (!user) {
           throw new Error("No user fround with this email.");
         }

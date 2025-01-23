@@ -1,6 +1,6 @@
+import { useCreateEventTheme } from "@/providers/themeProvider";
 import type React from "react";
 import type { ChangeEvent } from "react";
-import { useCreateEventTheme } from "../../app/create/provider";
 
 interface TextAreaProps {
   name: string;

@@ -5,8 +5,8 @@ import {
 } from "@/components/ui/popover";
 import EmojiPicker, { Emoji, type EmojiClickData } from "emoji-picker-react";
 import type React from "react";
+import type { Theme } from "../../providers/themeConfig";
 import type { MoodType, RSVPMood } from "../config/rvspMood";
-import type { Theme } from "../config/themeConfig";
 
 interface RVSPEmojiPickerProps {
   mood: RSVPMood;

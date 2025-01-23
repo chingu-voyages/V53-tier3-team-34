@@ -1,3 +1,10 @@
+"use client";
+
+import {
+  type Theme,
+  type ThemeName,
+  themeStyles,
+} from "@/providers/themeConfig"; // Import the theme styles and types
 import type React from "react";
 import {
   type ReactNode,
@@ -7,11 +14,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import {
-  type Theme,
-  type ThemeName,
-  themeStyles,
-} from "../../createEvent/config/themeConfig"; // Import the theme styles and types
 
 interface ThemeContextType {
   theme: Theme;

@@ -1,6 +1,6 @@
-import { useCreateEventTheme } from "@/app/create/provider";
 import { type StyleMood, styleMoods } from "@/createEvent/config/styleMoods";
-import { type ThemeName, themeStyles } from "../config/themeConfig";
+import { useCreateEventTheme } from "@/providers/themeProvider";
+import { type ThemeName, themeStyles } from "../../providers/themeConfig";
 export default function ThemesMenu() {
   const { setThemeName } = useCreateEventTheme();
 

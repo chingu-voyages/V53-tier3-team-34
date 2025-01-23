@@ -1,15 +1,12 @@
 "use server";
 
-import { PrismaClient } from "@prisma/client";
-import type { Session } from "next-auth";
-import type { EventFormData } from "../../createEvent/templates/EventForm";
+import prisma from "@/../prisma/client";
+import getUserSession from "@/actions/getUserSession";
+import type { EventFormData } from "@/createEvent/templates/EventForm";
 
-const prisma = new PrismaClient();
+export async function createEvent(eventFormData: EventFormData) {
+  const session = await getUserSession();
 
-export async function createEvent(
-  session: Session,
-  eventFormData: EventFormData,
-) {
   if (!eventFormData) {
     return {
       status: 400,
@@ -17,16 +14,12 @@ export async function createEvent(
     };
   }
 
-  if (!session || !session.user) {
+  if (!session?.user) {
     return {
       status: 401,
       body: "Unauthorized",
     };
   }
-
-  const image = eventFormData.image
-    ? Buffer.from(await eventFormData.image.arrayBuffer())
-    : null;
 
   const filteredRVSPMoods = eventFormData.rsvpMoods.filter((mood) => {
     return mood.value && mood.emoji;
@@ -41,7 +34,7 @@ export async function createEvent(
       title: eventFormData.title,
       date: eventFormData.date,
       description: eventFormData.description,
-      image: image,
+      imageUrl: eventFormData.imageUrl,
       style: eventFormData.style,
       reason: eventFormData.reason || "",
       guestHonor: eventFormData.guestHonor,
@@ -67,21 +60,3 @@ export async function createEvent(
     },
   });
 }
-
-export const getEventByID = async (session: Session, eventId: string) => {
-  if (!session || !session.user) {
-    return {
-      status: 401,
-      body: "Unauthorized",
-    };
-  }
-
-  const events = await prisma.event.findUnique({
-    where: {
-      id: eventId,
-      authorId: session.userID,
-    },
-  });
-
-  return events;
-};

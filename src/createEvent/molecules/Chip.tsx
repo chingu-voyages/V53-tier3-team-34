@@ -1,6 +1,6 @@
 import type React from "react";
+import type { Theme } from "../../providers/themeConfig";
 import type { ChipModel } from "../config/chipConfig";
-import type { Theme } from "../config/themeConfig";
 
 interface ChipProps {
   chip: ChipModel;

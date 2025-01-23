@@ -1,8 +1,8 @@
 "use client";
+import { RegisterUser } from "@/actions/registerIser";
 import Link from "next/link";
 // import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { RegisterUser } from "./action";
 
 const Register = () => {
   // const router = useRouter();
