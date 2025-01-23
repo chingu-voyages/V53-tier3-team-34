@@ -2,11 +2,9 @@
 
 import type { CloudinaryUploadWidgetResults } from "next-cloudinary";
 import { revalidatePath } from "next/cache";
-import prisma from "../../prisma/client";
 
 const addImageToDb = async ({
   res,
-  eventId,
 }: {
   res: CloudinaryUploadWidgetResults;
   eventId: string;
@@ -28,7 +26,7 @@ const addImageToDb = async ({
 
   revalidatePath("/[userId]/events/[eventId]");
 
-  return event.image;
+  return null;
 };
 
 export default addImageToDb;
