@@ -26,6 +26,7 @@ model Event {
   title                String
   date                 DateTime
   image                Bytes?
+  imageUrl             String?
   style                String?
   description          String?
   reason               String?

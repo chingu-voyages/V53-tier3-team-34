@@ -22,9 +22,9 @@ const UserEvents = async ({
       <h1>Event</h1>
       <h2 className="text-3xl font-bold p-3">{event.title}</h2>
       <p>{event.description}</p>
-      {event.image && (
+      {event.imageUrl && (
         <div>
-          <EventImage image={event.image} />
+          <EventImage image={event.imageUrl} />
           <RemoveEventImage eventId={event.id} />
         </div>
       )}

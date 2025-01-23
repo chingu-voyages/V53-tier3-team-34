@@ -2,9 +2,11 @@
 
 import type { CloudinaryUploadWidgetResults } from "next-cloudinary";
 import { revalidatePath } from "next/cache";
+import prisma from "../../prisma/client";
 
 const addImageToDb = async ({
   res,
+  eventId,
 }: {
   res: CloudinaryUploadWidgetResults;
   eventId: string;
@@ -13,20 +15,18 @@ const addImageToDb = async ({
     throw new Error("Image upload failed");
   }
 
-  // We need to decide on saving the image to the database or the url
-
-  // const event = await prisma.event.update({
-  //   where: {
-  //     id: eventId,
-  //   },
-  //   data: {
-  //     image: res.info?.url,
-  //   },
-  // });
+  const event = await prisma.event.update({
+    where: {
+      id: eventId,
+    },
+    data: {
+      imageUrl: res.info?.url,
+    },
+  });
 
   revalidatePath("/[userId]/events/[eventId]");
 
-  return null;
+  return event.image;
 };
 
 export default addImageToDb;
