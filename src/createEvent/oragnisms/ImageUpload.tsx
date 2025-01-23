@@ -16,7 +16,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ imageURL, onChange }) => {
   // Handle successful upload
   const handleUploadSuccess = async (res: CloudinaryUploadWidgetResults) => {
     // Ensure the response has a valid URL
-    if (res.info?.url) {
+    if (res.info && typeof res.info !== "string" && res.info.url) {
       onChange(res.info.url);
     }
   };
@@ -26,6 +26,9 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ imageURL, onChange }) => {
       onSuccess={handleUploadSuccess}
       uploadPreset="ml_default"
       options={{
+        sources: ["local", "url"],
+        multiple: false,
+        clientAllowedFormats: ["image"],
         maxFiles: 1, // Optional: Limit number of files uploaded
         cropping: true, // Optional: Enable cropping feature
       }}

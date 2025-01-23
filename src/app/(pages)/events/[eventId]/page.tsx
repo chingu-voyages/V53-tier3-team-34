@@ -1,7 +1,7 @@
 import getEvent from "@/actions/getEvent";
 import EventImage from "@/createEvent/molecules/EventImage";
 import RemoveEventImage from "@/createEvent/molecules/RemoveEventImage";
-import ImageUpload from "@/createEvent/oragnisms/ImageUpload";
+// import ImageUpload from "@/createEvent/oragnisms/ImageUpload";
 
 const UserEvents = async ({
   params,
@@ -28,7 +28,7 @@ const UserEvents = async ({
           <RemoveEventImage eventId={event.id} />
         </div>
       )}
-      {!event.image && <ImageUpload eventId={event.id} />}
+      {/* {!event.image && <ImageUpload onChange={() => {}} imageURL={}/>} */}
     </div>
   );
 };
