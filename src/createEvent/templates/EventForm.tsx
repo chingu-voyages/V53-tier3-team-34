@@ -11,11 +11,13 @@ import { RSVP } from "../oragnisms/RSVP";
 
 import { createEvent } from "@/actions/createEvent";
 import { saveEventToIndexedDB } from "@/app/(pages)/events/create/indexedDBActions";
+import ImagePicker from "@/components/imagePicker/ImagePicker";
 import { Button } from "@/components/ui/button";
 import { useCreateEventTheme } from "@/providers/themeProvider";
 import Link from "next/link";
 import { icons } from "../config/icons";
 import type { MoodType } from "../config/rvspMood";
+import EventImage from "../molecules/EventImage";
 import ImageUpload from "../oragnisms/ImageUpload";
 import TopMenu from "../oragnisms/TopMenu";
 
@@ -73,6 +75,13 @@ const EventForm = () => {
     rsvpMoods: [],
     chips: [],
   });
+
+  // State to manage image picker
+  const [showImagePicker, setShowImagePicker] = useState(false);
+
+  function handleShowImagePicker(state: boolean) {
+    setShowImagePicker(state);
+  }
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -135,6 +144,7 @@ const EventForm = () => {
         ...prevState,
         imageUrl: imageURL,
       }));
+      <EventImage image={imageURL} />;
     }
   };
 
@@ -157,7 +167,15 @@ const EventForm = () => {
   const { theme } = useCreateEventTheme();
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen relative">
+      {/* Placed onchange and image url from image upload in image picker  */}
+
+      <ImagePicker
+        onChange={handleImageChange}
+        showImagePicker={showImagePicker}
+        onClose={() => handleShowImagePicker(false)}
+      />
+
       <header className="flex justify-between items-center bg-red-600 py-9 px-16">
         <h1
           className={`text-white text-4xl font-normal ${peralta.className} leading-tight`}
@@ -175,6 +193,7 @@ const EventForm = () => {
           </Link>
         )}
       </header>
+
       <form
         onSubmit={handleSubmit}
         className={`pb-9 px-16 flex-1 flex flex-col gap-3 ${theme.pageBgImage} bg-cover bg-center `}
@@ -292,8 +311,9 @@ const EventForm = () => {
           </div>
 
           <div className="flex flex-col space-y-3 pt-28">
+            {/* Moved onchange and imageUrl props to image picker component */}
             <ImageUpload
-              onChange={handleImageChange}
+              showImagePicker={handleShowImagePicker}
               imageURL={formData.imageUrl}
             />
 
