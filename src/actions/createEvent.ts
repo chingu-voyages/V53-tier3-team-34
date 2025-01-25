@@ -32,7 +32,8 @@ export async function createEvent(eventFormData: EventFormData) {
   await prisma.event.create({
     data: {
       title: eventFormData.title,
-      date: eventFormData.date,
+      startDateTime: eventFormData.startDateTime,
+      endDateTime: eventFormData.endDateTime,
       description: eventFormData.description,
       imageUrl: eventFormData.imageUrl,
       style: eventFormData.style,

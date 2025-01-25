@@ -16,6 +16,7 @@ import { useCreateEventTheme } from "@/providers/themeProvider";
 import Link from "next/link";
 import { icons } from "../config/icons";
 import type { MoodType } from "../config/rvspMood";
+import { DateRangePicker } from "../oragnisms/DateRangePicker";
 import ImageUpload from "../oragnisms/ImageUpload";
 import TopMenu from "../oragnisms/TopMenu";
 
@@ -26,7 +27,8 @@ const peralta = Peralta({
 
 const eventFormSchema = z.object({
   title: z.string().min(1, "Title is required"),
-  date: z.date(),
+  startDateTime: z.date(),
+  endDateTime: z.date(),
   description: z.string().nullable(),
   style: z.string().nullable(),
   imageUrl: z.string().url().nullable(),
@@ -56,7 +58,8 @@ const EventForm = () => {
 
   const [formData, setFormData] = useState<EventFormData>({
     title: "",
-    date: new Date(),
+    startDateTime: new Date(),
+    endDateTime: new Date(new Date().setHours(new Date().getHours() + 1)),
     description: null,
     style: null,
     reason: null,
@@ -158,8 +161,8 @@ const EventForm = () => {
   const { theme } = useCreateEventTheme();
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <header className="flex justify-between items-center bg-red-600 py-9 px-16">
+    <div className="flex flex-col min-h-screen items-stretch">
+      <header className="flex justify-between items-center bg-red-600 p-2 md:py-9 md:px-16">
         <h1
           className={`text-white text-4xl font-normal ${peralta.className} leading-tight`}
         >
@@ -178,7 +181,7 @@ const EventForm = () => {
       </header>
       <form
         onSubmit={handleSubmit}
-        className={`pb-9 px-16 flex-1 flex flex-col gap-3 ${theme.pageBgImage} bg-cover bg-center `}
+        className={`p-2 md:pb-9 md:px-16 flex-1 flex flex-col gap-3 ${theme.pageBgImage} bg-cover bg-center `}
       >
         <div className="w-full flex flex-col md:flex-row justify-center space-y-3 md:space-y-0 md:space-x-11">
           <div className="flex flex-col space-y-3">
@@ -191,6 +194,20 @@ const EventForm = () => {
               isRequired={true}
               parentClassName="h-24"
               className="text-6xl placeholder:text-6xl leading-10 h-24 font-semibold"
+            />
+
+            <DateRangePicker
+              initialDateFrom={formData.startDateTime}
+              initialDateTo={formData.endDateTime}
+              showCompare={false}
+              align="start"
+              onUpdate={({ range }) => {
+                setFormData({
+                  ...formData,
+                  startDateTime: range.from,
+                  endDateTime: range.to || range.from,
+                });
+              }}
             />
 
             <Input
