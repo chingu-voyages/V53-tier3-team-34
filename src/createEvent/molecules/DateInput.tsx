@@ -376,7 +376,7 @@ const DateInput: React.FC<DateInputProps> = ({ value, onChange }) => {
         className="p-0 outline-none w-6 border-none text-center"
         placeholder="MM"
       />
-      <span className="opacity-20 mx-px"></span>
+      <span className="opacity-20 mx-px" />
       <DropdownMenu>
         <DropdownMenuTrigger ref={hour12Ref}>{date.hour12}</DropdownMenuTrigger>
         <DropdownMenuContent>
