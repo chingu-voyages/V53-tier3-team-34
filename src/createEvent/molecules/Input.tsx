@@ -1,6 +1,6 @@
 import { useCreateEventTheme } from "@/providers/themeProvider";
 import type React from "react";
-import { type ChangeEvent, memo, useRef } from "react";
+import { type ChangeEvent, memo, useEffect, useRef, useState } from "react";
 
 interface InputProps {
   icon?: React.ReactNode;
@@ -36,12 +36,24 @@ const Input: React.FC<InputProps> = memo(
   }) => {
     const ref = useRef<HTMLInputElement>(null);
     const { theme } = useCreateEventTheme();
+    const [isEditing, setIsEditing] = useState(false); // Track if we're editing
 
     const handleClick = () => {
       if (ref.current) {
         ref.current.focus();
       }
+      setIsEditing(true);
     };
+
+    const handleBlur = () => {
+      setIsEditing(false);
+    };
+
+    useEffect(() => {
+      if (ref.current && isEditing) {
+        ref.current.focus();
+      }
+    }, [isEditing]);
 
     return (
       <div
@@ -74,26 +86,38 @@ const Input: React.FC<InputProps> = memo(
         )}
 
         {/* Input field */}
-        <input
-          ref={ref}
-          type={type}
-          name={name}
-          value={value}
-          onChange={onChange}
-          placeholder={placeholder}
-          required={isRequired}
-          min={type === "number" ? 0 : undefined} // Only set min if type is number
-          max={type === "number" ? undefined : undefined} // No max for number type (remove or leave as undefined)
-          className={`
-              bg-transparent border-none outline-none
+        {isEditing ? (
+          <input
+            ref={ref}
+            type={type}
+            name={name}
+            value={value}
+            onChange={onChange}
+            placeholder={placeholder}
+            onBlur={handleBlur}
+            required={isRequired}
+            min={type === "number" ? 0 : undefined} // Only set min if type is number
+            max={type === "number" ? undefined : undefined} // No max for number type (remove or leave as undefined)
+            className={`
+              bg-transparent border-none outline-none font-medium leading-loose
               ${theme.textColor}
               ${theme.placeholderTextColor}
               ${preText && "-ml-1.5"}
               ${postText ? "w-28 -mr-1.5" : "w-full"}
-              font-medium leading-loose
               ${className}
             `}
-        />
+          />
+        ) : (
+          <span
+            className={`bg-transparent border-none outline-none font-medium leading-loose flex items-center
+              ${theme.textColor} 
+              ${className} 
+              ${preText && "-ml-1.5"}
+              ${postText && "-mr-1.5"}`}
+          >
+            {value || placeholder}
+          </span>
+        )}
 
         {/* Post-text label */}
         {postText && (
