@@ -16,7 +16,7 @@ interface RVSPEmojiPickerProps {
   mood: RSVPMood;
   theme: Theme;
   onChange: (value: MoodType, emoji: string) => void;
-  selectedRSVPEmoji?: string;
+  selectedRSVPEmoji?: string | null;
   popOverPosition?: string;
 }
 

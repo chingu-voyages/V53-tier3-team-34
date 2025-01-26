@@ -4,7 +4,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import React, { useEffect, useRef } from "react";
+import React, { memo, useEffect, useRef } from "react";
 
 interface DateInputProps {
   value?: Date;
@@ -20,7 +20,7 @@ interface DateParts {
   hour12: "AM" | "PM";
 }
 
-const DateInput: React.FC<DateInputProps> = ({ value, onChange }) => {
+const DateInput: React.FC<DateInputProps> = memo(({ value, onChange }) => {
   const [date, setDate] = React.useState<DateParts>(() => {
     const d = value ? new Date(value) : new Date();
     return {
@@ -400,7 +400,7 @@ const DateInput: React.FC<DateInputProps> = ({ value, onChange }) => {
       </DropdownMenu>
     </div>
   );
-};
+});
 
 DateInput.displayName = "DateInput";
 

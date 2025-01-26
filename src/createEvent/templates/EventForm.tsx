@@ -7,7 +7,7 @@ import Input from "../molecules/Input";
 import TextArea from "../molecules/TextArea";
 import ToggleInput from "../molecules/ToggleInput";
 import ChipsList from "../oragnisms/ChipsList";
-import { RSVP } from "../oragnisms/RSVP";
+import RSVP from "../oragnisms/RSVP";
 
 import { createEvent } from "@/actions/createEvent";
 import { saveEventToIndexedDB } from "@/app/(pages)/events/create/indexedDBActions";
@@ -53,8 +53,13 @@ const eventFormSchema = z.object({
 
 export type EventFormData = z.infer<typeof eventFormSchema>;
 
+export type BooleanKeys<T> = {
+  [K in keyof T]: T[K] extends boolean ? K : never;
+}[keyof T];
+
 const EventForm = () => {
   const { data: session } = useSession();
+  const { theme } = useCreateEventTheme();
 
   const [formData, setFormData] = useState<EventFormData>({
     title: "",
@@ -77,75 +82,71 @@ const EventForm = () => {
     chips: [],
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target;
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const { name, value } = e.target;
 
-    // Handle switches differently (for `isOutdoor`, `isPublic`, and `requireGuestApproval`)
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  const handleToggleChange = useCallback(
-    (name: string) => {
-      if (name in formData) {
-        setFormData((prevState) => ({
-          ...prevState,
-          [name as keyof EventFormData]:
-            !prevState[name as keyof EventFormData], // Toggle the value
-        }));
-      }
+      // Handle switches differently (for `isOutdoor`, `isPublic`, and `requireGuestApproval`)
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
     },
-    [formData],
+    [],
   );
 
-  const handleRSVPMoodChange = (value: MoodType, emoji: string) => {
+  const handleToggleChange = useCallback((name: BooleanKeys<EventFormData>) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: !prevState[name], // Toggle the value
+    }));
+  }, []);
+
+  const handleRSVPMoodChange = useCallback((value: MoodType, emoji: string) => {
     setFormData((prevState) => ({
       ...prevState,
       rsvpMoods: prevState.rsvpMoods.map((mood) =>
         mood.value === value ? { ...mood, emoji } : mood,
       ),
     }));
-  };
+  }, []);
 
-  const handleChipsChange = (
-    chipValue: string,
-    inputValue: string,
-    isSelected: boolean,
-  ) => {
-    const chips = formData.chips;
+  const handleChipsChange = useCallback(
+    (chipValue: string, inputValue: string, isSelected: boolean) => {
+      setFormData((prevFormData) => {
+        const chips = prevFormData.chips;
 
-    const existingChipIndex = chips.findIndex(
-      (chip) => chip.value === chipValue,
-    );
+        const existingChipIndex = chips.findIndex(
+          (chip) => chip.value === chipValue,
+        );
 
-    if (!isSelected) {
-      chips.splice(existingChipIndex, 1);
-    } else if (existingChipIndex === -1) {
-      chips.push({ value: chipValue, inputValue });
-    } else {
-      const chip = chips[existingChipIndex];
-      chip.inputValue = inputValue;
-    }
+        if (!isSelected) {
+          chips.splice(existingChipIndex, 1);
+        } else if (existingChipIndex === -1) {
+          chips.push({ value: chipValue, inputValue });
+        } else {
+          const chip = chips[existingChipIndex];
+          chip.inputValue = inputValue;
+        }
 
-    console.log(chips);
-    setFormData({
-      ...formData,
-      chips,
-    });
-  };
+        // console.log(chips);
+        return {
+          ...prevFormData,
+          chips,
+        };
+      });
+    },
+    [],
+  );
 
-  const handleImageChange = (imageURL?: string) => {
+  const handleImageChange = useCallback((imageURL?: string) => {
     if (imageURL) {
       setFormData((prevState) => ({
         ...prevState,
         imageUrl: imageURL,
       }));
     }
-  };
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     try {
@@ -162,8 +163,6 @@ const EventForm = () => {
       console.log(e);
     }
   };
-
-  const { theme } = useCreateEventTheme();
 
   return (
     <div className="flex flex-col min-h-screen items-stretch">

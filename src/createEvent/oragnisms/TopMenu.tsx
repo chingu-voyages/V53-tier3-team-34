@@ -1,9 +1,10 @@
 import ThemesMenu from "@/createEvent/molecules/ThemesMenu";
 import { useCreateEventTheme } from "@/providers/themeProvider";
-import React from "react";
+import type React from "react";
+import { memo, useState } from "react";
 
-const TopMenu: React.FC = () => {
-  const [isClicked, setIsClicked] = React.useState({
+const TopMenu: React.FC = memo(() => {
+  const [isClicked, setIsClicked] = useState({
     style: false,
     settings: false,
     preview: false,
@@ -105,6 +106,8 @@ const TopMenu: React.FC = () => {
       {isClicked.style && <ThemesMenu />}
     </div>
   );
-};
+});
+
+TopMenu.displayName = "TopMenu";
 
 export default TopMenu;

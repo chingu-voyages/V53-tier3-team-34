@@ -124,4 +124,6 @@ const ChipsList: React.FC<ChipsListProps> = ({ selectedChips, onChange }) => {
   );
 };
 
+ChipsList.displayName = "ChipsList";
+
 export default ChipsList;
