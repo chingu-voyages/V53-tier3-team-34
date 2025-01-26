@@ -71,7 +71,9 @@ const ChipsList: React.FC<ChipsListProps> = ({ selectedChips, onChange }) => {
               preText={chip.preText}
               maxCount={chip.maxCountCharacters}
               parentClassName={`h-10 bg-white/40 ${inter.className}`}
-              className="text-xl placeholder:text-xl font-medium font-['Inter'] leading-loose"
+              className={`text-xl placeholder:text-xl font-medium font-['Inter'] leading-loose ${
+                chip.placeholderClassName || ""
+              }`}
               postButton={
                 <button type="button" onClick={() => onClose(chip)}>
                   <svg

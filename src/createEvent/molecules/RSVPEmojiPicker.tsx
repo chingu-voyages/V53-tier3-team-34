@@ -37,16 +37,34 @@ const RVSPEmojiPicker: React.FC<RVSPEmojiPickerProps> = ({
           <div
             className={`flex items-center justify-center w-28 h-28 rounded-full border-none cursor-pointer border backdrop-blur-2xl ${theme.focusInputBorderColor}`}
           >
-            <Emoji
-              unified={selectedRSVPEmoji ? selectedRSVPEmoji : mood.emoji}
-              size={50}
-            />
+            {!selectedRSVPEmoji && !mood.emoji ? (
+              <svg
+                width="49"
+                height="49"
+                viewBox="0 0 49 49"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <title>Add Emoji</title>
+                <path
+                  d="M23.5 25.9048H12.5V23.9048H23.5V12.9048H25.5V23.9048H36.5V25.9048H25.5V36.9048H23.5V25.9048Z"
+                  fill="white"
+                />
+              </svg>
+            ) : selectedRSVPEmoji ? (
+              <Emoji unified={selectedRSVPEmoji} size={50} />
+            ) : (
+              mood.emoji && <Emoji unified={mood.emoji} size={50} />
+            )}
           </div>
         </PopoverTrigger>
-        <PopoverContent className="w-0 h-0 p-0 bg-none border-0">
+        <PopoverContent className="h-[450px] w-[350px] p-0 bg-none border-0">
           <EmojiPicker
             emojiStyle={EmojiStyle.APPLE}
-            previewConfig={{ defaultEmoji: mood.emoji, showPreview: false }}
+            previewConfig={{
+              defaultEmoji: mood.emoji || undefined,
+              showPreview: false,
+            }}
             onEmojiClick={onEmojiClick}
             // className={`${theme.emojiPickerTextColor} ${theme.emojiPickerBgColor} ${theme.emojiPickerHoverBgColor} ${theme.emojiPickerCategoryLabelBgColor}`}
           />

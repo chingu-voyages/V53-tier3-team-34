@@ -285,12 +285,16 @@ const DateInput: React.FC<DateInputProps> = ({ value, onChange }) => {
     setDate(newDate);
   };
 
+  const getMaxDaysInMonth = (month: number, year: number) => {
+    return new Date(year, month, 0).getDate();
+  };
+
   return (
     <div className="flex border rounded-lg items-center text-sm p-2.5">
       <input
-        type="text"
+        type="number"
         ref={monthRef}
-        max={12}
+        // max={12}
         maxLength={2}
         value={date.month.toString()}
         onChange={handleInputChange("month")}
@@ -306,9 +310,9 @@ const DateInput: React.FC<DateInputProps> = ({ value, onChange }) => {
       />
       <span className="opacity-20 -mx-px">/</span>
       <input
-        type="text"
+        type="number"
         ref={dayRef}
-        max={31}
+        max={getMaxDaysInMonth(date.month, date.year)}
         maxLength={2}
         value={date.day.toString()}
         onChange={handleInputChange("day")}
@@ -324,7 +328,7 @@ const DateInput: React.FC<DateInputProps> = ({ value, onChange }) => {
       />
       <span className="opacity-20 -mx-px">/</span>
       <input
-        type="text"
+        type="number"
         ref={yearRef}
         max={9999}
         maxLength={4}
@@ -342,7 +346,7 @@ const DateInput: React.FC<DateInputProps> = ({ value, onChange }) => {
       />
       <span className="opacity-20 -mx-px"> </span>
       <input
-        type="text"
+        type="number"
         ref={hourRef}
         max={12}
         maxLength={2}
@@ -360,7 +364,7 @@ const DateInput: React.FC<DateInputProps> = ({ value, onChange }) => {
       />
       <span className="opacity-20 -mx-px">:</span>
       <input
-        type="text"
+        type="number"
         ref={minuteRef}
         max={59}
         maxLength={2}

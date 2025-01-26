@@ -1,7 +1,7 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { Peralta } from "next/font/google";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { z } from "zod";
 import Input from "../molecules/Input";
 import TextArea from "../molecules/TextArea";
@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { useCreateEventTheme } from "@/providers/themeProvider";
 import Link from "next/link";
 import { icons } from "../config/icons";
-import type { MoodType } from "../config/rvspMood";
+import { type MoodType, defaultFormValuesRSVPMoods } from "../config/rvspMood";
 import { DateRangePicker } from "../oragnisms/DateRangePicker";
 import ImageUpload from "../oragnisms/ImageUpload";
 import TopMenu from "../oragnisms/TopMenu";
@@ -45,7 +45,7 @@ const eventFormSchema = z.object({
   rsvpMoods: z.array(
     z.object({
       value: z.enum(["attending", "maybe", "regretfully"]),
-      emoji: z.string(),
+      emoji: z.string().nullable(),
     }),
   ),
   chips: z.array(z.object({ value: z.string(), inputValue: z.string() })),
@@ -73,7 +73,7 @@ const EventForm = () => {
     costPerPerson: null,
     isPublic: false,
     requireGuestApproval: false,
-    rsvpMoods: [],
+    rsvpMoods: defaultFormValuesRSVPMoods,
     chips: [],
   });
 
@@ -89,14 +89,19 @@ const EventForm = () => {
     }));
   };
 
-  const handleToggleChange = (name: string) => {
-    if (name in formData) {
-      setFormData((prevState) => ({
-        ...prevState,
-        [name as keyof EventFormData]: !prevState[name as keyof EventFormData], // Toggle the value
-      }));
-    }
-  };
+  const handleToggleChange = useCallback(
+    (name: string) => {
+      if (name in formData) {
+        setFormData((prevState) => ({
+          ...prevState,
+          [name as keyof EventFormData]:
+            !prevState[name as keyof EventFormData], // Toggle the value
+        }));
+      }
+    },
+    [formData],
+  );
+
   const handleRSVPMoodChange = (value: MoodType, emoji: string) => {
     setFormData((prevState) => ({
       ...prevState,

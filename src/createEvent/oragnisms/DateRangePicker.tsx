@@ -158,44 +158,57 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
     if (!preset) throw new Error(`Unknown date range preset: ${presetName}`);
     const from = new Date();
     const to = new Date();
-    // const first = from.getDate() - from.getDay();
+    const today = new Date();
 
     switch (preset.name) {
       case "today": {
-        from.setHours(0, 0, 0, 0); // Start of today
         to.setHours(23, 59, 59, 999); // End of today
         break;
       }
       case "tomorrow": {
         from.setDate(from.getDate() + 1); // Move to tomorrow
+        if (from.getDate() < today.getDate()) {
+          from.setMonth(from.getMonth() + 1);
+        }
         from.setHours(0, 0, 0, 0); // Start of tomorrow
-        to.setDate(to.getDate() + 1); // Move to tomorrow
+        to.setTime(from.getTime());
         to.setHours(23, 59, 59, 999); // End of tomorrow
         break;
       }
       case "next7": {
         from.setDate(from.getDate() + 1); // Start from tomorrow
+        if (from.getDate() < today.getDate()) {
+          from.setMonth(from.getMonth() + 1);
+        }
         from.setHours(0, 0, 0, 0);
+        to.setTime(from.getTime());
         to.setDate(to.getDate() + 7); // End in 7 days from now
         to.setHours(23, 59, 59, 999);
         break;
       }
       case "next14": {
         from.setDate(from.getDate() + 1); // Start from tomorrow
+        if (from.getDate() < today.getDate()) {
+          from.setMonth(from.getMonth() + 1);
+        }
         from.setHours(0, 0, 0, 0);
+        to.setTime(from.getTime());
         to.setDate(to.getDate() + 14); // End in 14 days
         to.setHours(23, 59, 59, 999);
         break;
       }
       case "next30": {
         from.setDate(from.getDate() + 1); // Start from tomorrow
+        if (from.getDate() < today.getDate()) {
+          from.setMonth(from.getMonth() + 1);
+        }
         from.setHours(0, 0, 0, 0);
+        to.setTime(from.getTime());
         to.setDate(to.getDate() + 30); // End in 30 days
         to.setHours(23, 59, 59, 999);
         break;
       }
       case "thisWeek": {
-        const today = new Date();
         const tomorrowForWeek = new Date(today); // Set the date for tomorrow
         tomorrowForWeek.setDate(today.getDate() + 1); // Move to tomorrow
         from.setTime(tomorrowForWeek.setHours(0, 0, 0, 0)); // Set the date for tomorrow
@@ -206,20 +219,17 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
         break;
       }
       case "nextWeek": {
-        const nextWeekStart = new Date();
-        nextWeekStart.setDate(
-          nextWeekStart.getDate() + (7 - nextWeekStart.getDay()),
-        ); // Next week's start
-        nextWeekStart.setHours(0, 0, 0, 0);
-        from.setTime(nextWeekStart.getTime());
-        to.setDate(nextWeekStart.getDate() + 6); // End of next week
+        from.setDate(today.getDate() + (7 - today.getDay())); // Next week's start
+        from.setHours(0, 0, 0, 0);
+        to.setTime(from.getTime());
+        to.setDate(from.getDate() + 6); // End of next week
         to.setHours(23, 59, 59, 999);
+        console.log(from, to);
         break;
       }
       case "thisMonth": {
-        const tomorrowForMonth = new Date();
-        tomorrowForMonth.setDate(tomorrowForMonth.getDate() + 1); // Start from tomorrow
-        from.setTime(tomorrowForMonth.getTime()); // Set 'from' to tomorrow
+        from.setDate(today.getDate() + 1);
+        from.setHours(0, 0, 0, 0);
         to.setMonth(from.getMonth() + 1); // End at the end of the next month
         to.setDate(0); // Last day of this month
         to.setHours(23, 59, 59, 999);
@@ -324,7 +334,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
 
   useEffect(() => {
     checkPreset();
-  }, [range, checkPreset]);
+  }, [checkPreset]);
 
   const PresetButton = ({
     preset,
@@ -502,7 +512,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
                       <DateInput
                         value={rangeCompare?.to}
                         onChange={(date) => {
-                          if (rangeCompare && rangeCompare.from) {
+                          if (rangeCompare?.from) {
                             const compareFromDate =
                               date < rangeCompare.from
                                 ? date
@@ -558,7 +568,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
                   classNames={{
                     caption_label: "text-sm font-medium",
                     day_range_start: "!bg-[#084be7] rounded-r-none text-white",
-                    day_range_middle: "rounded-none bg-blue-200 !text-black",
+                    day_range_middle: "rounded-none !bg-blue-200 !text-black",
                     day_range_end: "!bg-[#084be7] rounded-l-none text-white",
                   }}
                 />

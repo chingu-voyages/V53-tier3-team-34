@@ -82,14 +82,14 @@ const Input: React.FC<InputProps> = ({
         min={type === "number" ? 0 : undefined} // Only set min if type is number
         max={type === "number" ? undefined : undefined} // No max for number type (remove or leave as undefined)
         className={`
-            bg-transparent border-none outline-none
-            ${theme.textColor}
-            ${theme.placeholderTextColor}
-            ${preText && "-ml-1.5"}
-            ${postText ? "w-28 -mr-1.5" : "w-full"}
-            font-medium leading-loose
-            ${className}
-          `}
+              bg-transparent border-none outline-none
+              ${theme.textColor}
+              ${theme.placeholderTextColor}
+              ${preText && "-ml-1.5"}
+              ${postText ? "w-28 -mr-1.5" : "w-full"}
+              font-medium leading-loose
+              ${className}
+            `}
       />
 
       {/* Post-text label */}

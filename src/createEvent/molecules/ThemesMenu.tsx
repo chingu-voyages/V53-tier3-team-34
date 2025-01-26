@@ -1,7 +1,7 @@
 import { type StyleMood, styleMoods } from "@/createEvent/config/styleMoods";
 import { useCreateEventTheme } from "@/providers/themeProvider";
 import { type ThemeName, themeStyles } from "../../providers/themeConfig";
-export default function ThemesMenu() {
+const ThemesMenu: React.FC = () => {
   const { theme, setThemeName } = useCreateEventTheme();
 
   return (
@@ -41,4 +41,6 @@ export default function ThemesMenu() {
       </div>
     </div>
   );
-}
+};
+
+export default ThemesMenu;
