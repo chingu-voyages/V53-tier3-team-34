@@ -41,8 +41,8 @@ const ChipsList: React.FC<ChipsListProps> = ({ selectedChips, onChange }) => {
     onChange(chip.value, e.target.value, true);
   };
 
-  const onSelected = (chip: ChipModel, isSelected: boolean) => {
-    onChange(chip.value, "", isSelected);
+  const onSelected = (chip: ChipModel) => {
+    onChange(chip.value, "", !isSelected(chip));
   };
 
   useEffect(() => {
@@ -106,7 +106,7 @@ const ChipsList: React.FC<ChipsListProps> = ({ selectedChips, onChange }) => {
             chip={chip}
             theme={theme}
             isSelected={isSelected(chip)}
-            onChange={() => onSelected(chip, !isSelected(chip))}
+            onChange={() => onSelected(chip)}
           />
         ))}
         {selectedChips.length <= 3 && (

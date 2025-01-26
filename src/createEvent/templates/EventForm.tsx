@@ -113,30 +113,29 @@ const EventForm = () => {
 
   const handleChipsChange = useCallback(
     (chipValue: string, inputValue: string, isSelected: boolean) => {
+      const chips = formData.chips;
+      const existingChipIndex = chips.findIndex(
+        (chip) => chip.value === chipValue,
+      );
+
+      if (!isSelected) {
+        chips.splice(existingChipIndex, 1);
+      } else if (existingChipIndex === -1) {
+        chips.push({ value: chipValue, inputValue });
+      } else {
+        const chip = chips[existingChipIndex];
+        chip.inputValue = inputValue;
+      }
+
+      // console.log(chips);
       setFormData((prevFormData) => {
-        const chips = prevFormData.chips;
-
-        const existingChipIndex = chips.findIndex(
-          (chip) => chip.value === chipValue,
-        );
-
-        if (!isSelected) {
-          chips.splice(existingChipIndex, 1);
-        } else if (existingChipIndex === -1) {
-          chips.push({ value: chipValue, inputValue });
-        } else {
-          const chip = chips[existingChipIndex];
-          chip.inputValue = inputValue;
-        }
-
-        // console.log(chips);
         return {
           ...prevFormData,
-          chips,
+          chips: chips,
         };
       });
     },
-    [],
+    [formData.chips],
   );
 
   const handleImageChange = useCallback((imageURL?: string) => {

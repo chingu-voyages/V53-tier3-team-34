@@ -58,7 +58,7 @@ const Input: React.FC<InputProps> = memo(
     return (
       <div
         className={`
-          flex items-center gap-3 backdrop-blur-2xl p-2
+          flex items-center gap-3 backdrop-blur-2xl p-2 h-min font-medium leading-tight
           ${theme.inputBgColor}
           ${
             ref.current &&
@@ -79,7 +79,7 @@ const Input: React.FC<InputProps> = memo(
         {/* Pre-text label */}
         {preText && (
           <span
-            className={`text-xl font-medium leading-loose whitespace-nowrap ${theme.textColor}`}
+            className={`text-xl font-medium leading-tight whitespace-nowrap ${theme.textColor}`}
           >
             {preText}
           </span>
@@ -99,17 +99,18 @@ const Input: React.FC<InputProps> = memo(
             min={type === "number" ? 0 : undefined} // Only set min if type is number
             max={type === "number" ? undefined : undefined} // No max for number type (remove or leave as undefined)
             className={`
-              bg-transparent border-none outline-none font-medium leading-loose
+              bg-transparent border-none outline-none 
               ${theme.textColor}
               ${theme.placeholderTextColor}
               ${preText && "-ml-1.5"}
               ${postText ? "w-28 -mr-1.5" : "w-full"}
+              -my-2
               ${className}
             `}
           />
         ) : (
           <span
-            className={`bg-transparent border-none outline-none font-medium leading-loose flex items-center
+            className={`bg-transparent border-none outline-none flex items-center leading-tight
               ${theme.textColor} 
               ${className} 
               ${preText && "-ml-1.5"}
@@ -122,13 +123,13 @@ const Input: React.FC<InputProps> = memo(
         {/* Post-text label */}
         {postText && (
           <span
-            className={`text-xl text-left font-medium leading-loose whitespace-nowrap ${theme.textColor}`}
+            className={`text-xl text-left whitespace-nowrap ${theme.textColor}`}
           >
             {postText}
           </span>
         )}
 
-        <div className="text-right text-[#faf1e5] text-sm font-normal leading-normal flex gap-0.5">
+        <div className="text-right text-[#faf1e5] text-sm font-normal leading-normal flex items-center gap-0.5 ml-auto">
           {maxCount && typeof value === "string" && value.length > 0 && (
             <span>
               ({value.length - 1}/{maxCount})
