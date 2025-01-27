@@ -12,6 +12,10 @@ import {
   type CloudinaryUploadWidgetResults,
 } from "next-cloudinary";
 
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
+
 type imagePickerProp = {
   showImagePicker: boolean;
   onChange: (url: string) => void; // The onChange function expects a string URL
@@ -37,6 +41,14 @@ export default function ImagePicker({
     image.url.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
+  // Chip search
+  async function genree() {
+    const imageType = await prisma.imageType.findMany();
+    return imageType;
+  }
+
+  function filterChip(type: string) {}
+
   return (
     <CldUploadWidget
       onSuccess={handleUploadSuccess}
@@ -52,9 +64,9 @@ export default function ImagePicker({
       {({ open }: { open: () => void }) => (
         <div
           style={{ display: showImagePicker ? "flex" : "none" }}
-          className="w-full h-full absolute bg-transparent backdrop-blur-md z-20 justify-center items-center"
+          className="w-full h-dvh py-10 fixed bg-transparent backdrop-blur-md z-20 justify-center items-center"
         >
-          <div className="w-3/4 h-3/4 bg-white p-5 flex flex-col gap-5">
+          <div className="w-3/5 h-full  bg-white p-5 flex flex-col gap-5">
             {/* cancel button */}
             <button className="self-end mr-5" type="button" onClick={onClose}>
               <Image
@@ -95,7 +107,7 @@ export default function ImagePicker({
             </div>
 
             {/* images section */}
-            <div className="flex flex-col gap-5 h-3/4 relative">
+            <div className="flex flex-col gap-5 h-3/5 relative">
               <Button
                 onClick={() => open()}
                 className="absolute bottom-10 right-10 z-10 h-16 px-6 py-2 bg-[#084be7] text-center text-base font-bold leading-normal rounded-none"
@@ -121,7 +133,7 @@ export default function ImagePicker({
                   <Image
                     key={image.url}
                     src={image.url}
-                    width={300}
+                    width={250}
                     height={0}
                     alt="Image template"
                     onClick={() => onChange(image.url)}
