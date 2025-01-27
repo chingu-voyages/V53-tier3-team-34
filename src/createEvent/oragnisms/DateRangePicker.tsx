@@ -575,13 +575,11 @@ export const DateRangePicker: FC<DateRangePickerProps> = memo(
                         ),
                       )
                     }
-                    classNames={{
-                      caption_label: "text-sm font-medium",
-                      day_range_start:
-                        "!bg-[#084be7] rounded-r-none text-white",
-                      day_range_middle: "rounded-none !bg-blue-200 !text-black",
-                      day_range_end: "!bg-[#084be7] rounded-l-none text-white",
-                    }}
+                    captionLabelClassName="text-sm font-medium"
+                    rangeStartClassName="[&>button]:bg-[#084be7] [&>button]:rounded-r-none text-white"
+                    rangeMiddleClassName="!rounded-none !bg-blue-200 !text-black"
+                    rangeEndClassName="[&>button]:bg-[#084be7] [&>button]:rounded-l-none text-white"
+                    todayClassName="[&>button]:bg-red-500 text-white"
                   />
                 </div>
               </div>

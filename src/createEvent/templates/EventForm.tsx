@@ -16,7 +16,7 @@ import { useCreateEventTheme } from "@/providers/themeProvider";
 import Link from "next/link";
 import { icons } from "../config/icons";
 import { type MoodType, defaultFormValuesRSVPMoods } from "../config/rvspMood";
-import { DateRangePicker } from "../oragnisms/DateRangePicker";
+import DateRangePicker from "../oragnisms/DateRangePicker";
 import ImageUpload from "../oragnisms/ImageUpload";
 import TopMenu from "../oragnisms/TopMenu";
 
