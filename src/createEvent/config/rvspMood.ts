@@ -3,14 +3,14 @@ export type MoodType = "attending" | "maybe" | "regretfully";
 export interface RSVPMood {
   name: string;
   value: MoodType;
-  emoji: string;
+  emoji: string | null;
 }
 
 export const rsvpMoods: RSVPMood[] = [
   {
     name: "Attending",
     value: "attending",
-    emoji: "1f970",
+    emoji: null,
   },
   {
     name: "Maybe",
@@ -19,6 +19,21 @@ export const rsvpMoods: RSVPMood[] = [
   },
   {
     name: "Regretfully",
+    value: "regretfully",
+    emoji: "1f614",
+  },
+];
+
+export const defaultFormValuesRSVPMoods: Omit<RSVPMood, "name">[] = [
+  {
+    value: "attending",
+    emoji: null,
+  },
+  {
+    value: "maybe",
+    emoji: "1f9d0",
+  },
+  {
     value: "regretfully",
     emoji: "1f614",
   },

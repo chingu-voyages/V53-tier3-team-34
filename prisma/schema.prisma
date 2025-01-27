@@ -24,7 +24,8 @@ model User {
 model Event {
   id                   String     @id @default(uuid())
   title                String
-  date                 DateTime
+  startDateTime        DateTime
+  endDateTime          DateTime 
   image                Bytes?
   imageUrl             String?
   style                String?

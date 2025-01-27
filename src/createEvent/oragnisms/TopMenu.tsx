@@ -1,9 +1,10 @@
 import ThemesMenu from "@/createEvent/molecules/ThemesMenu";
 import { useCreateEventTheme } from "@/providers/themeProvider";
-import React from "react";
+import type React from "react";
+import { memo, useState } from "react";
 
-const TopMenu: React.FC = () => {
-  const [isClicked, setIsClicked] = React.useState({
+const TopMenu: React.FC = memo(() => {
+  const [isClicked, setIsClicked] = useState({
     style: false,
     settings: false,
     preview: false,
@@ -19,9 +20,9 @@ const TopMenu: React.FC = () => {
 
   const { theme } = useCreateEventTheme();
   return (
-    <div className="relative flex flex-col w-min">
+    <div className="relative flex flex-col w-min font-['Mona Sans'] font-medium">
       <div
-        className={`backdrop-blur-2xl w-max justify-start items-center flex py-6 divide-x-[1px] ${theme.dividerColor} ${theme.inputBgColor} ${theme.textColor} text-base font-medium`}
+        className={`backdrop-blur-2xl max-w-screen md:w-max justify-start items-center flex py-6 divide-x-[1px] overflow-hidden ${theme.dividerColor} ${theme.inputBgColor} ${theme.textColor} text-base `}
       >
         <button
           type="button"
@@ -105,6 +106,8 @@ const TopMenu: React.FC = () => {
       {isClicked.style && <ThemesMenu />}
     </div>
   );
-};
+});
+
+TopMenu.displayName = "TopMenu";
 
 export default TopMenu;

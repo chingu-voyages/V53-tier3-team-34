@@ -2,8 +2,10 @@ export interface ChipModel {
   icon: React.ReactNode;
   text: string;
   value: string;
+  inputValue?: string;
   maxCountCharacters: number;
   placeholderText?: string;
+  placeholderClassName?: string;
   preText?: string;
 }
 
@@ -142,7 +144,8 @@ export const chips: ChipModel[] = [
     text: "Registry",
     value: "registry",
     maxCountCharacters: 200,
-    placeholderText: "",
+    placeholderText: "[Insert Registry Link]",
+    placeholderClassName: "italic  placeholder-[#094ce7]",
     preText: "Find it here:",
   },
   {

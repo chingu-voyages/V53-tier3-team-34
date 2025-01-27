@@ -21,7 +21,7 @@ const Chip: React.FC<ChipProps> = ({ chip, isSelected, onChange, theme }) => {
       className={`h-10 px-3 py-2 rounded-3xl backdrop-blur-[34px] flex items-center gap-1 text-white text-base font-normal ${
         isSelected
           ? `${theme.chipSelectedTextColor} ${theme.chipSelectedBgColor}`
-          : `${theme.chipUnselectedTextColor} ${theme.chipUnselectedBgColor}`
+          : `${theme.chipUnselectedTextColor} ${theme.chipUnselectedBgColor} ${theme.chipHoverBgColor}`
       }`}
       onClick={() => onChange(chip.value)}
       onKeyDown={onKeyDown}
