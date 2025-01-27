@@ -1,8 +1,8 @@
 "use client";
 
-import { CldImage } from "next-cloudinary";
+// import { CldImage } from "next-cloudinary";
 import Image from "next/image";
-import DefaultEventImage from "../../../public/assets/images/events/defaultEvent.png";
+// import DefaultEventImage from "../../../public/assets/images/events/defaultEvent.png";
 
 interface EventImageProps {
   image: string | null;

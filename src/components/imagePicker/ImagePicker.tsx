@@ -23,8 +23,7 @@ export default function ImagePicker({
   onChange,
   onClose,
 }: imagePickerProp) {
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  const handleUploadSuccess = async (res: any) => {
+  const handleUploadSuccess = async (res: CloudinaryUploadWidgetResults) => {
     // Ensure the response has a valid URL
     if (res.info && typeof res.info !== "string" && res.info.url) {
       onChange(res.info.url);
