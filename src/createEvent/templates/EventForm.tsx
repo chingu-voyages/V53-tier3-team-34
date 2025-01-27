@@ -1,13 +1,13 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { Peralta } from "next/font/google";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { z } from "zod";
 import Input from "../molecules/Input";
 import TextArea from "../molecules/TextArea";
 import ToggleInput from "../molecules/ToggleInput";
 import ChipsList from "../oragnisms/ChipsList";
-import { RSVP } from "../oragnisms/RSVP";
+import RSVP from "../oragnisms/RSVP";
 
 import { createEvent } from "@/actions/createEvent";
 import { saveEventToIndexedDB } from "@/app/(pages)/events/create/indexedDBActions";
@@ -15,7 +15,8 @@ import { Button } from "@/components/ui/button";
 import { useCreateEventTheme } from "@/providers/themeProvider";
 import Link from "next/link";
 import { icons } from "../config/icons";
-import type { MoodType } from "../config/rvspMood";
+import { type MoodType, defaultFormValuesRSVPMoods } from "../config/rvspMood";
+import DateRangePicker from "../oragnisms/DateRangePicker";
 import ImageUpload from "../oragnisms/ImageUpload";
 import TopMenu from "../oragnisms/TopMenu";
 
@@ -26,7 +27,8 @@ const peralta = Peralta({
 
 const eventFormSchema = z.object({
   title: z.string().min(1, "Title is required"),
-  date: z.date(),
+  startDateTime: z.date(),
+  endDateTime: z.date(),
   description: z.string().nullable(),
   style: z.string().nullable(),
   imageUrl: z.string().url().nullable(),
@@ -43,7 +45,7 @@ const eventFormSchema = z.object({
   rsvpMoods: z.array(
     z.object({
       value: z.enum(["attending", "maybe", "regretfully"]),
-      emoji: z.string(),
+      emoji: z.string().nullable(),
     }),
   ),
   chips: z.array(z.object({ value: z.string(), inputValue: z.string() })),
@@ -51,12 +53,18 @@ const eventFormSchema = z.object({
 
 export type EventFormData = z.infer<typeof eventFormSchema>;
 
+export type BooleanKeys<T> = {
+  [K in keyof T]: T[K] extends boolean ? K : never;
+}[keyof T];
+
 const EventForm = () => {
   const { data: session } = useSession();
+  const { theme } = useCreateEventTheme();
 
   const [formData, setFormData] = useState<EventFormData>({
     title: "",
-    date: new Date(),
+    startDateTime: new Date(),
+    endDateTime: new Date(new Date().setHours(new Date().getHours() + 1)),
     description: null,
     style: null,
     reason: null,
@@ -70,73 +78,74 @@ const EventForm = () => {
     costPerPerson: null,
     isPublic: false,
     requireGuestApproval: false,
-    rsvpMoods: [],
+    rsvpMoods: defaultFormValuesRSVPMoods,
     chips: [],
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target;
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const { name, value } = e.target;
 
-    // Handle switches differently (for `isOutdoor`, `isPublic`, and `requireGuestApproval`)
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  const handleToggleChange = (name: string) => {
-    if (name in formData) {
+      // Handle switches differently (for `isOutdoor`, `isPublic`, and `requireGuestApproval`)
       setFormData((prevState) => ({
         ...prevState,
-        [name as keyof EventFormData]: !prevState[name as keyof EventFormData], // Toggle the value
+        [name]: value,
       }));
-    }
-  };
-  const handleRSVPMoodChange = (value: MoodType, emoji: string) => {
+    },
+    [],
+  );
+
+  const handleToggleChange = useCallback((name: BooleanKeys<EventFormData>) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: !prevState[name], // Toggle the value
+    }));
+  }, []);
+
+  const handleRSVPMoodChange = useCallback((value: MoodType, emoji: string) => {
     setFormData((prevState) => ({
       ...prevState,
       rsvpMoods: prevState.rsvpMoods.map((mood) =>
         mood.value === value ? { ...mood, emoji } : mood,
       ),
     }));
-  };
+  }, []);
 
-  const handleChipsChange = (
-    chipValue: string,
-    inputValue: string,
-    isSelected: boolean,
-  ) => {
-    const chips = formData.chips;
+  const handleChipsChange = useCallback(
+    (chipValue: string, inputValue: string, isSelected: boolean) => {
+      const chips = formData.chips;
+      const existingChipIndex = chips.findIndex(
+        (chip) => chip.value === chipValue,
+      );
 
-    const existingChipIndex = chips.findIndex(
-      (chip) => chip.value === chipValue,
-    );
+      if (!isSelected) {
+        chips.splice(existingChipIndex, 1);
+      } else if (existingChipIndex === -1) {
+        chips.push({ value: chipValue, inputValue });
+      } else {
+        const chip = chips[existingChipIndex];
+        chip.inputValue = inputValue;
+      }
 
-    if (!isSelected) {
-      chips.splice(existingChipIndex, 1);
-    } else if (existingChipIndex === -1) {
-      chips.push({ value: chipValue, inputValue });
-    } else {
-      const chip = chips[existingChipIndex];
-      chip.inputValue = inputValue;
-    }
+      // console.log(chips);
+      setFormData((prevFormData) => {
+        return {
+          ...prevFormData,
+          chips: chips,
+        };
+      });
+    },
+    [formData.chips],
+  );
 
-    setFormData({
-      ...formData,
-      chips,
-    });
-  };
-
-  const handleImageChange = (imageURL?: string) => {
+  const handleImageChange = useCallback((imageURL?: string) => {
     if (imageURL) {
       setFormData((prevState) => ({
         ...prevState,
         imageUrl: imageURL,
       }));
     }
-  };
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     try {
@@ -154,11 +163,9 @@ const EventForm = () => {
     }
   };
 
-  const { theme } = useCreateEventTheme();
-
   return (
-    <div className="flex flex-col min-h-screen">
-      <header className="flex justify-between items-center bg-red-600 py-9 px-16">
+    <div className="flex flex-col min-h-screen items-stretch">
+      <header className="flex justify-between items-center bg-red-600 p-2 md:py-9 md:px-16">
         <h1
           className={`text-white text-4xl font-normal ${peralta.className} leading-tight`}
         >
@@ -177,7 +184,7 @@ const EventForm = () => {
       </header>
       <form
         onSubmit={handleSubmit}
-        className={`pb-9 px-16 flex-1 flex flex-col gap-3 ${theme.pageBgImage} bg-cover bg-center `}
+        className={`p-2 md:pb-9 md:px-16 flex-1 flex flex-col gap-3 ${theme.pageBgImage} bg-cover bg-center `}
       >
         <div className="w-full flex flex-col md:flex-row justify-center space-y-3 md:space-y-0 md:space-x-11">
           <div className="flex flex-col space-y-3">
@@ -189,7 +196,21 @@ const EventForm = () => {
               onChange={handleChange}
               isRequired={true}
               parentClassName="h-24"
-              className="text-6xl placeholder:text-6xl leading-10 h-24"
+              className="text-6xl placeholder:text-6xl leading-10 h-24 font-semibold"
+            />
+
+            <DateRangePicker
+              initialDateFrom={formData.startDateTime}
+              initialDateTo={formData.endDateTime}
+              showCompare={false}
+              align="start"
+              onUpdate={({ range }) => {
+                setFormData({
+                  ...formData,
+                  startDateTime: range.from,
+                  endDateTime: range.to || range.from,
+                });
+              }}
             />
 
             <Input
@@ -229,7 +250,7 @@ const EventForm = () => {
               icon={icons.chair}
               placeholder="(Maximum)"
               postText="Attendance"
-              value={formData.userGuestLimit || ""}
+              value={formData.maxGuestLimit || ""}
               onChange={handleChange}
               name="maxGuestLimit"
               type="number"
@@ -273,7 +294,7 @@ const EventForm = () => {
             <ToggleInput
               icon={icons.sunrise}
               text="Outdoor"
-              name="outdoor"
+              name="isOutdoor"
               isToggled={formData.isOutdoor}
               onChange={handleToggleChange}
             />
@@ -291,7 +312,7 @@ const EventForm = () => {
             />
           </div>
 
-          <div className="flex flex-col space-y-3 pt-28">
+          <div className="flex flex-col space-y-3 pt-0 md:pt-28">
             <ImageUpload
               onChange={handleImageChange}
               imageURL={formData.imageUrl}
@@ -312,6 +333,7 @@ const EventForm = () => {
             />
 
             <RSVP
+              requireGuestApproval={formData.requireGuestApproval}
               selectedRVSPMoods={formData.rsvpMoods}
               onChange={handleRSVPMoodChange}
             />
