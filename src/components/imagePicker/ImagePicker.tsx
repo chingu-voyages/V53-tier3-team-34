@@ -1,10 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { genre } from "./genre";
 import { images } from "./images";
+import { filteredImages, getAllImages } from "./images";
 
 // Use the cloudinary feature in the image picker
 import {
@@ -12,15 +13,17 @@ import {
   type CloudinaryUploadWidgetResults,
 } from "next-cloudinary";
 
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
-
 type imagePickerProp = {
   showImagePicker: boolean;
   onChange: (url: string) => void; // The onChange function expects a string URL
   onClose: () => void;
 };
+
+interface ImageDetail {
+  id: string;
+  imageUrl: string;
+  imageChipType: string;
+}
 
 export default function ImagePicker({
   showImagePicker,
@@ -35,19 +38,53 @@ export default function ImagePicker({
   };
 
   const [searchTerm, setSearchTerm] = useState("");
-
-  //   Simple search functionality
-  const filteredImages = images.filter((image) =>
-    image.url.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  const [chipType, setChipType] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const [image, setImages] = useState<ImageDetail[]>([]);
 
   // Chip search
-  async function genree() {
-    const imageType = await prisma.imageType.findMany();
-    return imageType;
+  useEffect(() => {
+    const fetchImages = async () => {
+      const images = await getAllImages();
+      setImages(images || []);
+    };
+
+    fetchImages();
+  }, []);
+
+  async function handleClick(chipType: string) {
+    setChipType(chipType);
+    const images = await filteredImages(chipType, searchInput);
+    setImages(images || []);
   }
 
-  function filterChip(type: string) {}
+  function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
+    event.preventDefault();
+    const { value } = event.target;
+    setSearchInput(value);
+  }
+
+  // Filter images based on search term and chip type
+  useEffect(() => {
+    const fetchFilteredImages = async () => {
+      const images = await filteredImages(chipType, searchInput);
+      setImages(images || []);
+    };
+
+    if (searchInput || chipType) {
+      fetchFilteredImages();
+    }
+  }, [searchInput, chipType]);
+
+  // Simple search functionality
+  // const filteredImages = imageDetails.filter((image) =>
+  //   image.imageUrl.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
+
+  // function filterChip(type: string) {
+  //   const allTypes = genre();
+  //   allTypes.filter(type=>type ==)
+  // }
 
   return (
     <CldUploadWidget
@@ -98,6 +135,7 @@ export default function ImagePicker({
               {genre.map((type, index) => (
                 <button
                   key={genre[index]}
+                  onClick={() => handleClick(genre[index])}
                   type="button"
                   className="bg-genreBg py-2 px-4 text-white rounded-full"
                 >
@@ -129,14 +167,14 @@ export default function ImagePicker({
                 <button type="button">GIFs</button>
               </div>
               <div className="grid grid-cols-3 gap-5 overflow-x-auto">
-                {filteredImages.map((image) => (
+                {image.map((image) => (
                   <Image
-                    key={image.url}
-                    src={image.url}
+                    key={image.imageUrl}
+                    src={image.imageUrl}
                     width={250}
                     height={0}
                     alt="Image template"
-                    onClick={() => onChange(image.url)}
+                    onClick={() => onChange(image.imageUrl)}
                   />
                 ))}
               </div>

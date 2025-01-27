@@ -1,3 +1,5 @@
+import prisma from "../../../prisma/client";
+
 export const images = [
   { url: "/assets/images/imagePicker/image1.png" },
   { url: "/assets/images/imagePicker/image2.png" },
@@ -24,3 +26,34 @@ export const images = [
   { url: "/assets/images/imagePicker/image23.png" },
   { url: "/assets/images/imagePicker/image24.png" },
 ];
+
+export async function getAllImages() {
+  try {
+    const allImages = await prisma.imageType.findMany();
+
+    return allImages;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function filteredImages(chipType: string, searchInput: string) {
+  try {
+    const imageDetails = await prisma.imageType.findMany({
+      where: {
+        imageChipType: chipType,
+        imageUrl: { contains: searchInput, mode: "insensitive" },
+      },
+    });
+
+    return imageDetails;
+  } catch (error) {
+    console.log(error);
+  }
+}
+// export async function genre() {
+//   const imageType = await prisma.imageType.findMany();
+//   return imageType;
+// }
+
+// console.log(genre);
