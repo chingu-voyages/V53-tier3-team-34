@@ -1,0 +1,15 @@
+export const genre = [
+  "Cyberpunk",
+  "Vintage",
+  "Modern Minimalist",
+  "Electric",
+  "Summer",
+  "Street",
+  "Elegant",
+  "Festival",
+  "Pop Art",
+  "Museum",
+  "Vaporwave",
+  "Industrial",
+  "Kawaii",
+];

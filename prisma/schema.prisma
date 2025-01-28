@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -24,48 +18,54 @@ model User {
 model Event {
   id                   String     @id @default(uuid())
   title                String
-  startDateTime        DateTime
-  endDateTime          DateTime 
-  image                Bytes?
-  imageUrl             String?
-  style                String?
   description          String?
-  reason               String?
   guestHonor           String?
   host                 String?
-  userGuestLimit       Int?
-  maxGuestLimit        Int?
-  address              String?
-  isOutdoor            Boolean    @default(false)
-  costPerPerson        Float?
-  isPublic             Boolean    @default(false)
   requireGuestApproval Boolean    @default(false)
-  rsvpMoods            RSVPMood[]
-  chips                Chip[]
-  author               User       @relation(fields: [authorId], references: [id])
   authorId             String
   createdAt            DateTime   @default(now())
   updatedAt            DateTime   @updatedAt
+  address              String?
+  costPerPerson        Float?
+  isOutdoor            Boolean    @default(false)
+  isPublic             Boolean    @default(false)
+  reason               String?
+  style                String?
+  image                Bytes?
+  maxGuestLimit        Int?
+  userGuestLimit       Int?
+  imageUrl             String?
+  endDateTime          DateTime
+  startDateTime        DateTime
+  chips                Chip[]
+  author               User       @relation(fields: [authorId], references: [id])
+  rsvpMoods            RSVPMood[]
 }
 
 model RSVPMood {
   value   String  @unique
   emoji   String?
-  Event   Event?  @relation(fields: [eventId], references: [id])
   eventId String?
+  Event   Event?  @relation(fields: [eventId], references: [id])
 }
 
 model Chip {
   value      String  @unique
   inputValue String
-  Event      Event?  @relation(fields: [eventId], references: [id])
   eventId    String?
+  Event      Event?  @relation(fields: [eventId], references: [id])
 }
 
 model Session {
   id           String   @id @default(uuid())
   sessionToken String   @unique
   expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ImageType {
+  id            String @id @default(uuid())
+  imageUrl      String
+  imageChipType String
 }
