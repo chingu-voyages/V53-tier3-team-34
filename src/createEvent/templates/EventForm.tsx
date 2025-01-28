@@ -11,8 +11,8 @@ import RSVP from "../oragnisms/RSVP";
 
 import { createEvent } from "@/actions/createEvent";
 import { saveEventToIndexedDB } from "@/app/(pages)/events/create/indexedDBActions";
-import ImagePicker from "@/components/imagePicker/ImagePicker";
 import { Button } from "@/components/ui/button";
+import ImagePicker from "@/createEvent/oragnisms/ImagePicker";
 import { useCreateEventTheme } from "@/providers/themeProvider";
 import Link from "next/link";
 import { icons } from "../config/icons";
@@ -178,8 +178,8 @@ const EventForm = () => {
       {/* Placed onchange and image url from image upload in image picker  */}
 
       <ImagePicker
-        onChange={handleImageChange}
-        showImagePicker={showImagePicker}
+        onImageSelect={handleImageChange}
+        isVisible={showImagePicker}
         onClose={() => handleShowImagePicker(false)}
       />
       <header className="flex justify-between items-center bg-red-600 p-2 md:py-9 md:px-16">
