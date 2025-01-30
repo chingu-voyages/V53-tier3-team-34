@@ -1,6 +1,9 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Inter } from "next/font/google";
 import type React from "react";
 import { useState } from "react";
+
+const inter = Inter({ subsets: ["latin"], weight: ["400", "500"] });
 
 interface TimePickerProps {
   initialHour?: number;
@@ -68,13 +71,13 @@ const TimePicker: React.FC<TimePickerProps> = ({
 
   return (
     <div className="w-40 rounded-none border-l text-center">
-      <ScrollArea className="h-72 rounded-md">
+      <ScrollArea className="h-96 rounded-md">
         <div className="p-2">
           {timeSlots.map((time, index) => (
             <button
               key={time}
               type="button"
-              className={`cursor-pointer rounded-none px-4 py-2 transition-colors text-center ${
+              className={`h-10 cursor-pointer rounded-none px-4 py-2 text-center text-[#7a7878] text-sm font-medium ${inter.className} ${
                 selectedTime === time
                   ? "bg-[#084be7] text-white"
                   : "hover:bg-gray-100"
