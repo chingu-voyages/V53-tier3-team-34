@@ -1,28 +1,33 @@
 import { Inter, Mona_Sans, Peralta } from "next/font/google";
+import Image from "next/image";
 import Link from "next/link";
 import type React from "react";
-
 const monaSans = Mona_Sans({ weight: "700", subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"], weight: ["400", "500"] });
 const peralta = Peralta({ weight: "400", subsets: ["latin"] });
 const Footer: React.FC = () => {
   return (
-    <div className="w-full bg-black p-16 flex flex-col gap-16">
-      <div className="flex justify-start gap-[15rem]">
+    <footer className="w-full bg-black p-4 md:p-8 lg:p-16 flex flex-col gap-16">
+      <div className="flex justify-start flex flex-col gap-16 lg:gap-[15rem] lg:flex-row ">
         {/* Left Section */}
         <div className="flex flex-col gap-16">
           {/* Logo Section */}
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-[#d6ff0b] rounded-full border border-black" />
+            <Image
+              src="/assets/images/logo.svg"
+              alt="Partiyo Logo"
+              width={50}
+              height={50}
+            />
             <span
-              className={`text-white text-2xl font-normal ${peralta.className}`}
+              className={`text-white text-4xl font-normal ${peralta.className}`}
             >
               Partiyo
             </span>
           </div>
 
           {/* Social Icons */}
-          <div className="flex align-center justify-center gap-4">
+          <div className="flex align-center justify-start gap-4">
             <svg
               width="54"
               height="55"
@@ -131,41 +136,43 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Right Section - Navigation */}
-        <div className="flex gap-12">
-          {/* Company Links */}
-          <div className="flex flex-col gap-6">
-            <h3
-              className={`text-white text-2xl font-bold ${monaSans.className}`}
-            >
-              Partiyo
-            </h3>
-            <Link
-              className={`text-[#dbd8d8] text-2xl font-medium ${inter.className}`}
-              href="/"
-            >
-              About
-            </Link>
-            <Link
-              className={`text-[#dbd8d8] text-2xl font-medium ${inter.className}`}
-              href="/"
-            >
-              Careers
-            </Link>
-          </div>
+        <div className="flex gap-12 flex-col md:flex-row">
+          <div className="flex flex-row gap-12">
+            {/* Company Links */}
+            <div className="flex flex-col gap-6">
+              <h3
+                className={`text-white text-2xl font-bold ${monaSans.className}`}
+              >
+                Partiyo
+              </h3>
+              <Link
+                className={`text-[#dbd8d8] text-2xl font-medium ${inter.className}`}
+                href="/"
+              >
+                About
+              </Link>
+              <Link
+                className={`text-[#dbd8d8] text-2xl font-medium ${inter.className}`}
+                href="/"
+              >
+                Careers
+              </Link>
+            </div>
 
-          {/* Support Links */}
-          <div className="flex flex-col gap-6">
-            <h3
-              className={`text-white text-2xl font-bold ${monaSans.className}`}
-            >
-              Support
-            </h3>
-            <Link
-              className={`text-[#dbd8d8] text-2xl font-medium ${inter.className}`}
-              href="/"
-            >
-              Help Centre
-            </Link>
+            {/* Support Links */}
+            <div className="flex flex-col gap-6">
+              <h3
+                className={`text-white text-2xl font-bold ${monaSans.className}`}
+              >
+                Support
+              </h3>
+              <Link
+                className={`text-[#dbd8d8] text-2xl font-medium ${inter.className}`}
+                href="/"
+              >
+                Help Centre
+              </Link>
+            </div>
           </div>
 
           {/* Partner Links */}
@@ -188,7 +195,7 @@ const Footer: React.FC = () => {
       <div className={`text-white text-2xl font-medium ${inter.className}`}>
         Copyright 2025, The Partiyo Inc.
       </div>
-    </div>
+    </footer>
   );
 };
 

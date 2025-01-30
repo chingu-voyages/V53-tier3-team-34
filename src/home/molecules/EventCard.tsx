@@ -1,4 +1,6 @@
+"use client";
 import type { EventFormData } from "@/createEvent/templates/EventForm";
+import { motion } from "framer-motion";
 import { Inter, Mona_Sans } from "next/font/google";
 import Image from "next/image";
 import type React from "react";
@@ -20,18 +22,21 @@ const EventCard: React.FC<EventCardProps> = ({
   address,
   costPerPerson,
 }) => {
-  const widthOfImage = "292";
-  const heightOfImage = "292";
   return (
-    <div
-      className={`flex flex-col gap-2 align-start min-w-[${widthOfImage}px] self-start`}
+    <motion.div
+      className={"flex flex-col gap-2 align-start min-w-[292px] self-start"}
+      initial={{ opacity: 0, scale: 0 }}
+      exit={{ opacity: 0, scale: 0 }}
+      transition={{ duration: 0.5, ease: "easeIn" }}
+      whileInView={{ opacity: 1, scale: 1 }}
     >
+      {/* Keep minimum width of div same as image width */}
       <Image
         src={imageUrl || "/assets/images/events/defaultEvent.png"}
         alt="Event"
-        width={widthOfImage}
-        height={heightOfImage}
-        className={`w-[${widthOfImage}px] h-[${heightOfImage}px]`}
+        width={292}
+        height={292}
+        className={"w-[292px] h-[292px]"}
       />
       <h2
         className={`text-black text-xl leading-loose break-words ${monaSans.className}`}
@@ -61,7 +66,7 @@ const EventCard: React.FC<EventCardProps> = ({
           Free
         </p>
       )}
-    </div>
+    </motion.div>
   );
 };
 

@@ -9,10 +9,15 @@ const nextConfig: NextConfig = {
         hostname: "s3-alpha-sig.figma.com",
         port: "",
         pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        port: "",
+        pathname: "/**",
       }
-    ]
+    ],
   },
-  domains: ["res.cloudinary.com"], // Cloudinary domain
 };
 
 export default nextConfig;

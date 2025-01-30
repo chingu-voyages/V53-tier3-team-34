@@ -1,4 +1,6 @@
+"use client";
 import getTrendingEvents from "@/actions/getTrendingEvents";
+import { motion } from "framer-motion";
 import { Mona_Sans } from "next/font/google";
 import type React from "react";
 import EventCard, { type EventCardProps } from "../molecules/EventCard";
@@ -108,26 +110,47 @@ const TrendingEvents: React.FC = async () => {
   }
   return (
     <div className="py-12">
-      <h3
+      <motion.h3
         className={`text-3xl text-black leading-10 pl-16 ${monaSans.className}`}
+        initial={{ opacity: 0, scale: 0 }}
+        exit={{ opacity: 0, scale: 0 }}
+        transition={{ duration: 0.5, ease: "easeIn" }}
+        whileInView={{ opacity: 1, scale: 1 }}
       >
         Trending Now
-      </h3>
-      {trendingEvents && (
-        <div className="flex items-center justify-center gap-8 py-12 [--scroll-duration:20s] animate-infinite-scroll">
-          {trendingEvents.map((event) => (
-            <EventCard
-              key={event.id}
-              id={`Event${event.id}`}
-              title={event.title}
-              imageUrl={event.imageUrl}
-              startDateTime={event.startDateTime}
-              address={event.address}
-              costPerPerson={event.costPerPerson}
-            />
-          ))}
-        </div>
-      )}
+      </motion.h3>
+      <div className="w-full inline-flex flex-nowrap overflow-x-hidden">
+        {trendingEvents && (
+          <div className="flex items-center justify-center gap-8 py-12 pl-8 [--scroll-duration:20s] animate-infinite-scroll">
+            {trendingEvents.map((event) => (
+              <EventCard
+                key={event.id}
+                id={`Event${event.id}`}
+                title={event.title}
+                imageUrl={event.imageUrl}
+                startDateTime={event.startDateTime}
+                address={event.address}
+                costPerPerson={event.costPerPerson}
+              />
+            ))}
+          </div>
+        )}
+        {trendingEvents && (
+          <div className="flex items-center justify-center gap-8 py-12 pl-8 [--scroll-duration:20s] animate-infinite-scroll">
+            {trendingEvents.map((event) => (
+              <EventCard
+                key={event.id}
+                id={`Event${event.id}-duplicate`}
+                title={event.title}
+                imageUrl={event.imageUrl}
+                startDateTime={event.startDateTime}
+                address={event.address}
+                costPerPerson={event.costPerPerson}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

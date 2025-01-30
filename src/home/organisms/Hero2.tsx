@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { Inter, Mona_Sans } from "next/font/google";
+import Image from "next/image";
 import type React from "react";
 import BlueButton from "../molecules/BlueButton";
 
@@ -9,20 +10,27 @@ const monaSans = Mona_Sans({ weight: "600", subsets: ["latin"] });
 
 const Hero2: React.FC = () => {
   return (
-    <div className="relative flex flex-col items-center justify-center h-screen w-screen overflow-hidden">
-      <div className="w-1/2 h-1/2 bg-[#d6ff0b] blur-3xl rounded-b-full" />
-      <div className="absolute -left-[150px] -bottom-[100px] w-3/4 h-full bg-[#F5AFB9] shadow-2xl blur-3xl rounded-full" />
-      <div className="absolute -right-[100px] -bottom-[100px] w-1/2 h-1/2 bg-[#0249ED] shadow-[34.57rem_34.57rem_34.57rem] blur-3xl rounded-full" />
-      <div className="w-full absolute left-0 top-0 h-full px-16 py-36 bg-gradient-to-r from-neutral-50 flex flex-row items-center justify-center ">
+    <div className="relative w-dvw h-dvh px-16 py-36 flex flex-col items-center justify-center h-dvh w-screen overflow-hidden bg-hero2-gradient">
+      <div className=" flex flex-row items-center justify-center ">
         <div className="flex flex-col items-center justify-center gap-8 w-1/2">
-          <h1
+          <motion.h1
             className={`text-6xl leading-tight text-center ${monaSans.className}`}
+            initial={{ opacity: 0, scale: 0 }}
+            exit={{ opacity: 0, scale: 0 }}
+            transition={{ duration: 0.5, ease: "easeIn" }}
+            whileInView={{ opacity: 1, scale: 1 }}
           >
             Discover customised activities around you
-          </h1>
-          <p className={`text-2xl leading-tight ${inter.className}`}>
+          </motion.h1>
+          <motion.p
+            className={`text-2xl leading-tight ${inter.className}`}
+            initial={{ opacity: 0, scale: 0 }}
+            exit={{ opacity: 0, scale: 0 }}
+            transition={{ duration: 0.5, ease: "easeIn" }}
+            whileInView={{ opacity: 1, scale: 1 }}
+          >
             Attending the same events and sharing the same interests
-          </p>
+          </motion.p>
           <BlueButton text="Browse Events" href="/events" />
         </div>
         <div className="w-1/2">
@@ -37,10 +45,11 @@ export default Hero2;
 
 const MovingCirclesAndImages = () => {
   const circles = Array.from({ length: 7 }, (_, index) => index + 1);
-
+  const radius = 120; // Radius of the circular path for the images
+  const angleOffset = Math.PI / 4; // Offset angle to position the images correctly
   return (
     <div className="relative w-96 h-96" style={{ perspective: "1000px" }}>
-      {/* Circles */}
+      {/* Concentric Circles */}
       {circles.map((value, index) => (
         <motion.div
           key={value}
@@ -69,31 +78,96 @@ const MovingCirclesAndImages = () => {
         />
       ))}
 
-      {/* Images moving in circular motion
-      {["image1.png", "image2.png", "image3.png"].map((img, index) => (
-        <motion.img
-          key={index}
-          src={img}
-          alt={`image-${index}`}
-          className="absolute transform -translate-x-1/2 -translate-y-1/2"
+      {/* Moving Images in Circular Path */}
+      <motion.div
+        className="absolute top-1/2 left-1/2"
+        style={{
+          width: "100%",
+          height: "100%",
+          transform: "translate(-50%, -50%)",
+        }}
+      >
+        {/* Image 1 */}
+        <motion.div
+          className="absolute"
           style={{
-            width: "50px",
-            height: "50px",
+            top: "50%",
+            left: "50%",
+            transformOrigin: "center",
           }}
           animate={{
-            rotate: [0, 360],
-            x: Math.sin((index / 3) * Math.PI * 2) * 160,
-            y: Math.cos((index / 3) * Math.PI * 2) * 160,
+            x: radius * Math.cos(0 + angleOffset),
+            y: radius * Math.sin(0 + angleOffset),
           }}
           transition={{
-            repeat: Infinity,
+            repeat: Number.POSITIVE_INFINITY,
             repeatType: "loop",
-            duration: 8,
-            ease: "easeInOut",
-            delay: index * 0.5,
+            duration: 5,
+            ease: "linear",
           }}
-        />
-      ))} */}
+        >
+          <Image
+            src="/assets/images/hero/hero21.png"
+            width={224}
+            height={280}
+            alt={"Event Image"}
+          />
+        </motion.div>
+
+        {/* Image 2 */}
+        <motion.div
+          className="absolute"
+          style={{
+            top: "50%",
+            left: "50%",
+            transformOrigin: "center",
+          }}
+          animate={{
+            x: radius * Math.cos(Math.PI / 2 + angleOffset), // 90 degrees offset
+            y: radius * Math.sin(Math.PI / 2 + angleOffset),
+          }}
+          transition={{
+            repeat: Number.POSITIVE_INFINITY,
+            repeatType: "loop",
+            duration: 5,
+            ease: "linear",
+          }}
+        >
+          <Image
+            src="/assets/images/hero/hero22.png"
+            width={295}
+            height={314}
+            alt={"Event Image"}
+          />
+        </motion.div>
+
+        {/* Image 3 */}
+        <motion.div
+          className="absolute"
+          style={{
+            top: "50%",
+            left: "50%",
+            transformOrigin: "center",
+          }}
+          animate={{
+            x: radius * Math.cos(Math.PI + angleOffset), // 180 degrees offset
+            y: radius * Math.sin(Math.PI + angleOffset),
+          }}
+          transition={{
+            repeat: Number.POSITIVE_INFINITY,
+            repeatType: "loop",
+            duration: 5,
+            ease: "linear",
+          }}
+        >
+          <Image
+            src="/assets/images/hero/hero23.png"
+            width={360}
+            height={360}
+            alt={"Event Image"}
+          />
+        </motion.div>
+      </motion.div>
     </div>
   );
 };
