@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Menu, Search, X } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import type React from "react";
 import { useState } from "react";
 import BlueButton from "../molecules/BlueButton";
@@ -22,7 +23,7 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
     <header className="bg-black text-white px-16 py-9">
       <div className="flex items-center justify-start">
         {/* Logo */}
-        <div className="flex items-center">
+        <div className="flex items-center gap-5">
           <Image
             src="/assets/images/logo.svg"
             alt="Partiyo Logo"
@@ -34,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center justify-center flex-1 mx-8">
-          <div className="flex bg-gray-900 rounded-none flex-1 max-w-xl h-16 px-6 py-3 border-2 border-white">
+          <div className="flex bg-gray-900 rounded-none flex-1 max-w-xl h-16">
             <input
               type="text"
               placeholder="Lunar new year"
@@ -51,7 +52,7 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
             />
             <Button
               onClick={handleSearch}
-              className="h-16 px-6 py-2 bg-[#084be7] border-2 border-white justify-center items-center inline-flex rounded-none"
+              className="h-16 px-6 py-2 bg-[#084be7] justify-center items-center flex rounded-none"
             >
               <Search className="w-5 h-5" />
             </Button>
@@ -68,7 +69,9 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
               Log In
             </Button>
           </a>
-          <BlueButton text="Create Events" href="/events/create" />
+          {/* Added Create event button and changed the blue button text to browse event */}
+          <Link href="/events/create">Create Event</Link>
+          <BlueButton text="Browse Events" href="/events" />
         </div>
 
         {/* Mobile Menu Button */}
