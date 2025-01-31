@@ -1,6 +1,6 @@
-import queriedEvents from "./queryEvents";
+import queriedEvents from "../events/public/queryEvents";
 import Header from "@/home/organisms/Header";
-import { defaultEvents } from "./dummyEvents";
+import { defaultEvents } from "../events/public/dummyEvents";
 import Image from "next/image";
 import Link from "next/link";
 import QueryChipBar from "@/components/ChipBar/QueryChipBar";

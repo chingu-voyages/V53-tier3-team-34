@@ -1,12 +1,12 @@
 "use client";
 
-import { queryChips } from "@/app/(pages)/publicevents/queryChipList";
+import { queryChips } from "@/app/(pages)/events/public/queryChipList";
 import Image from "next/image";
 
 export default function QueryChipBar() {
   return (
     <div className="">
-      <div className="flex justify-between relative">
+      <div className="flex justify-between relative overflow-y-auto">
         {/* Toggle left button */}
         <button type="button" className="absolute top-1/2 -translate-y-1/2">
           <Image

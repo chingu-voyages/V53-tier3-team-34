@@ -4,27 +4,30 @@ import { motion } from "framer-motion";
 import { Inter, Mona_Sans } from "next/font/google";
 import Image from "next/image";
 import type React from "react";
-export interface EventCardProps
-  extends Pick<
-    EventFormData,
-    "title" | "imageUrl" | "startDateTime" | "address" | "costPerPerson"
-  > {
+
+export type EventCardProps = {
+  event: EventCardInfo;
+  textColor?: string;
+};
+export type EventCardInfo = Pick<
+  EventFormData,
+  "title" | "imageUrl" | "startDateTime" | "address" | "costPerPerson"
+> & {
   id: string;
-}
+};
 
 const inter = Inter({ subsets: ["latin"], weight: "600" });
 const monaSans = Mona_Sans({ weight: "600", subsets: ["latin"] });
 
 const EventCard: React.FC<EventCardProps> = ({
-  title,
-  imageUrl,
-  startDateTime,
-  address,
-  costPerPerson,
+  event: { title, imageUrl, startDateTime, address, costPerPerson },
+  textColor,
 }) => {
   return (
     <motion.div
-      className={"flex flex-col gap-2 align-start min-w-[292px] self-start"}
+      className={
+        "flex flex-col gap-2 align-start min-w-[292px] max-w-[292px] self-start"
+      }
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -63,22 +66,22 @@ const EventCard: React.FC<EventCardProps> = ({
         </button>
       </div>
       <h2
-        className={`text-black text-xl leading-loose break-words ${monaSans.className}`}
+        className={`${textColor ? textColor : "text-black"} text-xl leading-loose break-words ${monaSans.className}`}
       >
         {title}
       </h2>
       <div
-        className={`text-[#084be7] text-base text-wrap leading-loose break-words ${inter.className}`}
+        className={`${textColor ? textColor : "text-[#084be7]"} text-base text-wrap leading-loose break-words ${inter.className}`}
       >
         {startDateTime.toString()}
       </div>
       <div
-        className={`text-[#26282b] text-base leading-loose break-words ${inter.className}`}
+        className={`${textColor ? textColor : "text-black"} text-base leading-loose break-words ${inter.className}`}
       >
         {address}
       </div>
       <p
-        className={`text-[#26282b] text-base leading-loose break-words ${inter.className}`}
+        className={`${textColor ? textColor : "text-black"} text-base leading-loose break-words ${inter.className}`}
       >
         {costPerPerson && costPerPerson > 0 ? `$${costPerPerson}` : "Free"}
       </p>
