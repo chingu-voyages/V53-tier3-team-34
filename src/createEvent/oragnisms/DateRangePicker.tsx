@@ -16,7 +16,7 @@ import TimePicker from "../molecules/TimePicker";
 const inter = Inter({ subsets: ["latin"], weight: ["400", "500"] });
 export interface DateRangePickerProps {
   /** Click handler for applying the updates from DateRangePicker. */
-  onUpdate?: (values: { range: DateRange; rangeCompare?: DateRange }) => void;
+  onUpdate: (range: DateRange) => void;
   /** Initial value for start date */
   initialDateFrom?: Date | string;
   /** Initial value for end date */
@@ -119,6 +119,10 @@ export const DateRangePicker: FC<DateRangePickerProps> = memo(
         openedRangeRef.current = range;
       }
     }, [isOpen, range]);
+
+    useEffect(() => {
+      onUpdate(range);
+    }, [range, onUpdate]);
 
     return (
       <Popover
@@ -254,16 +258,29 @@ export const DateRangePicker: FC<DateRangePickerProps> = memo(
                         ),
                       }));
                     } else {
-                      setRange((prevRange) => ({
-                        ...prevRange,
-                        to: new Date(
-                          prevRange.to.getFullYear(),
-                          prevRange.to.getMonth(),
-                          prevRange.to.getDate(),
-                          time.hours,
-                          time.minutes,
-                        ),
-                      }));
+                      setRange((prevRange) => {
+                        // Check if `to` is undefined
+                        const toDate = prevRange.to
+                          ? new Date(
+                              prevRange.to.getFullYear(),
+                              prevRange.to.getMonth(),
+                              prevRange.to.getDate(),
+                              time.hours,
+                              time.minutes,
+                            )
+                          : new Date(prevRange.from); // If `to` is undefined, use `from` date and add +1 day
+
+                        // If `to` is undefined, set it to one day after `from`
+                        if (!prevRange.to) {
+                          toDate.setDate(toDate.getDate() + 1); // Add one day
+                        }
+
+                        // Return updated range
+                        return {
+                          ...prevRange,
+                          to: toDate,
+                        };
+                      });
                     }
                   }}
                 />

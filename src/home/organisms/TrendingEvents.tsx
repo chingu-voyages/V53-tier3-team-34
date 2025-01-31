@@ -107,13 +107,19 @@ const TrendingEvents: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [trendingEvents, setTrendingEvents] = useState<EventCardProps[]>([]);
   const [displayedEvents, setDisplayedEvents] = useState<EventCardProps[]>([]);
+  const itemWidth = 292; // Width of each event card
+
   useEffect(() => {
     const fetchTrendingEvents = async () => {
       try {
         const response = await fetch("/api/events/getTrendingEvents");
         if (!response.ok) throw new Error("Failed to fetch trending events");
         const data = await response.json();
-        setTrendingEvents(data || defaultEvents);
+        if (data.length === 0) {
+          setTrendingEvents(defaultEvents);
+        } else {
+          setTrendingEvents(data);
+        }
       } catch (error) {
         console.error("Error fetching events:", error);
       }
@@ -123,37 +129,42 @@ const TrendingEvents: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const handleResize = () => {
-      const numberOfItemsToDisplay = Math.floor(window.innerWidth / 292);
-      setDisplayedEvents((prevDisplayedEvents) => {
-        return prevDisplayedEvents.slice(
-          activeIndex - numberOfItemsToDisplay,
-          activeIndex + 1,
-        );
-      });
+    const updateDisplayedEvents = () => {
+      const numberOfItemsToDisplay = Math.floor(window.innerWidth / itemWidth);
+      const startIndex = Math.max(0, activeIndex - numberOfItemsToDisplay + 1);
+      const endIndex = Math.min(
+        trendingEvents.length,
+        activeIndex + numberOfItemsToDisplay,
+      );
+
+      setDisplayedEvents(trendingEvents.slice(startIndex, endIndex));
     };
 
     if (trendingEvents.length > 0) {
-      handleResize();
+      updateDisplayedEvents();
     }
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", updateDisplayedEvents);
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("resize", updateDisplayedEvents);
     };
   }, [activeIndex, trendingEvents]);
 
   const handlePreviousClick = () => {
-    // TODO: implement previous click
-    setActiveIndex(activeIndex - 1);
-    displayedEvents.pop();
+    setActiveIndex((prevIndex) => {
+      const newIndex =
+        prevIndex - 1 >= 0 ? prevIndex - 1 : trendingEvents.length - 1;
+      return newIndex;
+    });
   };
 
   const handleNextClick = () => {
-    // TODO: implement next click
-    setActiveIndex(activeIndex + 1);
-    displayedEvents.push(trendingEvents[activeIndex]);
+    setActiveIndex((prevIndex) => {
+      const newIndex =
+        prevIndex + 1 < trendingEvents.length ? prevIndex + 1 : 0;
+      return newIndex;
+    });
   };
 
   return (

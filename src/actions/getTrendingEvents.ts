@@ -25,11 +25,9 @@ const getTrendingEvents = async () => {
     });
 
     if (events) {
-      console.log("Events found:", events);
       return NextResponse.json(events, { status: 200 });
     }
 
-    console.log("No events found");
     return NextResponse.json(
       { message: "No events found", data: events },
       { status: 404 },
