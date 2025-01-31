@@ -1,0 +1,16 @@
+export const queryChips = [
+  { chipIconUrl: "/assets/chipIcons/afternoon.svg", text: "Afternoon tea" },
+  { chipIconUrl: "/assets/chipIcons/art.svg", text: "Art" },
+  { chipIconUrl: "/assets/chipIcons/dj.svg", text: "DJ" },
+  { chipIconUrl: "/assets/chipIcons/drink.svg", text: "Drink" },
+  { chipIconUrl: "/assets/chipIcons/festival.svg", text: "Festival" },
+  { chipIconUrl: "/assets/chipIcons/film.svg", text: "Film" },
+  { chipIconUrl: "/assets/chipIcons/fireworks.svg", text: "Firework" },
+  { chipIconUrl: "/assets/chipIcons/food.svg", text: "Food" },
+  { chipIconUrl: "/assets/chipIcons/game.svg", text: "Game" },
+  { chipIconUrl: "/assets/chipIcons/ktv.svg", text: "KTV" },
+  { chipIconUrl: "/assets/chipIcons/meet.svg", text: "Meet" },
+  { chipIconUrl: "/assets/chipIcons/party.svg", text: "Party" },
+  { chipIconUrl: "/assets/chipIcons/sport.svg", text: "Sport" },
+  { chipIconUrl: "/assets/chipIcons/theatre.svg", text: "Theatre" },
+];

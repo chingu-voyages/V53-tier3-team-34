@@ -3,6 +3,7 @@ import Header from "@/home/organisms/Header";
 import { defaultEvents } from "./dummyEvents";
 import Image from "next/image";
 import Link from "next/link";
+import QueryChipBar from "@/components/ChipBar/QueryChipBar";
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
@@ -28,9 +29,9 @@ export default async function PublicEvents({ searchParams }: Props) {
   }
 
   return (
-    <main className="bg-black px-16 text-white min-h-screen">
+    <main className="bg-black px-16 text-white min-h-screen space-y-10">
       <Header />
-
+      <QueryChipBar />
       <section>
         {(title || location) && (
           <h1 className="mb-5 text-3xl">
