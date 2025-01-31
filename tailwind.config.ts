@@ -53,11 +53,17 @@ export default {
           "5": "hsl(var(--chart-5))",
         },
       },
+      backgroundImage: {
+        hero1: `url('/assets/images/hero/hero11.png')`,
+        "hero2-gradient":
+          "radial-gradient(ellipse at top, #d6ff0b, transparent 50%), radial-gradient(ellipse at bottom left, #F5AFB9, transparent 50%), radial-gradient(ellipse at bottom right, #0249ED, transparent 40%)",
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+<<<<<<< HEAD
       animation: {
         "infinite-scroll":
           "infinite-scroll var(--scroll-duration) linear infinite",
@@ -68,6 +74,10 @@ export default {
           "100%": { transform: "translateX(-100%)" },
         },
       },
+=======
+     
+  
+>>>>>>> landing-page
     },
   },
   plugins: [require("tailwindcss-animate")],

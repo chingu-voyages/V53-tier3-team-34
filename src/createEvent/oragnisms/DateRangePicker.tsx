@@ -149,7 +149,10 @@ export const DateRangePicker: FC<DateRangePickerProps> = memo(
             </div>
           </Button>
         </PopoverTrigger>
-        <PopoverContent align={align} className="w-auto p-0 rounded-none">
+        <PopoverContent
+          align={align}
+          className="w-auto p-0 rounded-none border-0"
+        >
           <div className="flex">
             <div className="flex flex-col">
               <div className="flex flex-row justify-between align-center gap-2 border-b border-[#d1d1d1]">
@@ -226,12 +229,12 @@ export const DateRangePicker: FC<DateRangePickerProps> = memo(
                     )
                   }
                   captionLabelClassName="text-sm font-medium"
-                  rangeStartClassName="[&>button]:bg-[#084be7] [&>button]:rounded-r-none text-white"
+                  rangeStartClassName="!bg-[#084be7] [&>button]:!bg-[#084be7] [&>button]:rounded-r-none text-white"
                   rangeMiddleClassName="!rounded-none !bg-blue-200 !text-black"
-                  rangeEndClassName="[&>button]:bg-[#084be7] [&>button]:rounded-l-none text-white"
+                  rangeEndClassName="!bg-[#084be7] [&>button]:!bg-[#084be7] [&>button]:rounded-l-none text-white"
                   todayClassName="[&>button]:bg-red-500 text-white"
                   monthCaptionClassName={`text-center text-black text-base font-normal leading-normal font-normal ${inter.className}`}
-                  weekdayClassName={`w-12 h-12 text-center text-[#7a7878] text-xs font-medium ${inter.className}`}
+                  weekdayClassName={`w-12 h-4 text-center text-[#7a7878] text-xs font-medium ${inter.className}`}
                   dayClassName={`w-12 h-12 text-center text-[#d1d1d1] text-base font-medium ${inter.className} leading-normal`}
                   className="!w-max"
                 />
