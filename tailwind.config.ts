@@ -13,6 +13,7 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         genreBg: "#FF00E366",
+        dimGray: "#7A7878",
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
@@ -58,12 +59,13 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       animation: {
-        'infinite-scroll': 'infinite-scroll var(--scroll-duration) linear infinite',
+        "infinite-scroll":
+          "infinite-scroll var(--scroll-duration) linear infinite",
       },
       keyframes: {
-        'infinite-scroll': {
-          '0%': { transform: 'translateX(0)' },
-          '100%': { transform: 'translateX(-100%)' },
+        "infinite-scroll": {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-100%)" },
         },
       },
     },

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Menu, Search, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type React from "react";
 import { useState } from "react";
 import BlueButton from "../molecules/BlueButton";
@@ -12,11 +13,13 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onSearch }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
+  const router = useRouter();
 
-  const handleSearch = () => {
-    onSearch?.(searchTerm, location);
+  const handleSearch = async () => {
+    onSearch?.(title, location);
+    router.push(`/publicevents?title=${title}&location=${location}`);
   };
 
   return (
@@ -27,8 +30,8 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
           <Image
             src="/assets/images/logo.svg"
             alt="Partiyo Logo"
-            width={50}
-            height={50}
+            width={48}
+            height={48}
           />
           <span className="text-xl font-bold">Partiyo</span>
         </div>
@@ -40,8 +43,8 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
               type="text"
               placeholder="Lunar new year"
               className="bg-transparent border-none outline-none px-4 py-2 flex-1"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
             />
             <input
               type="text"
