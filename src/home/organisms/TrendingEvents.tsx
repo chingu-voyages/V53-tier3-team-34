@@ -1,5 +1,5 @@
 "use client";
-import { defaultEvents } from "@/app/(pages)/publicevents/dummyEvents";
+import { defaultEvents } from "@/app/(pages)/events/public/dummyEvents";
 import { motion } from "framer-motion";
 import { Mona_Sans } from "next/font/google";
 import type React from "react";

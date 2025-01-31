@@ -26,7 +26,7 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
 
   const handleSearch = async () => {
     onSearch?.(title, location);
-    router.push(`/publicevents?title=${title}&location=${location}`);
+    router.push(`/events/public?title=${title}&location=${location}`);
   };
 
   return (
