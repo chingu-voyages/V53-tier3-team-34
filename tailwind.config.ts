@@ -63,7 +63,6 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
-<<<<<<< HEAD
       animation: {
         "infinite-scroll":
           "infinite-scroll var(--scroll-duration) linear infinite",
@@ -74,10 +73,6 @@ export default {
           "100%": { transform: "translateX(-100%)" },
         },
       },
-=======
-     
-  
->>>>>>> landing-page
     },
   },
   plugins: [require("tailwindcss-animate")],

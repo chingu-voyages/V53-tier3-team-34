@@ -26,17 +26,20 @@ const getTrendingEvents = async () => {
 
     if (events) {
       console.log("Events found:", events);
-      NextResponse.json(events, { status: 200 });
+      return NextResponse.json(events, { status: 200 });
     }
 
     console.log("No events found");
-    NextResponse.json(
+    return NextResponse.json(
       { message: "No events found", data: events },
       { status: 404 },
     );
   } catch (error) {
     console.error("Error fetching events:", error);
-    NextResponse.json({ message: "Error fetching events" }, { status: 500 });
+    return NextResponse.json(
+      { message: "Error fetching events" },
+      { status: 500 },
+    );
   }
 };
 
