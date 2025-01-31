@@ -1,5 +1,5 @@
 "use client";
-import { RegisterUser } from "@/actions/registerIser";
+import { RegisterUser } from "@/actions/registerUser";
 import Link from "next/link";
 // import { useRouter } from "next/navigation";
 import { useState } from "react";
