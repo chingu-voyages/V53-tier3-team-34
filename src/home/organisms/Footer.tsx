@@ -8,7 +8,7 @@ const peralta = Peralta({ weight: "400", subsets: ["latin"] });
 const Footer: React.FC = () => {
   return (
     <footer className="w-full bg-black p-4 md:p-8 lg:p-16 flex flex-col gap-16">
-      <div className="flex justify-start flex flex-col gap-16 lg:gap-[15rem] lg:flex-row ">
+      <div className="flex justify-between flex flex-col gap-16 lg:gap-[15rem] lg:flex-row ">
         {/* Left Section */}
         <div className="flex flex-col gap-16">
           {/* Logo Section */}

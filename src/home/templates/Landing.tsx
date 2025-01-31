@@ -9,7 +9,7 @@ import TrendingEvents from "../organisms/TrendingEvents";
 
 const Home: React.FC = () => {
   return (
-    <>
+    <div className="flex flex-col overflow-x-hidden">
       <Header />
       <Hero1 />
       <Hero2 />
@@ -17,7 +17,7 @@ const Home: React.FC = () => {
       <Hero3 />
       <Hero4 />
       <Footer />
-    </>
+    </div>
   );
 };
 

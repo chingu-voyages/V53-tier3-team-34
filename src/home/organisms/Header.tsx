@@ -27,8 +27,8 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
   };
 
   return (
-    <header className="bg-black text-white px-16 py-9">
-      <div className="flex items-center justify-start">
+    <header className="bg-black text-white p-8 lg:px-16 lg:py-9">
+      <div className="flex items-center justify-between lg:justify-start">
         {/* Logo */}
         <div className="flex items-center gap-2">
           <Image
