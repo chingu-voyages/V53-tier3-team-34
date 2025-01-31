@@ -12,7 +12,7 @@ export default async function queriedEvents({
   const foundEvents = defaultEvents.filter(
     (events) =>
       events.title?.toLowerCase().includes(title.toLowerCase()) &&
-      events.address?.toLowerCase().includes(location.toLowerCase()),
+      events.address?.toLowerCase().includes(location.toLowerCase())
   );
 
   return foundEvents;
