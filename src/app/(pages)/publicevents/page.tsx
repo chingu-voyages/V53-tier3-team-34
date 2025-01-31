@@ -1,31 +1,25 @@
-import queriedEvents from "./queryEvents";
+"use client";
+import EventCard, { type EventCardInfo } from "@/home/molecules/EventCard";
 import Header from "@/home/organisms/Header";
-import { defaultEvents } from "./dummyEvents";
-import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import queriedEvents from "./queryEvents";
 
-type SearchParams = Record<string, string | string[] | undefined>;
+export default function PublicEvents() {
+  const searchParams = useSearchParams();
+  const title = searchParams.get("title") || "";
 
-interface Props {
-  searchParams: SearchParams;
-  title: string;
-  location: string;
-}
+  const location = searchParams.get("location") || "";
+  const [events, setEvents] = useState<EventCardInfo[]>([]);
 
-export default async function PublicEvents({ searchParams }: Props) {
-  let events = defaultEvents;
-
-  const title = Array.isArray(searchParams.title)
-    ? searchParams.title[0]
-    : searchParams.title || "";
-
-  const location = Array.isArray(searchParams.location)
-    ? searchParams.location[0]
-    : searchParams.location || "";
-
-  if (title || location) {
-    events = await queriedEvents({ title, location });
-  }
+  useEffect(() => {
+    const fetchEvents = async () => {
+      const foundEvents = await queriedEvents({ title, location });
+      setEvents(foundEvents);
+    };
+    fetchEvents();
+  }, [title, location]);
 
   return (
     <main className="bg-black px-16 text-white min-h-screen">
@@ -41,18 +35,7 @@ export default async function PublicEvents({ searchParams }: Props) {
         <div className="flex flex-wrap gap-10 justify-between">
           {events.map((event) => (
             <Link href={`/events/${event.id}`} key={event.id}>
-              <Image
-                src={event.imageUrl}
-                width={292}
-                height={292}
-                alt="Event flyer"
-              />
-              <div className="space-y-3 mt-3">
-                <p>{event.title}</p>
-                <p>{event.startDateTime.toLocaleString()}</p>
-                <p>{event.address}</p>
-                <p>${event.costPerPerson}</p>
-              </div>
+              <EventCard event={event} textColor="text-white" />
             </Link>
           ))}
         </div>

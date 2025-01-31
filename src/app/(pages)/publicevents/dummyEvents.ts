@@ -1,4 +1,6 @@
-export const defaultEvents = [
+import type { EventCardInfo } from "@/home/molecules/EventCard";
+
+export const defaultEvents: EventCardInfo[] = [
   {
     id: "1",
     title: "Tech Conference 2025",
