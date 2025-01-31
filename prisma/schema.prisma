@@ -18,6 +18,11 @@ model User {
 model Event {
   id                   String     @id @default(uuid())
   title                String
+  startDateTime        DateTime
+  endDateTime          DateTime 
+  image                Bytes?
+  imageUrl             String?
+  style                String?
   description          String?
   guestHonor           String?
   host                 String?
@@ -30,13 +35,8 @@ model Event {
   isOutdoor            Boolean    @default(false)
   isPublic             Boolean    @default(false)
   reason               String?
-  style                String?
-  image                Bytes?
   maxGuestLimit        Int?
   userGuestLimit       Int?
-  imageUrl             String?
-  endDateTime          DateTime
-  startDateTime        DateTime
   chips                Chip[]
   author               User       @relation(fields: [authorId], references: [id])
   rsvpMoods            RSVPMood[]

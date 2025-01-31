@@ -13,6 +13,7 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         genreBg: "#FF00E366",
+        dimGray: "#7A7878",
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
@@ -52,10 +53,25 @@ export default {
           "5": "hsl(var(--chart-5))",
         },
       },
+      backgroundImage: {
+        hero1: `url('/assets/images/hero/hero11.png')`,
+        "hero2-gradient":
+          "radial-gradient(ellipse at top, #d6ff0b, transparent 50%), radial-gradient(ellipse at bottom left, #F5AFB9, transparent 50%), radial-gradient(ellipse at bottom right, #0249ED, transparent 40%)",
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      animation: {
+        "infinite-scroll":
+          "infinite-scroll var(--scroll-duration) linear infinite",
+      },
+      keyframes: {
+        "infinite-scroll": {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-100%)" },
+        },
       },
     },
   },
