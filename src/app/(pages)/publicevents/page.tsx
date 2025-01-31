@@ -7,13 +7,15 @@ import QueryChipBar from "@/components/ChipBar/QueryChipBar";
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
-interface Props {
+interface searchParamsProps {
   searchParams: SearchParams;
   title: string;
   location: string;
 }
 
-export default async function PublicEvents({ searchParams }: Props) {
+export default async function PublicEvents({
+  searchParams,
+}: searchParamsProps) {
   let events = defaultEvents;
 
   const title = Array.isArray(searchParams.title)
