@@ -222,7 +222,7 @@ const EventForm = () => {
               initialDateTo={formData.endDateTime}
               showCompare={false}
               align="start"
-              onUpdate={({ range }) => {
+              onUpdate={(range) => {
                 setFormData({
                   ...formData,
                   startDateTime: range.from,
