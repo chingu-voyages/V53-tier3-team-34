@@ -1,3 +1,4 @@
+import Footer from "@/home/organisms/Footer";
 import type React from "react";
 import { Suspense } from "react";
 import Header from "../../home/organisms/Header";
@@ -14,6 +15,7 @@ const PublicEvent: React.FC = () => {
       <Suspense fallback={<div>Loading events...</div>}>
         <EventSearchNavigation />
       </Suspense>
+      <Footer />
     </main>
   );
 };
