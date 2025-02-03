@@ -6,7 +6,7 @@ import Image from "next/image";
 export default function QueryChipBar() {
   return (
     <div className="">
-      <div className="flex justify-between relative overflow-y-auto">
+      <div className="flex justify-between w-full relative overflow-hidden mask">
         {/* Toggle left button */}
         <button type="button" className="absolute top-1/2 -translate-y-1/2">
           <Image

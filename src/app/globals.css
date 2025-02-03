@@ -86,3 +86,7 @@ input[type="number"] {
     @apply bg-background text-foreground;
   }
 }
+
+.mask {
+  mask: linear-gradient(90deg, transparent, white 5%, white 95%, transparent);
+}
