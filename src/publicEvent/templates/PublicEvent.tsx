@@ -6,7 +6,7 @@ import QueryChipBar from "../organisms/QueryChipBar";
 
 const PublicEvent: React.FC = () => {
   return (
-    <main className="bg-black px-16 text-white min-h-screen">
+    <main className="bg-black px-16 text-white min-h-screen space-y-10">
       <Header />
       <QueryChipBar />
       <Suspense fallback={<div>Loading events...</div>}>

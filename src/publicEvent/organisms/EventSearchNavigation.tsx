@@ -22,6 +22,12 @@ const EventSearchNavigation: React.FC = () => {
 
   return (
     <section>
+      <h1 className="text-3xl mb-5">
+        <span className="text-gray-500">Search: </span>
+        {title && title}{" "}
+        {location && <span className="text-gray-500">in {location}</span>}
+      </h1>
+
       <EventList events={events} />
     </section>
   );
