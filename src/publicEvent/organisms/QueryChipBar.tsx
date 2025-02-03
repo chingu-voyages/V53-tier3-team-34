@@ -2,8 +2,18 @@
 
 import { queryChips } from "@/app/(pages)/events/public/queryChipList";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function QueryChipBar() {
+  const [chipText, setChipText] = useState("");
+  const router = useRouter();
+
+  function handleClick(text: string) {
+    setChipText(text);
+    router.push(`/events/public?title=${chipText}`);
+  }
+
   return (
     <div className="">
       <div className="flex justify-between w-full relative overflow-hidden mask">
@@ -21,6 +31,7 @@ export default function QueryChipBar() {
           <button
             type="button"
             key={chip.text}
+            onClick={() => handleClick(chip.text)}
             className="bg-dimGray p-3 min-w-20 flex flex-col bg-opacity-30"
           >
             <Image
