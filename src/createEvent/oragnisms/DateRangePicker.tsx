@@ -373,15 +373,6 @@ export const DateRangePicker: FC<DateRangePickerProps> = memo(
       </Button>
     );
 
-    // Helper function to check if two date ranges are equal
-    const areRangesEqual = (a?: DateRange, b?: DateRange): boolean => {
-      if (!a || !b) return a === b; // If either is undefined, return true if both are undefined
-      return (
-        a.from.getTime() === b.from.getTime() &&
-        (!a.to || !b.to || a.to.getTime() === b.to.getTime())
-      );
-    };
-
     useEffect(() => {
       if (isOpen) {
         openedRangeRef.current = range;
