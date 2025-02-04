@@ -1,8 +1,8 @@
 import ThemesMenu from "@/createEvent/molecules/ThemesMenu";
 import { useCreateEventTheme } from "@/providers/themeProvider";
+import Link from "next/link";
 import type React from "react";
 import { memo, useState } from "react";
-import Link from "next/link";
 
 interface TopMenuProps {
   onSettingsClick: () => void; // Function to toggle sidebar
@@ -62,52 +62,52 @@ const TopMenu: React.FC<TopMenuProps> = memo(({ onSettingsClick }) => {
           <span>SETTING</span>
         </button>
         <Link href="/events/preview">
-        <button
-          type="button"
-          className="flex items-center gap-[18px] px-4 leading-tight"
-          onClick={() => handleClick("preview")}
-        >
-          <svg
-            width="52"
-            height="52"
-            viewBox="0 0 52 52"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+          <button
+            type="button"
+            className="flex items-center gap-[18px] px-4 leading-tight"
+            onClick={() => handleClick("preview")}
           >
-            <title>Preview</title>
-            <mask
-              id="mask0_338_13481"
-              className="mask-type:luminance"
-              maskUnits="userSpaceOnUse"
-              x="3"
-              y="12"
-              width="46"
-              height="28"
+            <svg
+              width="52"
+              height="52"
+              viewBox="0 0 52 52"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              <path
-                d="M25.9999 39C37.9664 39 47.6666 26 47.6666 26C47.6666 26 37.9664 13 25.9999 13C14.0334 13 4.33325 26 4.33325 26C4.33325 26 14.0334 39 25.9999 39Z"
-                fill="white"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M25.9999 31.4168C27.4365 31.4168 28.8143 30.8461 29.8301 29.8303C30.8459 28.8145 31.4166 27.4368 31.4166 26.0002C31.4166 24.5636 30.8459 23.1858 29.8301 22.17C28.8143 21.1542 27.4365 20.5835 25.9999 20.5835C24.5633 20.5835 23.1856 21.1542 22.1698 22.17C21.1539 23.1858 20.5833 24.5636 20.5833 26.0002C20.5833 27.4368 21.1539 28.8145 22.1698 29.8303C23.1856 30.8461 24.5633 31.4168 25.9999 31.4168Z"
-                fill="black"
-                stroke="black"
-                strokeWidth="2"
-                strokeLinejoin="round"
-              />
-            </mask>
-            <g mask="url(#mask0_338_13481)">
-              <path
-                d="M0 0L52 1.2122e-10L52 52L-1.2122e-10 52L0 0Z"
-                fill="white"
-              />
-            </g>
-          </svg>
-          <span>PREVIEW</span>
-        </button>
+              <title>Preview</title>
+              <mask
+                id="mask0_338_13481"
+                className="mask-type:luminance"
+                maskUnits="userSpaceOnUse"
+                x="3"
+                y="12"
+                width="46"
+                height="28"
+              >
+                <path
+                  d="M25.9999 39C37.9664 39 47.6666 26 47.6666 26C47.6666 26 37.9664 13 25.9999 13C14.0334 13 4.33325 26 4.33325 26C4.33325 26 14.0334 39 25.9999 39Z"
+                  fill="white"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M25.9999 31.4168C27.4365 31.4168 28.8143 30.8461 29.8301 29.8303C30.8459 28.8145 31.4166 27.4368 31.4166 26.0002C31.4166 24.5636 30.8459 23.1858 29.8301 22.17C28.8143 21.1542 27.4365 20.5835 25.9999 20.5835C24.5633 20.5835 23.1856 21.1542 22.1698 22.17C21.1539 23.1858 20.5833 24.5636 20.5833 26.0002C20.5833 27.4368 21.1539 28.8145 22.1698 29.8303C23.1856 30.8461 24.5633 31.4168 25.9999 31.4168Z"
+                  fill="black"
+                  stroke="black"
+                  strokeWidth="2"
+                  strokeLinejoin="round"
+                />
+              </mask>
+              <g mask="url(#mask0_338_13481)">
+                <path
+                  d="M0 0L52 1.2122e-10L52 52L-1.2122e-10 52L0 0Z"
+                  fill="white"
+                />
+              </g>
+            </svg>
+            <span>PREVIEW</span>
+          </button>
         </Link>
       </div>
       {isClicked.style && <ThemesMenu />}

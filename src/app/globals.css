@@ -86,7 +86,6 @@ input[type="number"] {
   }
 }
 
-
 #settings-sidebar {
   transform: translateX(0);
   transition: transform 10s ease-out;

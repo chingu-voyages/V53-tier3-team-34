@@ -132,11 +132,13 @@ export const DateRangePicker: FC<DateRangePickerProps> = memo(
     const openedRangeRef = useRef<DateRange | undefined>(undefined);
     const openedRangeCompareRef = useRef<DateRange | undefined>(undefined);
 
-     // ✅ Store the range immediately when popover opens
-     useEffect(() => {
+    // ✅ Store the range immediately when popover opens
+    useEffect(() => {
       if (isOpen) {
         openedRangeRef.current = { ...range };
-        openedRangeCompareRef.current = rangeCompare ? { ...rangeCompare } : undefined;
+        openedRangeCompareRef.current = rangeCompare
+          ? { ...rangeCompare }
+          : undefined;
       }
     }, [isOpen, range, rangeCompare]);
 
@@ -626,15 +628,18 @@ export const DateRangePicker: FC<DateRangePickerProps> = memo(
 
                 // ✅ Prevent unnecessary updates by checking if the date range changed
                 if (
-                  range.from.getTime() !== new Date(initialDateFrom).getTime() || 
-                  (range.to && initialDateTo && range.to.getTime() !== new Date(initialDateTo).getTime())
+                  range.from.getTime() !==
+                    new Date(initialDateFrom).getTime() ||
+                  (range.to &&
+                    initialDateTo &&
+                    range.to.getTime() !== new Date(initialDateTo).getTime())
                 ) {
                   // ✅ Prevent invalid range where start and end dates are the same
                   if (range.to && range.from.getTime() === range.to.getTime()) {
                     console.log("Start date and end date cannot be the same.");
                     return; // 🚨 Exit early to prevent the update
                   }
-                
+
                   console.log("Calling onUpdate with:", range);
                   onUpdate?.({ range, rangeCompare });
                 } else {

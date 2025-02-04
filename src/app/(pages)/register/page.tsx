@@ -27,17 +27,16 @@ const Register = () => {
   //   // }
   //   // return router.push("/");
   // };
- 
 
   const handleSubmit = async () => {
     try {
       const res = await RegisterUser({ email, password });
-  
+
       if (res.status === 201) {
         alert("User created successfully");
         return;
       }
-  
+
       console.error("Server error:", res);
       alert(res.message || "Error creating user");
     } catch (error) {
@@ -45,7 +44,7 @@ const Register = () => {
       alert("Something went wrong!");
     }
   };
-  
+
   return (
     <div className="p-24 flex flex-col gap-8 items-center">
       <h2 className="font-semibold text-3xl">Register</h2>
