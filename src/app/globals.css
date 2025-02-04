@@ -85,3 +85,12 @@ input[type="number"] {
     @apply bg-background text-foreground;
   }
 }
+
+
+#settings-sidebar {
+  transform: translateX(0);
+  transition: transform 10s ease-out;
+}
+#settings-sidebar.open {
+  transform: translateX(100%);
+}

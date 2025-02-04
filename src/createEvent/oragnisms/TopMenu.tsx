@@ -2,8 +2,13 @@ import ThemesMenu from "@/createEvent/molecules/ThemesMenu";
 import { useCreateEventTheme } from "@/providers/themeProvider";
 import type React from "react";
 import { memo, useState } from "react";
+import Link from "next/link";
 
-const TopMenu: React.FC = memo(() => {
+interface TopMenuProps {
+  onSettingsClick: () => void; // Function to toggle sidebar
+}
+
+const TopMenu: React.FC<TopMenuProps> = memo(({ onSettingsClick }) => {
   const [isClicked, setIsClicked] = useState({
     style: false,
     settings: false,
@@ -37,7 +42,7 @@ const TopMenu: React.FC = memo(() => {
         <button
           type="button"
           className="flex items-center gap-[18px] px-4 leading-tight"
-          onClick={() => handleClick("settings")}
+          onClick={onSettingsClick}
         >
           <svg
             width="52"
@@ -56,6 +61,7 @@ const TopMenu: React.FC = memo(() => {
           </svg>
           <span>SETTING</span>
         </button>
+        <Link href="/events/preview">
         <button
           type="button"
           className="flex items-center gap-[18px] px-4 leading-tight"
@@ -102,6 +108,7 @@ const TopMenu: React.FC = memo(() => {
           </svg>
           <span>PREVIEW</span>
         </button>
+        </Link>
       </div>
       {isClicked.style && <ThemesMenu />}
     </div>

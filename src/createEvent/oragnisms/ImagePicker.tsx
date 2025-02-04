@@ -54,7 +54,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const response = await fetch("/api/images");
+        const response = await fetch("app/api/images");
         if (!response.ok) throw new Error("Failed to fetch images");
         const data = await response.json();
         setImages(data || []);
