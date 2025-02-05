@@ -5,13 +5,13 @@ import { SessionProvider } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import { Peralta } from "next/font/google";
 
-import {
-  type RSVPMood,
-  defaultFormValuesRSVPMoods,
-} from "@//createEvent/config/rvspMood";
 import { Button } from "@/components/ui/button";
 import { chips } from "@/createEvent/config/chipConfig";
 import { icons } from "@/createEvent/config/icons";
+import {
+  type RSVPMood,
+  defaultFormValuesRSVPMoods,
+} from "@/createEvent/config/rvspMood";
 import RSVPEmojiPicker from "@/createEvent/molecules/RSVPEmojiPicker";
 import { getDateAdjustedForTimezone } from "@/createEvent/oragnisms/DateRangePicker";
 import type { EventFormData } from "@/createEvent/templates/EventForm";
@@ -127,7 +127,7 @@ const PreviewPage = () => {
     loadData(); // Run the async function
   }, []);
 
-  console.log(eventData);
+  // console.log(eventData);
 
   const { theme } = useCreateEventTheme();
 
@@ -348,7 +348,7 @@ const PreviewPage = () => {
                   </Button>
                 ) : (
                   <>
-                    {rsvpMoods?.map((mood) => (
+                    {rsvpMoods.map((mood) => (
                       <div
                         key={mood.value}
                         className="flex flex-col items-center"
@@ -372,11 +372,13 @@ const PreviewPage = () => {
             <h1 className="text-5xl font-bold">{title || "Untitled Event"}</h1>
             <p className="text-xl mt-2">
               {startDateTime
-                ? formatDate(startDateTime, "en-us")
+                ? formatDate(startDateTime, "iiii, MMM dd, hh:mm a")
                 : "No Start Date"}
             </p>
             <p className="text-xl mt-2">
-              {endDateTime ? formatDate(endDateTime, "en-us") : "No End Date"}
+              {endDateTime
+                ? formatDate(endDateTime, "iiii, MMM dd, hh:mm a")
+                : "No End Date"}
             </p>
 
             {/* Additional bullet lines (with custom text) */}
