@@ -10,13 +10,17 @@ import {
   defaultFormValuesRSVPMoods,
 } from "@//createEvent/config/rvspMood";
 import { Button } from "@/components/ui/button";
-import type { ChipModel } from "@/createEvent/config/chipConfig";
+import { chips } from "@/createEvent/config/chipConfig";
 import { icons } from "@/createEvent/config/icons";
 import RSVPEmojiPicker from "@/createEvent/molecules/RSVPEmojiPicker";
+import { getDateAdjustedForTimezone } from "@/createEvent/oragnisms/DateRangePicker";
+import type { EventFormData } from "@/createEvent/templates/EventForm";
 import { ThemeProvider } from "@/providers/themeProvider";
+import { formatDate } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { getEventFromIndexedDB } from "../create/indexedDBActions";
 
 const peralta = Peralta({
   weight: "400",
@@ -30,31 +34,13 @@ type ChipType = {
   inputValue: string;
 };
 
-type EventDataType = {
-  title: string;
-  startDateTime: Date;
-  endDateTime: Date; // Change from string to Date
-  description: string | null;
-  reason: string | null;
-  guestHonor: string | null;
-  host: string | null;
-  address: string | null;
-  isOutdoor: boolean;
+interface PreviewFormData extends EventFormData {
   rsvpMoods: RSVPMood[];
-  userGuestLimit: number | null;
-  maxGuestLimit: number | null;
-  isPublic: boolean;
-  requireGuestApproval: boolean;
-  imageUrl: string | null;
-  costPerPerson: number | null;
-  chip: ChipType[];
-  style: string | null;
-};
+  chips: ChipType[];
+}
 
 const PreviewPage = () => {
-  const [detailChips, setDetailChips] = useState<ChipType[] | null>(null);
-
-  const [eventData, setEventData] = useState<EventDataType | null>({
+  const [eventData, setEventData] = useState<PreviewFormData>({
     title: "",
     startDateTime: new Date(),
     endDateTime: new Date(new Date().setHours(new Date().getHours() + 1)),
@@ -72,74 +58,76 @@ const PreviewPage = () => {
     isPublic: false,
     requireGuestApproval: false,
     rsvpMoods: [],
-    chip: [],
+    chips: [],
   });
 
   const { data: session } = useSession();
 
   useEffect(() => {
-    const cachedData = localStorage.getItem("cachedEventData");
-    if (cachedData) {
-      const parsedData = JSON.parse(cachedData);
-      console.log(parsedData);
-
-      // ✅ Rename 'chips' to 'chip' and remove 'chips'
-      const updatedLocal = { ...parsedData, chip: parsedData.chips || [] };
-      const { chips, ...updatedLocalData } = updatedLocal; // Removes 'chips'
-
-      // Convert date fields back to Date objects
-      if (updatedLocalData.startDateTime) {
-        updatedLocalData.startDateTime = new Date(
-          updatedLocalData.startDateTime,
-        );
-      }
-      if (updatedLocalData.endDateTime) {
-        updatedLocalData.endDateTime = new Date(updatedLocalData.endDateTime);
-      }
-      if (updatedLocalData.rsvpMoods) {
-        updatedLocalData.rsvpMoods = (
-          updatedLocalData.rsvpMoods || defaultFormValuesRSVPMoods
-        ).map((mood: RSVPMood) => ({
-          ...mood,
-          name:
-            mood.value === "attending"
-              ? "Attending"
-              : mood.value === "maybe"
-                ? "Maybe"
-                : mood.value === "regretfully"
-                  ? "Regretfully"
-                  : "Unknown",
-        }));
-      }
-      console.log(updatedLocalData.rsvpMoods);
-      // if (!updatedLocalData.chip) {
-      //   updatedLocalData.chip = [];
-      // }
-      console.log(updatedLocalData.chip);
-      setEventData(updatedLocalData);
-      console.log("Loaded cached form data:", updatedLocalData);
-
-      console.log(parsedData.chips);
-      setDetailChips(
-        updatedLocalData?.chip?.map(
-          (c: { value: string; inputValue: string }) => {
-            const chipConfig = chips.find(
-              (chipItem: ChipModel) => chipItem.value === c.value,
+    const loadData = async () => {
+      if (typeof window !== "undefined") {
+        try {
+          const cachedData =
+            (await getEventFromIndexedDB()) as PreviewFormData | null;
+          if (cachedData !== null) {
+            cachedData.startDateTime = getDateAdjustedForTimezone(
+              new Date(cachedData.startDateTime),
             );
-            console.log("chipConfig found:", chipConfig);
-            return {
-              label: chipConfig?.text || c.value,
-              value: c.inputValue || chipConfig?.placeholderText,
-              inputValue: c.inputValue || "",
-              icon: chipConfig?.icon || "",
-            };
-          },
-        ) || [],
-      );
-    }
+
+            cachedData.endDateTime = getDateAdjustedForTimezone(
+              new Date(cachedData.endDateTime),
+            );
+
+            const rsvpMoods = (
+              cachedData.rsvpMoods || defaultFormValuesRSVPMoods
+            )
+              .filter((mood) =>
+                ["attending", "maybe", "regretfully"].includes(mood.value),
+              )
+              .map(
+                (mood): RSVPMood => ({
+                  ...mood,
+                  name:
+                    mood.value === "attending"
+                      ? "Attending"
+                      : mood.value === "maybe"
+                        ? "Maybe"
+                        : "Regretfully", // This handles the three valid moods
+                }),
+              ) as RSVPMood[];
+
+            cachedData.rsvpMoods = rsvpMoods;
+
+            cachedData.chips = cachedData.chips.filter(
+              (formChip: { value: string; inputValue: string }) => {
+                if (formChip.inputValue.length > 0) {
+                  const chipConfig = chips.find(
+                    (chip) => chip.value === formChip.value,
+                  );
+
+                  if (chipConfig) {
+                    return {
+                      label: chipConfig.text,
+                      icon: chipConfig?.icon || "",
+                      ...formChip,
+                    };
+                  }
+                }
+              },
+            );
+
+            setEventData(cachedData);
+          }
+        } catch (error) {
+          console.error("Failed to load event data from IndexedDB", error);
+        }
+      }
+    };
+
+    loadData(); // Run the async function
   }, []);
+
   console.log(eventData);
-  console.log(detailChips);
 
   const { theme } = useCreateEventTheme();
 
@@ -167,12 +155,7 @@ const PreviewPage = () => {
     requireGuestApproval,
     costPerPerson,
     imageUrl,
-    chip,
   } = eventData;
-  console.log("RSVP Moods in PreviewPage:", rsvpMoods);
-  console.log("chips in PreviewPage:", chip);
-
-  console.log("Chips:", chip);
 
   // Additional details array with icons
   const details = [
@@ -194,17 +177,6 @@ const PreviewPage = () => {
     },
   ];
 
-  const formatDate = (date: Date, locale = "en-us"): string => {
-    return date.toLocaleDateString(locale, {
-      weekday: "long",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true, // 12-hour format
-    });
-  };
-
   return (
     <>
       <header className="flex justify-between items-center bg-red-600 py-9 px-16">
@@ -216,7 +188,6 @@ const PreviewPage = () => {
         {!session && (
           <Link href="/register">
             <Button
-              // className="px-6 py-2 h-16 bg-[#084be7] text-center text-white text-base font-bold leading-normal"
               className="px-6 py-2 h-16 bg-[#084be7] text-white text-center text-base font-bold leading-normal w-max inline self-end rounded-none"
               type="button"
             >
@@ -228,10 +199,9 @@ const PreviewPage = () => {
 
       {/* Main Content */}
       <main
-        className={`flex flex-col items-start bg-red-900 text-white px-20 min-h-screen ${
+        className={`flex flex-col items-start bg-red-900 text-white px-20 min-h-screen bg-cover ${
           theme.pageBgImage || ""
         }`}
-        style={{ backgroundSize: "cover" }}
       >
         {/* 2) Preview Toolbar (dark background + icons) */}
 
@@ -455,7 +425,7 @@ const PreviewPage = () => {
             </div>
 
             {/* Rendering the chips */}
-            {detailChips?.map((item: ChipType) => (
+            {eventData.chips.map((item: ChipType) => (
               <div
                 key={item.label}
                 className="flex items-center gap-2 space-y-3"

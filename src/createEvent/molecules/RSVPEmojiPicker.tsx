@@ -69,6 +69,7 @@ const RVSPEmojiPicker: React.FC<RVSPEmojiPickerProps> = ({
                 defaultEmoji: mood.emoji || undefined,
                 showPreview: false,
               }}
+              lazyLoadEmojis
               onEmojiClick={onEmojiClick}
             />
           </PopoverContent>

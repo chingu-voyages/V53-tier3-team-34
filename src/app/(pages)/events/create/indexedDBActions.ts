@@ -1,9 +1,5 @@
 import type { EventFormData } from "@/createEvent/templates/EventForm";
 
-interface IndexedDBEventData extends EventFormData {
-  id: number;
-}
-
 // Utility function to open IndexedDB
 const openIndexedDB = (): Promise<IDBDatabase> => {
   return new Promise((resolve, reject) => {
@@ -44,7 +40,7 @@ export const saveEventToIndexedDB = async (
 
 // Get the single event from IndexedDB
 export const getEventFromIndexedDB =
-  async (): Promise<IndexedDBEventData | null> => {
+  async (): Promise<EventFormData | null> => {
     const db = await openIndexedDB();
     const transaction = db.transaction("events", "readonly");
     const store = transaction.objectStore("events");
@@ -52,7 +48,10 @@ export const getEventFromIndexedDB =
 
     return await new Promise((resolve, reject) => {
       request.onsuccess = () => {
-        const result = request.result as IndexedDBEventData[];
+        let result = request.result;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        result = result.map(({ id, ...event }) => event as EventFormData);
+
         resolve(result.length > 0 ? result[result.length - 1] : null); // Return the last event if exists
       };
       request.onerror = () => reject("Error retrieving event");

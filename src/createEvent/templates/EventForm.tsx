@@ -1,7 +1,7 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { Peralta } from "next/font/google";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { z } from "zod";
 import Input from "../molecules/Input";
 import TextArea from "../molecules/TextArea";
@@ -10,7 +10,11 @@ import ChipsList from "../oragnisms/ChipsList";
 import RSVP from "../oragnisms/RSVP";
 
 import { createEvent } from "@/actions/createEvent";
-import { saveEventToIndexedDB } from "@/app/(pages)/events/create/indexedDBActions";
+import {
+  clearIndexedDB,
+  getEventFromIndexedDB,
+  saveEventToIndexedDB,
+} from "@/app/(pages)/events/create/indexedDBActions";
 import { Button } from "@/components/ui/button";
 import ImagePicker from "@/createEvent/oragnisms/ImagePicker";
 import { useCreateEventTheme } from "@/providers/themeProvider";
@@ -18,10 +22,14 @@ import Link from "next/link";
 import { icons } from "../config/icons";
 import { type MoodType, defaultFormValuesRSVPMoods } from "../config/rvspMood";
 import EventImage from "../molecules/EventImage";
-import DateRangePicker from "../oragnisms/DateRangePicker";
+import DateRangePicker, {
+  type DateRange,
+  getDateAdjustedForTimezone,
+} from "../oragnisms/DateRangePicker";
 import ImageUpload from "../oragnisms/ImageUpload";
 import TopMenu from "../oragnisms/TopMenu";
 import "../../app/globals.css";
+import SettingsSidebar from "../oragnisms/SettingsSidebar";
 const peralta = Peralta({
   weight: "400",
   subsets: ["latin"],
@@ -62,44 +70,30 @@ export type BooleanKeys<T> = {
 const EventForm = () => {
   const { data: session } = useSession();
   const { theme } = useCreateEventTheme();
+  const [isFormMounted, setIsFormMounted] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const [formData, setFormData] = useState<EventFormData>(() => {
-    // ✅ Retrieve cached data on initial load
-    if (typeof window !== "undefined") {
-      const savedData = localStorage.getItem("cachedEventData");
-      if (savedData) {
-        const parsedData = JSON.parse(savedData);
-
-        // Convert string dates back to Date objects
-        return {
-          ...parsedData,
-          startDateTime: new Date(parsedData.startDateTime),
-          endDateTime: new Date(parsedData.endDateTime),
-        };
-      }
-    }
-
-    // Default form values if no cached data
-    return {
-      title: "",
-      startDateTime: new Date(),
-      endDateTime: new Date(new Date().setHours(new Date().getHours() + 1)),
-      description: null,
-      style: null,
-      reason: null,
-      imageUrl: null,
-      guestHonor: null,
-      host: null,
-      userGuestLimit: null,
-      maxGuestLimit: null,
-      address: null,
-      isOutdoor: false,
-      costPerPerson: null,
-      isPublic: false,
-      requireGuestApproval: false,
-      rsvpMoods: defaultFormValuesRSVPMoods,
-      chips: [],
-    };
+  const [formData, setFormData] = useState<EventFormData>({
+    title: "",
+    startDateTime: getDateAdjustedForTimezone(new Date()),
+    endDateTime: getDateAdjustedForTimezone(
+      new Date(new Date().getTime() + 15 * 60 * 1000),
+    ),
+    description: null,
+    style: null,
+    reason: null,
+    imageUrl: null,
+    guestHonor: null,
+    host: null,
+    userGuestLimit: null,
+    maxGuestLimit: null,
+    address: null,
+    isOutdoor: false,
+    costPerPerson: null,
+    isPublic: false,
+    requireGuestApproval: false,
+    rsvpMoods: defaultFormValuesRSVPMoods,
+    chips: [],
   });
 
   // State to manage image picker
@@ -120,7 +114,6 @@ const EventForm = () => {
           [name]: type === "number" ? (value ? Number(value) : null) : value,
         };
 
-        localStorage.setItem("cachedEventData", JSON.stringify(updatedData)); // Save to localStorage
         return updatedData;
       });
     },
@@ -128,30 +121,19 @@ const EventForm = () => {
   );
 
   const handleToggleChange = useCallback((name: BooleanKeys<EventFormData>) => {
-    setFormData((prevState) => {
-      const updatedData = {
-        ...prevState,
-        [name]: !prevState[name], // Toggle the value
-      };
-
-      localStorage.setItem("cachedEventData", JSON.stringify(updatedData)); // Save to localStorage
-      return updatedData;
-    });
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: !prevState[name], // Toggle the value
+    }));
   }, []);
 
   const handleRSVPMoodChange = useCallback((value: MoodType, emoji: string) => {
-    setFormData((prevState) => {
-      const updatedData = {
-        ...prevState,
-        rsvpMoods: prevState.rsvpMoods.map((mood) =>
-          mood.value === value ? { ...mood, emoji } : mood,
-        ),
-      };
-
-      localStorage.setItem("cachedEventData", JSON.stringify(updatedData)); // Save to localStorage
-      console.log("Cached Data:", localStorage.getItem("cachedEventData"));
-      return updatedData;
-    });
+    setFormData((prevState) => ({
+      ...prevState,
+      rsvpMoods: prevState.rsvpMoods.map((mood) =>
+        mood.value === value ? { ...mood, emoji } : mood,
+      ),
+    }));
   }, []);
 
   const handleChipsChange = useCallback(
@@ -177,8 +159,6 @@ const EventForm = () => {
           chips: chips, // React state maintains 'chips'
         };
 
-        localStorage.setItem("cachedEventData", JSON.stringify(updatedData)); // Save to localStorage
-        console.log("Cached Data:", localStorage.getItem("cachedEventData"));
         return updatedData;
       });
     },
@@ -196,7 +176,7 @@ const EventForm = () => {
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
-    localStorage.removeItem("cachedEventData");
+    clearIndexedDB();
     try {
       e.preventDefault();
       eventFormSchema.parse(formData); // Will throw an error if validation fails
@@ -213,11 +193,61 @@ const EventForm = () => {
     }
   };
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const handleToggleSidebar = () => {
+  const handleToggleSidebar = useCallback(() => {
     setIsSidebarOpen((prevState) => !prevState);
-  };
+  }, []);
+
+  const updateDateRange = useCallback((range: DateRange) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      startDateTime: getDateAdjustedForTimezone(range.from),
+      endDateTime: getDateAdjustedForTimezone(
+        range.to ? range.to : new Date(range.from.getTime() + 15 * 60 * 1000),
+      ),
+    }));
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const loadData = async () => {
+        if (typeof window !== "undefined") {
+          try {
+            const savedData = await getEventFromIndexedDB();
+            console.log("Saved Data:", savedData);
+            if (savedData !== null) {
+              savedData.startDateTime = getDateAdjustedForTimezone(new Date());
+              savedData.endDateTime = getDateAdjustedForTimezone(
+                new Date(new Date().getTime() + 15 * 60 * 1000),
+              );
+              setFormData(savedData);
+            }
+          } catch (error) {
+            console.error("Failed to load event data from IndexedDB", error);
+          } finally {
+            setIsFormMounted(true);
+          }
+        }
+      };
+
+      loadData();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && isFormMounted) {
+      const saveData = async () => {
+        if (typeof window !== "undefined") {
+          try {
+            await saveEventToIndexedDB(formData);
+          } catch (error) {
+            console.error("Failed to save event data to IndexedDB", error);
+          }
+        }
+      };
+
+      saveData();
+    }
+  }, [formData, isFormMounted]);
 
   return (
     <div className="flex flex-col min-h-screen items-stretch">
@@ -267,35 +297,11 @@ const EventForm = () => {
               />
 
               <DateRangePicker
-                initialDateFrom={new Date(formData.startDateTime)} // ✅ Convert back to Date
-                initialDateTo={new Date(formData.endDateTime)} // ✅ Convert back to Date
+                initialDateFrom={formData.startDateTime}
+                initialDateTo={formData.endDateTime}
                 showCompare={false}
                 align="start"
-                onUpdate={({ range }) => {
-                  setFormData((prevState) => {
-                    const updatedData = {
-                      ...prevState,
-                      startDateTime: new Date(range.from), // ✅ Convert back to Date
-                      endDateTime: new Date(range.to || range.from), // ✅ Convert back to Date
-                    };
-
-                    // ✅ Store in localStorage as ISO string
-                    localStorage.setItem(
-                      "cachedEventData",
-                      JSON.stringify({
-                        ...updatedData,
-                        startDateTime: updatedData.startDateTime.toISOString(),
-                        endDateTime: updatedData.endDateTime.toISOString(),
-                      }),
-                    );
-
-                    console.log(
-                      "Updated formData inside setFormData:",
-                      updatedData,
-                    );
-                    return updatedData;
-                  });
-                }}
+                onUpdate={updateDateRange}
               />
 
               <Input
@@ -435,125 +441,7 @@ const EventForm = () => {
         </Button>
       </form>
       {isSidebarOpen && (
-        <div
-          id="settings-sidebar"
-          className="fixed inset-0 bg-black bg-opacity-50 flex justify-end z-50"
-        >
-          {/* Sidebar container (80% of the screen width) */}
-          <div className="w-[80%] h-full  bg-transparent  backdrop-blur-[50px] p-8 relative text-white overflow-auto shadow-lg">
-            {/* Close Button */}
-            <button
-              type="button"
-              className="absolute top-4 right-4 text-white text-2xl hover:text-gray-300"
-              onClick={handleToggleSidebar}
-            >
-              ✖
-            </button>
-
-            {/* Sidebar Title */}
-            <h2 className="text-2xl font-bold mb-6">Event Settings</h2>
-            <div className="flex  justify-between space-x-4 mb-6">
-              {/* Sidebar Tabs (Ticket Cost & Invite Guests) */}
-              <div className="flex flex-col items-start  mb-6">
-                <button
-                  type="button"
-                  className="bg-[rgba(255,255,255,0.40)]  text-gray-300  p-3  text-left w-[150px]"
-                >
-                  🎟 Ticket Cost
-                </button>
-                <button
-                  type="button"
-                  className="bg-[rgba(174,171,171,0.30)] text-gray-400 p-3 text-left w-[150px]"
-                >
-                  👥 Invite Guests
-                </button>
-              </div>
-
-              {/* Start Ticket Type & Price Section */}
-              <div>
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold">
-                    Friendship Contribution
-                  </h3>
-                  <p className="text-sm text-gray-300">
-                    For the Guest Approval: The payment amount will be <br />{" "}
-                    confirmed after approval.
-                  </p>
-
-                  {/* Start Ticket Name & Type */}
-
-                  <div className="flex items-center space-x-12 mt-5 ">
-                    <span className="w-[200px] text-gray-300 p-3 bg-[rgba(255,255,255,0.40)]">
-                      Ticket Name
-                    </span>
-                    <select className="w-[200px] text-white p-3  bg-[rgba(255,255,255,0.40)]">
-                      <option>General</option>
-                      <option>VIP</option>
-                    </select>
-                  </div>
-
-                  {/* End  Ticket Name & Type */}
-
-                  {/* Start  Price Section */}
-                  <h3 className="text-lg font-semibold mt-8">Price</h3>
-                  <div className="flex items-center space-x-12 mt-3">
-                    <select className=" w-[200px]  text-white p-3 bg-[rgba(255,255,255,0.40)]">
-                      <option>USD ($)</option>
-                      <option>EUR (€)</option>
-                    </select>
-                    <input
-                      type="number"
-                      placeholder="Price"
-                      className="w-[200px] text-white p-3  bg-[rgba(255,255,255,0.40)]"
-                    />
-                  </div>
-                  {/* End Price Section */}
-                </div>
-                {/* End Ticket Type & Price Section */}
-
-                {/*Start  Payment Methods Section */}
-                <div className="mb-6 mt-8">
-                  <h3 className="text-lg font-semibold">Payment Methods</h3>
-                  <div className="mt-4 flex flex-col space-y-3">
-                    {[
-                      "Apple Pay",
-                      "Paypal",
-                      "Bank Transfer",
-                      "Credit Card",
-                    ].map((method) => (
-                      <div
-                        key={method}
-                        className="flex items-center justify-between bg-[rgba(255,255,255,0.40)] p-3 w-[450px]"
-                      >
-                        <span className="text-gray-300">{method}</span>
-                        <label className="relative inline-flex items-center cursor-pointer">
-                          <input type="checkbox" className="sr-only peer" />
-                          <div className="w-11 h-6 bg-[rgba(255,255,255,0.40)] peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600" />
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              {/*  End Payment Methods Section */}
-
-              {/* Start  Price Section */}
-              <div className="flex flex-col  items-end  justify-between  space-x-3  p-3 ">
-                <select className="text-white p-3  bg-[rgba(255,255,255,0.40)] w-[200px]">
-                  <option>🎟 Support Our Event</option>
-                  <option>Free</option>
-                  <option>🎟 Standard Ticket</option>
-                </select>
-                {/* Save Changes Button (Bottom Right) */}
-
-                <Button className="bg-blue-600 px-3 py-6 text-white font-semibold w-[150px] rounded-none ">
-                  Save Changes
-                </Button>
-              </div>
-              {/* End Price Section */}
-            </div>
-          </div>
-        </div>
+        <SettingsSidebar handleToggleSidebar={handleToggleSidebar} />
       )}
     </div>
   );
