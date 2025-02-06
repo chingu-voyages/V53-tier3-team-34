@@ -418,7 +418,9 @@ const PreviewPage = () => {
                 return (
                   <div key={item.label} className="flex items-center gap-2">
                     {/* Icon */}
+
                     <div className="w-5 h-5 flex-none">{item.icon}</div>
+
                     {/* Text */}
                     <p>{displayText}</p>
                   </div>
@@ -427,12 +429,14 @@ const PreviewPage = () => {
             </div>
 
             {/* Rendering the chips */}
+
             {eventData.chips.map((item: ChipType) => (
               <div
                 key={item.label}
                 className="flex items-center gap-2 space-y-3"
               >
                 <div className="w-5 h-5 flex-none">{item.icon}</div>
+
                 <p>{item.inputValue || item.value}</p>
               </div>
             ))}
