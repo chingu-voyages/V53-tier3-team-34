@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { Peralta } from "next/font/google";
 
 import { Button } from "@/components/ui/button";
-import { chips } from "@/createEvent/config/chipConfig";
+import { chips as chipsConfig } from "@/createEvent/config/chipConfig";
 import { icons } from "@/createEvent/config/icons";
 import {
   type RSVPMood,
@@ -98,22 +98,24 @@ const PreviewPage = () => {
 
             cachedData.rsvpMoods = rsvpMoods;
 
-            cachedData.chips = cachedData.chips.filter(
-              (formChip: { value: string; inputValue: string }) => {
+            cachedData.chips = cachedData.chips.reduce(
+              (acc, formChip: { value: string; inputValue: string }) => {
                 if (formChip.inputValue.length > 0) {
-                  const chipConfig = chips.find(
+                  const chipConfig = chipsConfig.find(
                     (chip) => chip.value === formChip.value,
                   );
 
                   if (chipConfig) {
-                    return {
-                      label: chipConfig.text,
-                      icon: chipConfig?.icon || "",
+                    acc.push({
                       ...formChip,
-                    };
+                      label: chipConfig.text,
+                      icon: chipConfig.icon,
+                    });
                   }
                 }
+                return acc;
               },
+              [] as ChipType[],
             );
 
             setEventData(cachedData);
@@ -196,7 +198,7 @@ const PreviewPage = () => {
                 r="24.2637"
                 fill="#D6FF0B"
                 stroke="black"
-                stroke-width="0.527388"
+                strokeWidth="0.527388"
               />
               <path
                 d="M23.5323 18.23C21.3842 17.123 19.9305 18.8016 19.3397 19.6758C19.287 19.7539 19.1868 19.784 19.1005 19.7463L18.6098 19.5318C18.601 19.528 18.5918 19.5248 18.5826 19.5222C18.3307 19.4529 18.2059 19.3706 17.2915 19.2908C16.1274 19.1891 13.5669 20.1147 13.9917 22.1908C14.4166 24.2669 16.49 25.9435 17.4917 26.9127C18.4933 27.8819 19.7062 30.9398 20.5258 31.0193C21.3455 31.0988 21.9189 29.2202 22.9384 26.1998C23.958 23.1793 26.3647 19.6898 23.5323 18.23Z"
@@ -206,24 +208,24 @@ const PreviewPage = () => {
                 d="M37.846 9.61917L31.9438 10.3183C31.8841 10.3254 31.8355 10.3698 31.8231 10.4286L29.9754 19.2054C29.959 19.2833 30.0107 19.3592 30.0891 19.3725L33.8553 20.0105C33.9382 20.0246 33.9902 20.1079 33.9663 20.1886L30.5936 31.5793C30.5472 31.7362 30.7613 31.832 30.8473 31.6928L39.1129 18.3199C39.1664 18.2333 39.1127 18.1203 39.0117 18.1071L35.1696 17.6064C35.0795 17.5947 35.0242 17.5017 35.0569 17.4169L37.9933 9.80889C38.0314 9.71036 37.9509 9.60675 37.846 9.61917Z"
                 fill="black"
                 stroke="black"
-                stroke-width="0.140208"
+                strokeWidth="0.140208"
               />
               <path
                 d="M11.75 31.389C11.75 37.0706 17.7622 44.1903 25.7785 44.1903C33.7948 44.1903 41.1255 38.811 43.446 26.959"
                 stroke="black"
-                stroke-width="1.05478"
+                strokeWidth="1.05478"
               />
               <path
                 d="M9.37891 32.7581C9.95898 31.8264 11.8152 30.364 14.5995 31.9671"
                 stroke="black"
-                stroke-width="1.05478"
-                stroke-linecap="round"
+                strokeWidth="1.05478"
+                strokeLinecap="round"
               />
               <path
                 d="M40.707 28.4868C41.3223 27.4849 43.2277 25.924 45.9277 27.6958"
                 stroke="black"
-                stroke-width="1.05478"
-                stroke-linecap="round"
+                strokeWidth="1.05478"
+                strokeLinecap="round"
               />
             </svg>
 
@@ -357,14 +359,14 @@ const PreviewPage = () => {
             >
               <title>Copy</title>
               <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
+                fillRule="evenodd"
+                clipRule="evenodd"
                 d="M7.49734 32.2459C6.71629 33.027 6.7163 34.2933 7.49734 35.0744L16.9254 44.5025C17.7065 45.2835 18.9728 45.2835 19.7539 44.5025L29.182 35.0744C29.963 34.2933 29.963 33.027 29.182 32.2459L26 29.064L20.5788 34.4851C20.1883 34.8756 19.5551 34.8756 19.1646 34.4851L17.5147 32.8352C17.1242 32.4447 17.1242 31.8115 17.5147 31.421L22.9358 25.9998L19.7539 22.8179C18.9728 22.0368 17.7065 22.0368 16.9254 22.8179L7.49734 32.2459Z"
                 fill="white"
               />
               <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
+                fillRule="evenodd"
+                clipRule="evenodd"
                 d="M22.818 16.9256C22.037 17.7067 22.037 18.973 22.818 19.7541L26 22.936L31.4212 17.5149C31.8117 17.1244 32.4448 17.1244 32.8354 17.5149L34.4853 19.1648C34.8758 19.5553 34.8758 20.1885 34.4853 20.579L29.0641 26.0002L32.2461 29.1821C33.0272 29.9632 34.2935 29.9632 35.0745 29.1821L44.5026 19.7541C45.2837 18.973 45.2837 17.7067 44.5026 16.9256L35.0745 7.49754C34.2935 6.71649 33.0272 6.71649 32.2461 7.49754L22.818 16.9256Z"
                 fill="white"
               />
@@ -373,7 +375,7 @@ const PreviewPage = () => {
           </button>
         </div>
 
-        <div className="flex flex-col lg:flex-row w-full  items-start gap-10">
+        <div className="flex flex-col lg:flex-row w-full items-start justify-center gap-10">
           {/* LEFT Column: Image + RSVP */}
           <div className="w-full lg:w-1/2">
             {/* 1) Image in a relative container */}
@@ -418,20 +420,22 @@ const PreviewPage = () => {
 
           {/* RIGHT Column: Event details */}
           <div className="w-full lg:w-1/2">
-            <h1 className="text-5xl font-bold">{title || "Untitled Event"}</h1>
-            <p className="text-xl mt-2">
+            <h1 className="text-white text-8xl font-semibold font-['Mona Sans']">
+              {title || "Untitled Event"}
+            </h1>
+            <p className="text-white text-4xl font-medium font-['Mona Sans'] leading-loose">
               {startDateTime
                 ? formatDate(startDateTime, "iiii, MMM dd, hh:mm a")
                 : "No Start Date"}
             </p>
-            <p className="text-xl mt-2">
+            <p className="text-white text-4xl font-medium font-['Mona Sans'] ">
               {endDateTime
                 ? formatDate(endDateTime, "iiii, MMM dd, hh:mm a")
                 : "No End Date"}
             </p>
 
             {/* Additional bullet lines (with custom text) */}
-            <div className="mt-8 space-y-3 text-lg">
+            <div className="mt-9 gap-6">
               {details.map((item) => {
                 // 2) Switch label => custom line
                 let displayText = "";
@@ -465,13 +469,16 @@ const PreviewPage = () => {
                 if (!displayText || displayText === "N/A") return null;
 
                 return (
-                  <div key={item.label} className="flex items-center gap-2">
+                  <div
+                    key={item.label}
+                    className="flex items-center gap-2 text-[#dbd8d8] text-xl font-medium font-['Mona Sans'] leading-loose"
+                  >
                     {/* Icon */}
 
-                    <div className="w-5 h-5 flex-none">{item.icon}</div>
+                    <div className="w-6 h-6">{item.icon}</div>
 
                     {/* Text */}
-                    <p>{displayText}</p>
+                    <span className="">{displayText}</span>
                   </div>
                 );
               })}
@@ -484,13 +491,19 @@ const PreviewPage = () => {
                 key={item.label}
                 className="flex items-center gap-2 space-y-3"
               >
-                <div className="w-5 h-5 flex-none">{item.icon}</div>
+                <div className={`${theme.iconColor} flex-shrink-0`}>
+                  {item.icon}
+                </div>
 
                 <p>{item.inputValue || item.value}</p>
               </div>
             ))}
 
-            {description && <p className="text-xl mt-4">{description}</p>}
+            {description && (
+              <p className="text-xl mt-4 text-[#dbd8d8] font-medium font-['Mona Sans'] leading-loose">
+                {description}
+              </p>
+            )}
           </div>
         </div>
       </main>
