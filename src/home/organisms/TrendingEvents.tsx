@@ -18,9 +18,12 @@ const TrendingEvents: React.FC = () => {
   const itemWidth = 292; // Width of each event card
 
   useEffect(() => {
+    const abortController = new AbortController();
     const fetchTrendingEvents = async () => {
       try {
-        const response = await fetch("/api/events/getTrendingEvents");
+        const response = await fetch("/api/events/getTrendingEvents", {
+          signal: abortController.signal,
+        });
         if (!response.ok) throw new Error("Failed to fetch trending events");
         const data = await response.json();
         if (data.length === 0) {
@@ -34,6 +37,10 @@ const TrendingEvents: React.FC = () => {
     };
 
     fetchTrendingEvents();
+
+    return () => {
+      abortController.abort();
+    };
   }, []);
 
   useEffect(() => {

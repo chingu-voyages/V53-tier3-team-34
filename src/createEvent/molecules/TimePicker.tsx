@@ -9,6 +9,7 @@ interface TimePickerProps {
   initialHour?: number;
   initialMinute?: number;
   initialPeriod?: "AM" | "PM";
+  excludeSlotsBefore?: TimeObject;
   onChange?: (time: TimeObject) => void;
 }
 
@@ -22,6 +23,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
   initialHour = 9,
   initialMinute = 0,
   initialPeriod = "AM",
+  excludeSlotsBefore,
   onChange,
 }) => {
   // Format initial time to match our time slot format
@@ -48,17 +50,39 @@ const TimePicker: React.FC<TimePickerProps> = ({
   // Generate time slots from 12 AM to 11:55 PM in 15-minute intervals
   const generateTimeSlots = (): string[] => {
     const slots: string[] = [];
+
+    // Generate all time slots
     for (let hour = 0; hour < 24; hour++) {
       for (let minute = 0; minute < 60; minute += 15) {
         const period = hour < 12 ? "AM" : "PM";
         const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
+
         const timeString = `${displayHour}:${minute
           .toString()
           .padStart(2, "0")} ${period}`;
         slots.push(timeString);
       }
     }
-    return slots;
+
+    if (!excludeSlotsBefore?.hours) {
+      return slots;
+    }
+
+    // Now find the index of the slot to exclude (based on excludeSlotsBefore)
+    const excludeSlotTime = `${
+      excludeSlotsBefore.hours
+    }:${excludeSlotsBefore.minutes.toString().padStart(2, "0")} ${
+      excludeSlotsBefore.period
+    }`;
+
+    // Find the index of the slot to exclude
+    const excludeIndex = slots.findIndex((slot) => slot === excludeSlotTime);
+    // If an index was found, slice the slots array from the excludeIndex
+    if (excludeIndex !== -1) {
+      return slots.slice(excludeIndex + 1); // Exclude all slots before the found index
+    }
+
+    return slots; // If no match was found, return all slots
   };
 
   const timeSlots = generateTimeSlots();
@@ -77,7 +101,9 @@ const TimePicker: React.FC<TimePickerProps> = ({
             <button
               key={time}
               type="button"
-              className={`h-10 cursor-pointer rounded-none px-4 py-2 text-center text-[#7a7878] text-sm font-medium ${inter.className} ${
+              className={`h-10 cursor-pointer rounded-none px-4 py-2 text-center text-[#7a7878] text-sm font-medium ${
+                inter.className
+              } ${
                 selectedTime === time
                   ? "bg-[#084be7] text-white"
                   : "hover:bg-gray-100"

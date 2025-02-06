@@ -3,7 +3,7 @@ import { type NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: Promise<{ slug: string }> },
 ) {
   const { slug } = await params;
   console.log("SLUG", slug);
@@ -18,7 +18,7 @@ export async function GET(
     default:
       return NextResponse.json(
         { message: "Method not allowed" },
-        { status: 405 }
+        { status: 405 },
       );
     // break;
   }
@@ -26,7 +26,7 @@ export async function GET(
 
 export async function POST(
   _req: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: Promise<{ slug: string }> },
 ) {
   const slug = (await params).slug;
 
@@ -39,7 +39,7 @@ export async function POST(
 
 export async function PUT(
   _req: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: Promise<{ slug: string }> },
 ) {
   const slug = (await params).slug;
   switch (slug) {
@@ -52,7 +52,7 @@ export async function PUT(
 
 export async function DELETE(
   _req: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: Promise<{ slug: string }> },
 ) {
   const slug = (await params).slug;
   switch (slug) {

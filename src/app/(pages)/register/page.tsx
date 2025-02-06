@@ -10,22 +10,39 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // const handleSubmit = async () => {
+  //   const res = await RegisterUser({
+  //     email,
+  //     password,
+  //   });
+
+  //   if (res.status !== 201) {
+  //     return alert("Error creating user");
+  //   }
+
+  //   // const referer = (await headers()).get("referer");
+
+  //   // if (referer?.includes("/create")) {
+  //   //   return router.push(referer);
+  //   // }
+  //   // return router.push("/");
+  // };
+
   const handleSubmit = async () => {
-    const res = await RegisterUser({
-      email,
-      password,
-    });
+    try {
+      const res = await RegisterUser({ email, password });
 
-    if (res.status !== 201) {
-      return alert("Error creating user");
+      if (res.status === 201) {
+        alert("User created successfully");
+        return;
+      }
+
+      console.error("Server error:", res);
+      alert(res.message || "Error creating user");
+    } catch (error) {
+      console.error("Unexpected error:", error);
+      alert("Something went wrong!");
     }
-
-    // const referer = (await headers()).get("referer");
-
-    // if (referer?.includes("/create")) {
-    //   return router.push(referer);
-    // }
-    // return router.push("/");
   };
 
   return (
