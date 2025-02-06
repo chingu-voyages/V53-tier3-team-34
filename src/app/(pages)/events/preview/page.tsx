@@ -180,11 +180,60 @@ const PreviewPage = () => {
   return (
     <>
       <header className="flex justify-between items-center bg-red-600 py-9 px-16">
-        <h1
-          className={`text-white text-4xl font-normal ${peralta.className} leading-tight`}
-        >
-          Partiyo
-        </h1>
+        <Link href="/">
+          <div className="flex items-center">
+            <svg
+              width="56"
+              height="56"
+              viewBox="0 0 56 56"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <title>Partiyo</title>
+              <circle
+                cx="28"
+                cy="28"
+                r="24.2637"
+                fill="#D6FF0B"
+                stroke="black"
+                stroke-width="0.527388"
+              />
+              <path
+                d="M23.5323 18.23C21.3842 17.123 19.9305 18.8016 19.3397 19.6758C19.287 19.7539 19.1868 19.784 19.1005 19.7463L18.6098 19.5318C18.601 19.528 18.5918 19.5248 18.5826 19.5222C18.3307 19.4529 18.2059 19.3706 17.2915 19.2908C16.1274 19.1891 13.5669 20.1147 13.9917 22.1908C14.4166 24.2669 16.49 25.9435 17.4917 26.9127C18.4933 27.8819 19.7062 30.9398 20.5258 31.0193C21.3455 31.0988 21.9189 29.2202 22.9384 26.1998C23.958 23.1793 26.3647 19.6898 23.5323 18.23Z"
+                fill="black"
+              />
+              <path
+                d="M37.846 9.61917L31.9438 10.3183C31.8841 10.3254 31.8355 10.3698 31.8231 10.4286L29.9754 19.2054C29.959 19.2833 30.0107 19.3592 30.0891 19.3725L33.8553 20.0105C33.9382 20.0246 33.9902 20.1079 33.9663 20.1886L30.5936 31.5793C30.5472 31.7362 30.7613 31.832 30.8473 31.6928L39.1129 18.3199C39.1664 18.2333 39.1127 18.1203 39.0117 18.1071L35.1696 17.6064C35.0795 17.5947 35.0242 17.5017 35.0569 17.4169L37.9933 9.80889C38.0314 9.71036 37.9509 9.60675 37.846 9.61917Z"
+                fill="black"
+                stroke="black"
+                stroke-width="0.140208"
+              />
+              <path
+                d="M11.75 31.389C11.75 37.0706 17.7622 44.1903 25.7785 44.1903C33.7948 44.1903 41.1255 38.811 43.446 26.959"
+                stroke="black"
+                stroke-width="1.05478"
+              />
+              <path
+                d="M9.37891 32.7581C9.95898 31.8264 11.8152 30.364 14.5995 31.9671"
+                stroke="black"
+                stroke-width="1.05478"
+                stroke-linecap="round"
+              />
+              <path
+                d="M40.707 28.4868C41.3223 27.4849 43.2277 25.924 45.9277 27.6958"
+                stroke="black"
+                stroke-width="1.05478"
+                stroke-linecap="round"
+              />
+            </svg>
+
+            <h1
+              className={`text-white pl-2 text-4xl font-normal ${peralta.className} leading-tight`}
+            >
+              Partiyo
+            </h1>
+          </div>
+        </Link>
         {!session && (
           <Link href="/register">
             <Button
