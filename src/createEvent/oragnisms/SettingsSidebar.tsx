@@ -1,4 +1,11 @@
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type React from "react";
 
 interface SettingsSidebarProps {
@@ -41,8 +48,8 @@ const SettingsSidebar: React.FC<SettingsSidebarProps> = ({
               >
                 <title>Ticket Cost</title>
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M6.13717 11.5855L2.60164 15.121C2.21111 15.5115 2.21111 16.1447 2.60164 16.5352L4.05121 17.9848C5.0219 17.3417 6.3426 17.4478 7.19783 18.303C8.05306 19.1582 8.15913 20.4789 7.51602 21.4496L8.9656 22.8992C9.35612 23.2897 9.98929 23.2897 10.3798 22.8992L13.9153 19.3637L12.5011 17.9494C12.1106 17.5589 12.1106 16.9258 12.5011 16.5352C12.8917 16.1447 13.5248 16.1447 13.9153 16.5352L15.3296 17.9494L22.4006 10.8784C22.7912 10.4879 22.7912 9.85469 22.4006 9.46416L20.9511 8.01459C19.9804 8.65769 18.6597 8.55163 17.8044 7.6964C16.9492 6.84117 16.8431 5.52046 17.4862 4.54978L16.0367 3.1002C15.6461 2.70968 15.013 2.70968 14.6225 3.1002L7.55139 10.1713L8.9656 11.5855C9.35612 11.976 9.35612 12.6092 8.9656 12.9997C8.57507 13.3902 7.94191 13.3902 7.55139 12.9997L6.13717 11.5855ZM9.67271 15.121C9.28218 14.7305 9.28218 14.0973 9.67271 13.7068C10.0632 13.3163 10.6964 13.3163 11.0869 13.7068L11.794 14.4139C12.1846 14.8044 12.1846 15.4376 11.794 15.8281C11.4035 16.2186 10.7703 16.2186 10.3798 15.8281L9.67271 15.121Z"
                   fill="#DBD9D9"
                 />
@@ -142,11 +149,31 @@ const SettingsSidebar: React.FC<SettingsSidebarProps> = ({
 
           {/* Start  Price Section */}
           <div className="flex flex-col  items-end  justify-between  space-x-3  p-3 ">
-            <select className="text-white p-3  bg-[rgba(255,255,255,0.40)] w-[200px]">
-              <option>🎟 Support Our Event</option>
-              <option>Free</option>
-              <option>🎟 Standard Ticket</option>
-            </select>
+            <Select defaultValue="supportOurEvent">
+              <SelectTrigger className="w-60 rounded-none border-none text-white p-3  bg-[rgba(255,255,255,0.40)]">
+                <SelectValue placeholder="Theme" />
+              </SelectTrigger>
+              <SelectContent className="w-60 rounded-none border-none  bg-[#26282b]">
+                <SelectItem
+                  value="supportOurEvent"
+                  className="h-16 px-6 py-3 justify-start items-center gap-3 inline-flex text-[#faf1e5] text-base font-medium font-['Mona Sans'] leading-normal hover:!text-white hover:!bg-white/10 hover:rounded-none"
+                >
+                  💙 Support Our Event
+                </SelectItem>
+                <SelectItem
+                  value="free"
+                  className="h-16 px-6 py-3 justify-start items-center gap-3 inline-flex text-[#faf1e5] text-base font-medium font-['Mona Sans'] leading-normal hover:!text-white hover:!bg-white/10 hover:rounded-none"
+                >
+                  👼🏻 Free
+                </SelectItem>
+                <SelectItem
+                  value="standardTicket"
+                  className="h-16 px-6 py-3 justify-start items-center gap-3 inline-flex text-[#faf1e5] text-base font-medium font-['Mona Sans'] leading-normal hover:!text-white hover:!bg-white/10 hover:rounded-none"
+                >
+                  🎟 Standard Ticket
+                </SelectItem>
+              </SelectContent>
+            </Select>
             {/* Save Changes Button (Bottom Right) */}
 
             <Button className="px-6 py-2 bg-[#084be7] justify-center items-center flex rounded-none ">

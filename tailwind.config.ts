@@ -66,29 +66,14 @@ export default {
       animation: {
         "infinite-scroll":
           "infinite-scroll var(--scroll-duration) linear infinite",
+          "float": "float 2s infinite",
+          "pulse-scale": "pulse-scale 1s infinite",
       },
       keyframes: {
         "infinite-scroll": {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(-100%)" },
         },
-      },
-    },
-  },
-  plugins: [require("tailwindcss-animate")],
-} satisfies Config;
-
-
-
-module.exports = {
-  content: ["./src/**/*.{js,ts,jsx,tsx}"],
-  theme: {
-    extend: {
-      animation: {
-        "float": "float 2s infinite",
-        "pulse-scale": "pulse-scale 1s infinite",
-      },
-      keyframes: {
         float: {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-10px)" }
@@ -98,9 +83,9 @@ module.exports = {
           "50%": { transform: "scale(1.05)" }
         }
       }
-    }
+    },
   },
-  plugins: [],
-};
+  plugins: [require("tailwindcss-animate")],
+} satisfies Config;
 
 

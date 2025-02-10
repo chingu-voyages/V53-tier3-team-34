@@ -70,7 +70,7 @@ const ChipsList: React.FC<ChipsListProps> = ({ selectedChips, onChange }) => {
               placeholder={chip.placeholderText}
               preText={chip.preText}
               maxCount={chip.maxCountCharacters}
-              parentClassName={`h-10 bg-white/40 ${inter.className}`}
+              parentClassName={`h-10 ${inter.className}`}
               className={`text-xl placeholder:text-xl font-medium font-['Inter'] leading-loose ${
                 chip.placeholderClassName || ""
               }`}
@@ -99,7 +99,7 @@ const ChipsList: React.FC<ChipsListProps> = ({ selectedChips, onChange }) => {
           ),
       )}
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-row flex-wrap gap-2">
         {displayedChips.map((chip) => (
           <Chip
             key={`chip${chip.value}`}
