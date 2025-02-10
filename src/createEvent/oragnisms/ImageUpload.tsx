@@ -15,7 +15,11 @@ const ImageUpload: React.FC<ImageUploadProps> = memo(
       <div className="relative inline-block">
         <EventImage image={imageURL} />
         <Button
-          onClick={() => showImagePicker(true)}
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent event from bubbling to form
+            showImagePicker(true);
+          }}
           className="absolute bottom-0 right-0 z-10 h-16 px-6 py-2 bg-[#084be7] text-center text-base font-bold leading-normal rounded-none"
         >
           Change

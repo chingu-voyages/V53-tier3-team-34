@@ -29,6 +29,7 @@ import DateRangePicker, {
 import ImageUpload from "../oragnisms/ImageUpload";
 import TopMenu from "../oragnisms/TopMenu";
 import "../../app/globals.css";
+import AnimatedButton from "../oragnisms/AnimatedButton";
 import SettingsSidebar from "../oragnisms/SettingsSidebar";
 const peralta = Peralta({
   weight: "400",
@@ -238,6 +239,7 @@ const EventForm = () => {
       const saveData = async () => {
         if (typeof window !== "undefined") {
           try {
+            console.log("Chips data from eventPage", formData.chips);
             await saveEventToIndexedDB(formData);
           } catch (error) {
             console.error("Failed to save event data to IndexedDB", error);
@@ -327,7 +329,7 @@ const EventForm = () => {
       </header>
 
       <form
-        onSubmit={handleSubmit}
+        // onSubmit={handleSubmit}
         className={`p-2 pt-0 md:pb-9 md:px-16 flex-1 flex flex-col gap-3 ${theme.pageBgImage} bg-cover bg-center `}
       >
         <div className="w-full flex flex-col md:flex-row justify-center space-y-3 md:space-y-0 md:space-x-11">

@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { Peralta } from "next/font/google";
 
 import { Button } from "@/components/ui/button";
-import { chips as chipsConfig } from "@/createEvent/config/chipConfig";
+import { chipPreview } from "@/createEvent/config/chipPreview";
 import { icons } from "@/createEvent/config/icons";
 import {
   type RSVPMood,
@@ -40,6 +40,7 @@ interface PreviewFormData extends EventFormData {
 }
 
 const PreviewPage = () => {
+  const [detailChips, setDetailChips] = useState<ChipType[] | null>([]);
   const [eventData, setEventData] = useState<PreviewFormData>({
     title: "",
     startDateTime: new Date(),
@@ -73,6 +74,7 @@ const PreviewPage = () => {
             cachedData.startDateTime = getDateAdjustedForTimezone(
               new Date(cachedData.startDateTime),
             );
+            console.log("Chips Data in Preview page", cachedData.chips);
 
             cachedData.endDateTime = getDateAdjustedForTimezone(
               new Date(cachedData.endDateTime),
@@ -98,26 +100,46 @@ const PreviewPage = () => {
 
             cachedData.rsvpMoods = rsvpMoods;
 
-            cachedData.chips = cachedData.chips.reduce(
-              (acc, formChip: { value: string; inputValue: string }) => {
-                if (formChip.inputValue.length > 0) {
-                  const chipConfig = chipsConfig.find(
-                    (chip) => chip.value === formChip.value,
-                  );
+            // cachedData.chips = cachedData.chips.reduce(
+            //   (acc, formChip: { value: string; inputValue: string }) => {
+            //     if (formChip.inputValue.length > 0) {
+            //       const chipConfig = chipPreview.find(
+            //         (chip) => chip.value === formChip.value,
+            //       );
 
-                  if (chipConfig) {
-                    acc.push({
-                      ...formChip,
-                      label: chipConfig.text,
-                      icon: chipConfig.icon,
-                    });
-                  }
-                }
-                return acc;
-              },
-              [] as ChipType[],
+            //       if (chipConfig) {
+            //         acc.push({
+            //           ...formChip,
+            //           label: chipConfig.text,
+            //           icon: chipConfig.icon,
+            //         });
+            //       }
+            //     }
+            //     console.log(acc);
+            //     return acc;
+            //   },
+            //   [] as ChipType[],
+            // );
+
+            setDetailChips(
+              cachedData?.chips?.map((c) => {
+                const chipConfig = chipPreview.find(
+                  (chipItem) => chipItem.value === c.value,
+                );
+                console.log("chipConfig found:", chipConfig);
+                return {
+                  label: chipConfig?.text || c.value,
+                  value: c.inputValue ?? chipConfig?.placeholderText ?? "", // Ensure it's always a string
+                  inputValue: c.inputValue ?? "", // Ensure it's always a string
+                  icon: chipConfig?.icon || "",
+                };
+              }) || [],
             );
-
+            console.log(
+              "Chips Data in Preview page after reduce function",
+              cachedData.chips,
+            );
+            console.log(cachedData);
             setEventData(cachedData);
           }
         } catch (error) {
@@ -128,6 +150,7 @@ const PreviewPage = () => {
 
     loadData(); // Run the async function
   }, []);
+  console.log(detailChips);
 
   // console.log(eventData);
 
@@ -486,7 +509,7 @@ const PreviewPage = () => {
 
             {/* Rendering the chips */}
 
-            {eventData.chips.map((item: ChipType) => (
+            {/* {eventData.chips.map((item: ChipType) => (
               <div
                 key={item.label}
                 className="flex items-center gap-2 space-y-3"
@@ -496,6 +519,19 @@ const PreviewPage = () => {
                 </div>
 
                 <p>{item.inputValue || item.value}</p>
+              </div>
+            ))} */}
+
+            {/* Rendering the chips */}
+            {detailChips?.map((item) => (
+              <div
+                key={item.label}
+                className="flex items-center gap-2 space-y-3"
+              >
+                <div className="w-5 h-5 flex-none">{item.icon}</div>
+                <p>
+                  {item.label}: {item.inputValue || item.value}
+                </p>
               </div>
             ))}
 
