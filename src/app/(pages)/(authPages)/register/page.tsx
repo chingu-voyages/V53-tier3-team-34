@@ -1,19 +1,5 @@
-import Signup from "@/signupAndSigninPages/templates/SignUp";
-
-// const Register = () => {
-//   return (
-//     <div>
-//       <Signup />
-//     </div>
-//   );
-// };
-
-// export default Register;
+import Signup from "@/app/(pages)/(authPages)/_templates/SignUp";
 
 export default function Register() {
-  return (
-    <div>
-      <Signup />
-    </div>
-  );
+  return <Signup />;
 }

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Mona_Sans } from "next/font/google";
 import "../../../app/globals.css";
-import Header from "@/home/organisms/Header";
 import Footer from "@/home/organisms/Footer";
+import Header from "@/home/organisms/Header";
 
 const monoSans = Mona_Sans({
   variable: "--font-mona-sans",
@@ -24,7 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${monoSans.className} antialiased`}>
         <Header />
-        <div>{children}</div>
+        {children}
         <Footer />
       </body>
     </html>
