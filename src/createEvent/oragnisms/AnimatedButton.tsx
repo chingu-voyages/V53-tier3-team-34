@@ -28,7 +28,7 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({ onClick }) => {
       <span className="relative z-10">Done</span>
 
       {isClicked &&
-        hearts.map((heart) => (
+        hearts.map((heart, index) => (
           <motion.span
             key={heart.id}
             className="absolute bg-contain bg-no-repeat opacity-70"
