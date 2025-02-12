@@ -155,7 +155,7 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
           </Link>
           {/* Added Create event button and changed the blue button text to browse event */}
           <Link href="/events/create">Create Event</Link>
-          <BlueButton text="Browse Events" href="/" />
+          <BlueButton text="Browse Events" href="/events/public" />
         </div>
 
         {/* Mobile Menu Button */}

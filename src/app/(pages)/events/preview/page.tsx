@@ -21,6 +21,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getEventFromIndexedDB } from "../create/indexedDBActions";
+import CopyPopup from "@/Copy Popup/templates/CopyPopup";
 
 const peralta = Peralta({
   weight: "400",
@@ -61,6 +62,8 @@ const PreviewPage = () => {
     chips: [],
   });
 
+  const [isClicked, setIsClicked] = useState(false);
+
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -71,18 +74,18 @@ const PreviewPage = () => {
             (await getEventFromIndexedDB()) as PreviewFormData | null;
           if (cachedData !== null) {
             cachedData.startDateTime = getDateAdjustedForTimezone(
-              new Date(cachedData.startDateTime),
+              new Date(cachedData.startDateTime)
             );
 
             cachedData.endDateTime = getDateAdjustedForTimezone(
-              new Date(cachedData.endDateTime),
+              new Date(cachedData.endDateTime)
             );
 
             const rsvpMoods = (
               cachedData.rsvpMoods || defaultFormValuesRSVPMoods
             )
               .filter((mood) =>
-                ["attending", "maybe", "regretfully"].includes(mood.value),
+                ["attending", "maybe", "regretfully"].includes(mood.value)
               )
               .map(
                 (mood): RSVPMood => ({
@@ -91,9 +94,9 @@ const PreviewPage = () => {
                     mood.value === "attending"
                       ? "Attending"
                       : mood.value === "maybe"
-                        ? "Maybe"
-                        : "Regretfully", // This handles the three valid moods
-                }),
+                      ? "Maybe"
+                      : "Regretfully", // This handles the three valid moods
+                })
               ) as RSVPMood[];
 
             cachedData.rsvpMoods = rsvpMoods;
@@ -102,7 +105,7 @@ const PreviewPage = () => {
               (formChip: { value: string; inputValue: string }) => {
                 if (formChip.inputValue.length > 0) {
                   const chipConfig = chips.find(
-                    (chip) => chip.value === formChip.value,
+                    (chip) => chip.value === formChip.value
                   );
 
                   if (chipConfig) {
@@ -113,7 +116,7 @@ const PreviewPage = () => {
                     };
                   }
                 }
-              },
+              }
             );
 
             setEventData(cachedData);
@@ -177,8 +180,17 @@ const PreviewPage = () => {
     },
   ];
 
+  function handleCLick() {
+    setIsClicked(false);
+
+    setTimeout(() => {
+      setIsClicked(true);
+    }, 0); // Delay opening to allow state reset
+  }
+
   return (
     <>
+      {isClicked && <CopyPopup />}
       <header className="flex justify-between items-center bg-red-600 py-9 px-16">
         <h1
           className={`text-white text-4xl font-normal ${peralta.className} leading-tight`}
@@ -297,6 +309,7 @@ const PreviewPage = () => {
           <button
             type="button"
             className="flex items-center gap-1  hover:bg-gray-600 px-3 py-3 rounded uppercase text-md"
+            onClick={handleCLick}
           >
             {/* <LinkIcon className="h-4 w-4" /> */}
             <svg
@@ -308,14 +321,14 @@ const PreviewPage = () => {
             >
               <title>Copy</title>
               <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
+                fillRule="evenodd"
+                clipRule="evenodd"
                 d="M7.49734 32.2459C6.71629 33.027 6.7163 34.2933 7.49734 35.0744L16.9254 44.5025C17.7065 45.2835 18.9728 45.2835 19.7539 44.5025L29.182 35.0744C29.963 34.2933 29.963 33.027 29.182 32.2459L26 29.064L20.5788 34.4851C20.1883 34.8756 19.5551 34.8756 19.1646 34.4851L17.5147 32.8352C17.1242 32.4447 17.1242 31.8115 17.5147 31.421L22.9358 25.9998L19.7539 22.8179C18.9728 22.0368 17.7065 22.0368 16.9254 22.8179L7.49734 32.2459Z"
                 fill="white"
               />
               <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
+                fillRule="evenodd"
+                clipRule="evenodd"
                 d="M22.818 16.9256C22.037 17.7067 22.037 18.973 22.818 19.7541L26 22.936L31.4212 17.5149C31.8117 17.1244 32.4448 17.1244 32.8354 17.5149L34.4853 19.1648C34.8758 19.5553 34.8758 20.1885 34.4853 20.579L29.0641 26.0002L32.2461 29.1821C33.0272 29.9632 34.2935 29.9632 35.0745 29.1821L44.5026 19.7541C45.2837 18.973 45.2837 17.7067 44.5026 16.9256L35.0745 7.49754C34.2935 6.71649 33.0272 6.71649 32.2461 7.49754L22.818 16.9256Z"
                 fill="white"
               />
