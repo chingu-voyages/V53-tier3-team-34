@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { Peralta } from "next/font/google";
 
 import { Button } from "@/components/ui/button";
+import { activities } from "@/createEvent/config/activityConfig";
 import { chips } from "@/createEvent/config/chipConfig";
 import { icons } from "@/createEvent/config/icons";
 import {
@@ -59,6 +60,7 @@ const PreviewPage = () => {
     requireGuestApproval: false,
     rsvpMoods: [],
     chips: [],
+    activity: { name: "Add activity categories" },
   });
 
   const { data: session } = useSession();
@@ -93,7 +95,7 @@ const PreviewPage = () => {
                       ? "Attending"
                       : mood.value === "maybe"
                         ? "Maybe"
-                        : "Regretfully", // This handles the three valid moods
+                        : "Regretfully",
                 }),
               ) as RSVPMood[];
 
@@ -117,7 +119,7 @@ const PreviewPage = () => {
                         : formChip.inputValue,
                   });
                 }
-                // console.log(acc);
+
                 return acc;
               },
               [] as ChipType[],
@@ -138,9 +140,6 @@ const PreviewPage = () => {
 
     loadData(); // Run the async function
   }, []);
-  // console.log(detailChips);
-
-  // console.log(eventData);
 
   const { theme } = useCreateEventTheme();
 
@@ -168,6 +167,7 @@ const PreviewPage = () => {
     requireGuestApproval,
     costPerPerson,
     imageUrl,
+    activity,
   } = eventData;
 
   // Additional details array with icons
@@ -421,7 +421,7 @@ const PreviewPage = () => {
                               mood={mood}
                               theme={theme}
                               selectedRSVPEmoji={null}
-                              disablePicker={true} // Disable emoji picker in preview mode
+                              disablePicker={true}
                             />
                           </div>
                         ))}
@@ -512,6 +512,16 @@ const PreviewPage = () => {
                     <span>{item.inputValue}</span>
                   </div>
                 ))}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2 text-[#dbd8d8] text-xl font-medium font-['Mona Sans'] leading-normal">
+                  <div className={`${theme.iconColor} flex-shrink-0`}>
+                    {activities.find((act) => act.text === activity.name)?.icon}
+                  </div>
+
+                  <span>{activity?.name}</span>
+                </div>
               </div>
 
               {description && (

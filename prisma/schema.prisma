@@ -40,7 +40,18 @@ model Event {
   chips                Chip[]
   author               User       @relation(fields: [authorId], references: [id])
   rsvpMoods            RSVPMood[]
+  
+  activityId    String?    @unique 
+  activity      Activity? 
 }
+
+model Activity {
+  id      String   @id @default(uuid())
+  name    String   @unique  
+  eventId String   @unique 
+  event   Event    @relation(fields: [eventId], references: [id]) 
+}
+
 
 model RSVPMood {
   value   String  @unique

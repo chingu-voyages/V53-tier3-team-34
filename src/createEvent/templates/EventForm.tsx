@@ -1,14 +1,4 @@
 "use client";
-import { useSession } from "next-auth/react";
-import { Peralta } from "next/font/google";
-import { useCallback, useEffect, useState } from "react";
-import { z } from "zod";
-import Input from "../molecules/Input";
-import TextArea from "../molecules/TextArea";
-import ToggleInput from "../molecules/ToggleInput";
-import ChipsList from "../oragnisms/ChipsList";
-import RSVP from "../oragnisms/RSVP";
-
 import { createEvent } from "@/actions/createEvent";
 import {
   clearIndexedDB,
@@ -18,17 +8,29 @@ import {
 import { Button } from "@/components/ui/button";
 import ImagePicker from "@/createEvent/oragnisms/ImagePicker";
 import { useCreateEventTheme } from "@/providers/themeProvider";
+import { useSession } from "next-auth/react";
+import { Peralta } from "next/font/google";
 import Link from "next/link";
+import { useCallback, useEffect, useState } from "react";
+import { z } from "zod";
+import { activities } from "../config/activityConfig";
 import { icons } from "../config/icons";
 import { type MoodType, defaultFormValuesRSVPMoods } from "../config/rvspMood";
 import EventImage from "../molecules/EventImage";
+import Input from "../molecules/Input";
+import TextArea from "../molecules/TextArea";
+import ToggleInput from "../molecules/ToggleInput";
+import ChipsList from "../oragnisms/ChipsList";
 import DateRangePicker, {
   type DateRange,
   getDateAdjustedForTimezone,
 } from "../oragnisms/DateRangePicker";
 import ImageUpload from "../oragnisms/ImageUpload";
+import RSVP from "../oragnisms/RSVP";
 import TopMenu from "../oragnisms/TopMenu";
 import "../../app/globals.css";
+import ActivitySelector from "../oragnisms/ActivitySelector";
+import AnimatedButton from "../oragnisms/AnimatedButton";
 import SettingsSidebar from "../oragnisms/SettingsSidebar";
 const peralta = Peralta({
   weight: "400",
@@ -59,6 +61,7 @@ const eventFormSchema = z.object({
     }),
   ),
   chips: z.array(z.object({ value: z.string(), inputValue: z.string() })),
+  activity: z.object({ name: z.string().nullable() }),
 });
 
 export type EventFormData = z.infer<typeof eventFormSchema>;
@@ -72,6 +75,7 @@ const EventForm = () => {
   const { theme } = useCreateEventTheme();
   const [isFormMounted, setIsFormMounted] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [selectedActivity, setSelectedActivity] = useState<string | null>(null);
 
   const [formData, setFormData] = useState<EventFormData>({
     title: "",
@@ -94,6 +98,7 @@ const EventForm = () => {
     requireGuestApproval: false,
     rsvpMoods: defaultFormValuesRSVPMoods,
     chips: [],
+    activity: { name: "Add activity categories" },
   });
 
   // State to manage image picker
@@ -182,7 +187,7 @@ const EventForm = () => {
       eventFormSchema.parse(formData); // Will throw an error if validation fails
       if (!session) {
         saveEventToIndexedDB(formData);
-        console.log(formData.chips);
+        console.log(formData);
         return;
       }
       console.log("Form is valid! Submitting...");
@@ -249,6 +254,43 @@ const EventForm = () => {
       saveData();
     }
   }, [formData, isFormMounted]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const saveDataWithActivity = async () => {
+        try {
+          const activeConfig = activities.find(
+            (act) => act.value === selectedActivity,
+          );
+          const dataActivity1 = {
+            name: activeConfig?.text,
+          };
+          if (activeConfig) {
+            const dataActivity = {
+              name: activeConfig.text,
+            };
+
+            console.log(selectedActivity);
+            setFormData((prevState) => ({
+              ...prevState,
+              activity: dataActivity,
+            }));
+            await saveEventToIndexedDB({ ...formData, activity: dataActivity });
+            console.log("Chips data from eventPage", {
+              ...formData,
+              activity: dataActivity,
+            });
+          }
+          console.log(dataActivity1);
+          console.log(formData.activity);
+        } catch (error) {
+          console.error("Failed to save event data to IndexedDB", error);
+        }
+      };
+
+      saveDataWithActivity();
+    }
+  }, [formData, selectedActivity]);
 
   return (
     <div className="flex flex-col min-h-screen items-stretch">
@@ -328,7 +370,7 @@ const EventForm = () => {
       </header>
 
       <form
-        onSubmit={handleSubmit}
+        // onSubmit={handleSubmit}
         className={`p-2 pt-0 md:pb-9 md:px-16 flex flex-col gap-3 ${theme.pageBgImage} bg-cover bg-center `}
       >
         <div className="flex flex-col md:flex-row justify-center space-y-3 md:space-y-0 md:space-x-11">
@@ -426,6 +468,10 @@ const EventForm = () => {
                 parentClassName="h-10"
                 className="text-xl placeholder:text-xl font-medium leading-loose"
               />
+              <ActivitySelector
+                selectedActivity={selectedActivity}
+                onChange={setSelectedActivity}
+              />
 
               <Input
                 icon={icons.cost}
@@ -483,12 +529,13 @@ const EventForm = () => {
           </div>
         </div>
 
-        <Button
+        {/* <Button
           type="submit"
           className="px-6 py-2 h-16 bg-[#084be7] text-white text-center text-base font-bold leading-normal w-max inline self-end rounded-none"
         >
           Done
-        </Button>
+        </Button> */}
+        <AnimatedButton onClick={handleSubmit} />
       </form>
       {isSidebarOpen && (
         <SettingsSidebar handleToggleSidebar={handleToggleSidebar} />
