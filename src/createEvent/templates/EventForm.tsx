@@ -199,7 +199,9 @@ const EventForm = () => {
     }
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (
+    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>,
+  ) => {
     clearIndexedDB();
     try {
       e.preventDefault();
@@ -228,6 +230,13 @@ const EventForm = () => {
       endDateTime: getDateAdjustedForTimezone(
         range.to ? range.to : new Date(range.from.getTime() + 15 * 60 * 1000),
       ),
+    }));
+  }, []);
+
+  const onChangeActivity = useCallback((activityValue: activityType) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      activity: activityValue,
     }));
   }, []);
 
@@ -263,6 +272,7 @@ const EventForm = () => {
         if (typeof window !== "undefined") {
           try {
             console.log("Chips data from eventPage", formData.chips);
+            console.log("Activity data from eventPage", formData.activity);
             await saveEventToIndexedDB(formData);
           } catch (error) {
             console.error("Failed to save event data to IndexedDB", error);
@@ -273,13 +283,6 @@ const EventForm = () => {
       saveData();
     }
   }, [formData, isFormMounted]);
-
-  const onChangeActivity = useCallback((activityValue: activityType) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      activity: activityValue,
-    }));
-  }, []);
 
   return (
     <div className="flex flex-col min-h-screen items-stretch">
@@ -307,7 +310,6 @@ const EventForm = () => {
         {!session && (
           <Link href="/register">
             <Button
-              // className="px-6 py-2 h-16 bg-[#084be7] text-center text-white text-base font-bold leading-normal"
               className="px-6 py-2 h-16 bg-[#084be7] text-white text-center text-base font-bold leading-normal w-max inline self-end rounded-none"
               type="button"
             >
@@ -321,11 +323,11 @@ const EventForm = () => {
         onSubmit={handleSubmit}
         className={`p-2 pt-0 md:pb-9 md:px-16 flex flex-col gap-3 ${theme.pageBgImage} bg-cover bg-center `}
       >
-        <div className="flex flex-col md:flex-row justify-center space-y-3 md:space-y-0 md:space-x-11">
-          <div className="flex flex-col">
+        <div className="flex flex-col justify-between md:flex-row justify-center space-y-3 md:space-y-0 md:space-x-11">
+          <div className="flex flex-col w-1/2">
             {/* Pass handleToggleSidebar to TopMenu */}
             <TopMenu onSettingsClick={handleToggleSidebar} />
-            <div className="flex flex-col space-y-3">
+            <div className="flex flex-col space-y-3 ">
               {/* Moved onchange and imageUrl props to image picker component */}
               <ImageUpload
                 showImagePicker={handleShowImagePicker}
@@ -443,7 +445,7 @@ const EventForm = () => {
             </div>
           </div>
 
-          <div className="flex flex-col space-y-3 pt-0 md:pt-28">
+          <div className="flex flex-col w-1/2 space-y-3 pt-0 md:pt-28">
             <ChipsList
               selectedChips={formData.chips}
               onChange={handleChipsChange}

@@ -20,7 +20,7 @@ const RSVP: React.FC<RSVPProps> = memo(
       >
         <p className={`${theme.textColor} text-2xl font-medium`}>RVSP</p>
         <div
-          className={`px-10 flex gap-10 ${
+          className={`px-10 flex gap-10 justify-center ${
             requireGuestApproval ? "m-auto py-2.5" : ""
           }`}
         >
