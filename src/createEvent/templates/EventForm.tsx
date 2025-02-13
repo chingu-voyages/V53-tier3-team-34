@@ -162,22 +162,23 @@ const EventForm = () => {
 
   const handleChipsChange = useCallback(
     (chipValue: string, inputValue: string, isSelected: boolean) => {
-      const chips = formData.chips;
-      const existingChipIndex = chips.findIndex(
-        (chip) => chip.value === chipValue,
-      );
-
-      if (!isSelected) {
-        chips.splice(existingChipIndex, 1);
-      } else if (existingChipIndex === -1) {
-        chips.push({ value: chipValue, inputValue });
-      } else {
-        const chip = chips[existingChipIndex];
-        chip.inputValue = inputValue;
-      }
-
-      // console.log(chips);
       setFormData((prevState) => {
+        const chips = prevState.chips;
+        const existingChipIndex = chips.findIndex(
+          (chip) => chip.value === chipValue,
+        );
+
+        if (!isSelected) {
+          chips.splice(existingChipIndex, 1);
+        } else if (existingChipIndex === -1) {
+          chips.push({ value: chipValue, inputValue });
+        } else {
+          const chip = chips[existingChipIndex];
+          chip.inputValue = inputValue;
+        }
+
+        // console.log(chips);
+
         const updatedData = {
           ...prevState,
           chips: chips, // React state maintains 'chips'
@@ -186,7 +187,7 @@ const EventForm = () => {
         return updatedData;
       });
     },
-    [formData.chips],
+    [],
   );
 
   const handleImageChange = useCallback((imageURL?: string) => {
@@ -199,7 +200,7 @@ const EventForm = () => {
     }
   }, []);
 
-  const handleSubmit = (
+  const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>,
   ) => {
     clearIndexedDB();
@@ -212,7 +213,8 @@ const EventForm = () => {
         return;
       }
       console.log("Form is valid! Submitting...");
-      createEvent(formData);
+      console.log("Form Data:", formData);
+      await createEvent(formData);
       // Proceed with submission logic
     } catch (e) {
       console.log(e);

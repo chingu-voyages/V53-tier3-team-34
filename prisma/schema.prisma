@@ -54,25 +54,26 @@ model Event {
   reason               String?
   maxGuestLimit        Int?
   userGuestLimit       Int?
-  chips                Chip[]
+  chips                Chip[]        
   author               User          @relation(fields: [authorId], references: [id])
   rsvpMoods            RSVPMood[]
   activity             ActivityType?
 }
 
 model RSVPMood {
-  value   String  @unique
+  id      Int     @id @default(autoincrement())
+  value   String
   emoji   String?
-  eventId String?
-  Event   Event?  @relation(fields: [eventId], references: [id])
+  eventId String
+  Event   Event   @relation(fields: [eventId], references: [id])
 }
 
 model Chip {
+  id         Int    @id @default(autoincrement())
   value      String
   inputValue String
-  eventId    String 
+  eventId    String
   Event      Event  @relation(fields: [eventId], references: [id])
-  @@unique([value, eventId])
 }
 
 model Session {

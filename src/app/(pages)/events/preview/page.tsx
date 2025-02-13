@@ -243,7 +243,7 @@ const PreviewPage = () => {
         {/* 2) Preview Toolbar (dark background + icons) */}
         <div className="flex flex-col items-start text-white px-20">
           <div
-            className={`backdrop-blur-2xl max-w-screen md:w-max justify-start items-center flex overflow-hidden  ${theme.inputBgColor} ${theme.textColor} text-base `}
+            className={`mb-4 backdrop-blur-2xl max-w-screen md:w-max justify-start items-center flex overflow-hidden  ${theme.inputBgColor} ${theme.textColor} text-base `}
           >
             {/* “Previewing” Button */}
             <button
@@ -366,63 +366,55 @@ const PreviewPage = () => {
               <span>Copy</span>
             </button>
           </div>
+          {/*grid-cols-1 grid-rows-3 grid-flow-col lg:grid-cols-2 lg:grid-rows-2 lg:grid-flow-row-dense*/}
+          <div className="gap-6 grid grid-flow-row-dense auto-rows-auto lg:grid-flow-col-dense w-full items-start justify-center gap-10 items-stretch justify-items-start ">
+            {/* 1) Image in a relative container */}
+            <Image
+              src={imageUrl || "/assets/images/events/defaultEvent.png"}
+              alt="Event Banner"
+              width={600}
+              height={600}
+              className="shadow-lg object-cover row-start-1 lg:col-start-1"
+            />
 
-          <div className="flex flex-col lg:flex-row w-full items-start justify-center gap-10">
-            {/* LEFT Column: Image + RSVP */}
-            <div className="w-full lg:w-1/2">
-              {/* 1) Image in a relative container */}
-              <div className="flex flex-col justify-start w-full">
-                <Image
-                  src={imageUrl || "/assets/images/events/defaultEvent.png"}
-                  alt="Event Banner"
-                  width={600}
-                  height={600}
-                  className="shadow-lg object-cover"
-                />
-
-                <div
-                  className={`px-10 flex gap-10 ${
-                    requireGuestApproval ? "m-auto py-2.5" : ""
-                  }`}
-                >
-                  <div className="px-10 flex gap-10 m-auto p-10">
-                    {requireGuestApproval ? (
-                      <Button className="h-16 px-6 py-2 text-center bg-[#aeaaaa]/30 backdrop-blur-2xl text-white text-base font-bold leading-normal rounded-none">
-                        Request to Join
-                      </Button>
-                    ) : (
-                      <>
-                        {rsvpMoods.map((mood) => (
-                          <div
-                            key={mood.value}
-                            className="flex flex-col items-center"
-                          >
-                            <RSVPEmojiPicker
-                              mood={mood}
-                              theme={theme}
-                              selectedRSVPEmoji={null}
-                              disablePicker={true}
-                            />
-                          </div>
-                        ))}
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
+            <div
+              className={`justify-self-center flex gap-10 row-start-3 lg:row-start-2 lg:col-start-1
+                ${requireGuestApproval ? "m-auto py-2.5" : "py-10"}`}
+            >
+              {requireGuestApproval ? (
+                <Button className="h-16 px-6 py-2 text-center bg-[#aeaaaa]/30 backdrop-blur-2xl text-white text-base font-bold leading-normal rounded-none">
+                  Request to Join
+                </Button>
+              ) : (
+                <>
+                  {rsvpMoods.map((mood) => (
+                    <div
+                      key={mood.value}
+                      className="flex flex-col items-center"
+                    >
+                      <RSVPEmojiPicker
+                        mood={mood}
+                        theme={theme}
+                        selectedRSVPEmoji={null}
+                        disablePicker={true}
+                      />
+                    </div>
+                  ))}
+                </>
+              )}
             </div>
 
             {/* RIGHT Column: Event details */}
-            <div className="w-full lg:w-1/2">
+            <div className="w-full row-start-2 lg:row-start-1 lg:col-start-2">
               <h1 className="text-white text-8xl font-semibold font-['Mona Sans']">
                 {title || "Untitled Event"}
               </h1>
-              <p className="text-white text-4xl font-medium font-['Mona Sans'] leading-loose">
+              <p className="text-white text-4xl font-medium font-['Mona Sans'] leading-[50px]">
                 {startDateTime
                   ? formatDate(startDateTime, "iiii, MMM dd, hh:mm a")
                   : "No Start Date"}
               </p>
-              <p className="text-white text-4xl font-medium font-['Mona Sans'] ">
+              <p className="text-white text-4xl font-medium font-['Mona Sans'] leading-[50px] ">
                 {endDateTime
                   ? formatDate(endDateTime, "iiii, MMM dd, hh:mm a")
                   : "No End Date"}
