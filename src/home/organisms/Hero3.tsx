@@ -24,7 +24,6 @@ const EventHero: React.FC = () => {
 
   return (
     <div className="bg-black p-8 md:p-20 lg:py-40 lg:px-16 flex flex-col lg:flex-row items-center justify-center gap-16">
-      {/* biome-ignore lint: This video doesn't need captions*/}
       <motion.video
         ref={videoRef}
         className="rounded-2xl"

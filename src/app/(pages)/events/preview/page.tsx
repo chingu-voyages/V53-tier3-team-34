@@ -41,6 +41,11 @@ interface PreviewFormData extends EventFormData {
 }
 
 const PreviewPage = () => {
+  const [isClicked, setIsClicked] = useState({
+    previewing: true,
+    copy: false,
+  });
+
   const [eventData, setEventData] = useState<PreviewFormData>({
     title: "",
     startDateTime: new Date(),
@@ -143,6 +148,13 @@ const PreviewPage = () => {
 
   const { theme } = useCreateEventTheme();
 
+  const handleClick = (target: "previewing" | "copy") => {
+    setIsClicked((prevState) => ({
+      previewing: target === "previewing" ? !prevState.previewing : false,
+      copy: target === "copy" ? !prevState.copy : false,
+    }));
+  };
+
   if (!eventData) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -225,7 +237,9 @@ const PreviewPage = () => {
       </header>
 
       {/* Main Content */}
-      <main className={`text-white min-h-screen bg-cover ${theme.pageBgImage}`}>
+      <main
+        className={`text-white h-full flex flex-col items-center justify-between bg-cover ${theme.pageBgImage}`}
+      >
         {/* 2) Preview Toolbar (dark background + icons) */}
         <div className="flex flex-col items-start text-white px-20">
           <div
@@ -234,7 +248,9 @@ const PreviewPage = () => {
             {/* “Previewing” Button */}
             <button
               type="button"
-              className="flex items-center gap-2 px-3 py-3 rounded uppercase text-md text-white"
+              className={`flex items-center gap-[18px] px-4 py-6 leading-tight self-stretch ${
+                isClicked.previewing && "bg-black/20"
+              }`}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -280,7 +296,7 @@ const PreviewPage = () => {
             {/* “Back” Button */}
             <button
               type="button"
-              className="flex items-center gap-1 px-3 py-3 uppercase text-md"
+              className="flex items-center gap-[18px] px-4 py-6 leading-tight self-stretch"
               onClick={() => history.back()}
             >
               {/* <ArrowLeftIcon className="h-4 w-4" /> */}
@@ -320,7 +336,10 @@ const PreviewPage = () => {
             {/* “Copy” Button */}
             <button
               type="button"
-              className="flex items-center gap-1 px-4 py-6 uppercase text-md"
+              className={`flex items-center gap-[18px] px-4 py-6 leading-tight self-stretch ${
+                isClicked.copy && "bg-black/20"
+              }`}
+              onClick={() => handleClick("copy")}
             >
               {/* <LinkIcon className="h-4 w-4" /> */}
               <svg
@@ -352,13 +371,13 @@ const PreviewPage = () => {
             {/* LEFT Column: Image + RSVP */}
             <div className="w-full lg:w-1/2">
               {/* 1) Image in a relative container */}
-              <div className="flex flex-col items-center justify-column w-full">
+              <div className="flex flex-col justify-start w-full">
                 <Image
                   src={imageUrl || "/assets/images/events/defaultEvent.png"}
                   alt="Event Banner"
                   width={600}
                   height={600}
-                  className="w-full  shadow-lg object-cover"
+                  className="shadow-lg object-cover"
                 />
 
                 <div
@@ -487,7 +506,7 @@ const PreviewPage = () => {
           </div>
         </div>
         <footer
-          className={`w-full fixed bottom-0 px-2 py-12 ${theme.inputBgColor} backdrop-blur-2xl flex-col justify-center items-center gap-2.5 inline-flex`}
+          className={`w-full px-2 py-12 ${theme.inputBgColor} backdrop-blur-2xl flex-col justify-center items-center gap-2.5 inline-flex`}
         >
           <div className="text-[#d1d1d1] text-5xl font-normal font-['Peralta'] leading-tight">
             Partiyo
