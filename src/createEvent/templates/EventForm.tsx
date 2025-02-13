@@ -321,12 +321,15 @@ const EventForm = () => {
 
       <form
         onSubmit={handleSubmit}
-        className={`p-2 pt-0 md:pb-9 md:px-16 flex flex-col gap-3 ${theme.pageBgImage} bg-cover bg-center `}
+        className={`p-2 pt-0 md:pb-9 md:px-16 flex flex-col items-center gap-3 ${theme.pageBgImage} bg-cover bg-center `}
       >
-        <div className="flex flex-col justify-between md:flex-row justify-center space-y-3 md:space-y-0 md:space-x-11">
+        <div className="w-max flex flex-col justify-between md:flex-row md:justify-center space-y-3 md:space-y-0 md:space-x-11">
           <div className="flex flex-col w-1/2">
             {/* Pass handleToggleSidebar to TopMenu */}
-            <TopMenu onSettingsClick={handleToggleSidebar} />
+            <TopMenu
+              onSettingsClick={handleToggleSidebar}
+              isSettingsOpen={isSidebarOpen}
+            />
             <div className="flex flex-col space-y-3 ">
               {/* Moved onchange and imageUrl props to image picker component */}
               <ImageUpload

@@ -34,10 +34,10 @@ const SettingsSidebar: React.FC<SettingsSidebarProps> = ({
         <h2 className="text-2xl font-bold mb-6">Event Settings</h2>
         <div className="flex  justify-between space-x-4 mb-6">
           {/* Sidebar Tabs (Ticket Cost & Invite Guests) */}
-          <div className="flex flex-col items-start  mb-6">
+          <div className="flex flex-col items-start">
             <button
               type="button"
-              className="px-6 py-3 bg-[#aeaaaa]/30 justify-start items-center gap-3 inline-flex mb-1 w-[200px]"
+              className="h-20 px-6 py-3 bg-[#aeaaaa]/30 justify-start items-center gap-3 inline-flex mb-1 w-[200px]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -59,7 +59,7 @@ const SettingsSidebar: React.FC<SettingsSidebarProps> = ({
             </button>
             <button
               type="button"
-              className="px-6 py-3 bg-[#aeaaaa]/30 justify-start items-center gap-3 inline-flex w-[200px]"
+              className="h-20 px-6 py-3 bg-[#aeaaaa]/30 justify-start items-center gap-3 inline-flex w-[200px]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -85,7 +85,7 @@ const SettingsSidebar: React.FC<SettingsSidebarProps> = ({
           {/* Start Ticket Type & Price Section */}
           <div>
             <div className="mb-6">
-              <h3 className="text-white text-3xl font-semibold font-['Mona Sans'] leading-10">
+              <h3 className="text-white text-3xl font-semibold font-['Mona Sans'] leading-normal mb-3">
                 Friendship Contribution
               </h3>
               <p className="text-[#faf1e5] text-base font-normal font-['Inter'] leading-normal">
@@ -95,29 +95,73 @@ const SettingsSidebar: React.FC<SettingsSidebarProps> = ({
 
               {/* Start Ticket Name & Type */}
 
-              <div className="flex items-center space-x-12 mt-5 ">
-                <span className="w-[200px] text-gray-300 p-3 bg-[rgba(255,255,255,0.40)]">
-                  Ticket Name
-                </span>
-                <select className="w-[200px] text-white p-3  bg-[rgba(255,255,255,0.40)]">
-                  <option>General</option>
-                  <option>VIP</option>
-                </select>
+              <div className="flex items-center gap-9 mt-5 ">
+                <input
+                  className="h-20 w-60 px-6 py-3 bg-[#3c3e40] text-[#7a7878]/50 text-xl font-medium font-['Mona Sans'] leading-loose"
+                  type="text"
+                  placeholder="Ticket Name"
+                  name={"ticketName"}
+                  value={""}
+                  onChange={() => {}}
+                />
+                <Select defaultValue="general">
+                  <SelectTrigger className="w-60 h-20 rounded-none border-none text-white py-6 bg-[rgba(255,255,255,0.40)]">
+                    <SelectValue placeholder="Price" />
+                  </SelectTrigger>
+                  <SelectContent className="w-60 rounded-none border-none bg-[#26282b]">
+                    <SelectItem
+                      value="general"
+                      className="data-[highlighted]:!bg-white/10 data-[highlighted]:!text-[#faf1e5] h-20 px-6 py-3 justify-start items-center gap-3 inline-flex text-[#faf1e5] text-base font-medium font-['Mona Sans'] leading-normal hover:!text-white hover:!bg-white/10 hover:!rounded-none"
+                    >
+                      General
+                    </SelectItem>
+                    <SelectItem
+                      value="VIP"
+                      className="data-[highlighted]:!bg-white/10 data-[highlighted]:!text-[#faf1e5] h-20 px-6 py-3 justify-start items-center gap-3 inline-flex text-[#faf1e5] text-base font-medium font-['Mona Sans'] leading-normal hover:!text-white hover:!bg-white/10 hover:!rounded-none"
+                    >
+                      <div className="flex gap-2">VIP</div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* End  Ticket Name & Type */}
 
               {/* Start  Price Section */}
               <h3 className="text-lg font-semibold mt-8">Price</h3>
-              <div className="flex items-center space-x-12 mt-3">
-                <select className=" w-[200px]  text-white p-3 bg-[rgba(255,255,255,0.40)]">
-                  <option>USD ($)</option>
-                  <option>EUR (€)</option>
-                </select>
+              <div className="flex items-center gap-9 mt-3">
+                <Select defaultValue="USD">
+                  <SelectTrigger className="w-60 h-20 rounded-none border-none text-white py-6 bg-[rgba(255,255,255,0.40)]">
+                    <SelectValue placeholder="Price" />
+                  </SelectTrigger>
+                  <SelectContent className="w-60 rounded-none border-none bg-[#26282b]">
+                    <SelectItem
+                      value="USD"
+                      className="data-[highlighted]:!bg-white/10 data-[highlighted]:!text-[#faf1e5] h-20 px-6 py-3 justify-start items-center gap-3 inline-flex text-[#faf1e5] text-base font-medium font-['Mona Sans'] leading-normal hover:!text-white hover:!bg-white/10 hover:!rounded-none"
+                    >
+                      <div className="flex gap-2">
+                        <span>USD</span>
+                        <span>($)</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem
+                      value="EUR"
+                      className="data-[highlighted]:!bg-white/10 data-[highlighted]:!text-[#faf1e5] h-20 px-6 py-3 justify-start items-center gap-3 inline-flex text-[#faf1e5] text-base font-medium font-['Mona Sans'] leading-normal hover:!text-white hover:!bg-white/10 hover:!rounded-none"
+                    >
+                      <div className="flex gap-2">
+                        <span>EUR</span>
+                        <span>(€)</span>
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
                 <input
+                  className="h-20 w-60 px-6 py-3 text-[#7a7878]/50 bg-[#3c3e40] text-xl font-medium font-['Mona Sans'] leading-loose"
                   type="number"
                   placeholder="Price"
-                  className="w-[200px] text-white p-3  bg-[rgba(255,255,255,0.40)]"
+                  name={"price"}
+                  value={""}
+                  onChange={() => {}}
                 />
               </div>
               {/* End Price Section */}
@@ -126,13 +170,15 @@ const SettingsSidebar: React.FC<SettingsSidebarProps> = ({
 
             {/*Start  Payment Methods Section */}
             <div className="mb-6 mt-8">
-              <h3 className="text-lg font-semibold">Payment Methods</h3>
+              <h3 className="text-white text-2xl font-semibold font-['Mona Sans'] leading-[75px]">
+                Payment Methods
+              </h3>
               <div className="mt-4 flex flex-col space-y-3">
                 {["Apple Pay", "Paypal", "Bank Transfer", "Credit Card"].map(
                   (method) => (
                     <div
                       key={method}
-                      className="flex items-center justify-between bg-[rgba(255,255,255,0.40)] p-3 w-[450px]"
+                      className="h-20 flex items-center justify-between bg-[rgba(255,255,255,0.40)] p-6 w-[450px] w-full"
                     >
                       <span className="text-gray-300">{method}</span>
                       <label className="relative inline-flex items-center cursor-pointer">
@@ -148,35 +194,44 @@ const SettingsSidebar: React.FC<SettingsSidebarProps> = ({
           {/*  End Payment Methods Section */}
 
           {/* Start  Price Section */}
-          <div className="flex flex-col items-end justify-between space-x-3  p-3 ">
+          <div className="flex flex-col items-end justify-between space-x-3 p-3 h-dvh">
             <Select defaultValue="supportOurEvent">
-              <SelectTrigger className="w-60 rounded-none border-none text-white p-3 bg-[rgba(255,255,255,0.40)]">
+              <SelectTrigger className="w-60 h-20 rounded-none border-none text-white py-6 bg-[rgba(255,255,255,0.40)]">
                 <SelectValue placeholder="Theme" />
               </SelectTrigger>
               <SelectContent className="w-60 rounded-none border-none  bg-[#26282b]">
                 <SelectItem
                   value="supportOurEvent"
-                  className="h-16 px-6 py-3 justify-start items-center gap-3 inline-flex text-[#faf1e5] text-base font-medium font-['Mona Sans'] leading-normal hover:!text-white hover:!bg-white/10 hover:!rounded-none"
+                  className="data-[highlighted]:!bg-white/10 data-[highlighted]:!text-[#faf1e5] h-20 px-6 py-3 justify-start items-center gap-3 inline-flex text-[#faf1e5] text-base font-medium font-['Mona Sans'] leading-normal hover:!text-white hover:!bg-white/10 hover:!rounded-none"
                 >
-                  💙 Support Our Event
+                  <div className="flex gap-2">
+                    <span>💙</span>
+                    <span>Support Our Event</span>
+                  </div>
                 </SelectItem>
                 <SelectItem
                   value="free"
-                  className="h-16 px-6 py-3 justify-start items-center gap-3 inline-flex text-[#faf1e5] text-base font-medium font-['Mona Sans'] leading-normal hover:!text-white hover:!bg-white/10 hover:!rounded-none"
+                  className="h-20 px-6 py-3 justify-start items-center gap-3 inline-flex text-[#faf1e5] text-base font-medium font-['Mona Sans'] leading-normal hover:!text-white hover:!bg-white/10 hover:!rounded-none"
                 >
-                  👼🏻 Free
+                  <div className="flex gap-2">
+                    <span>👼🏻</span>
+                    <span>Free</span>
+                  </div>
                 </SelectItem>
                 <SelectItem
                   value="standardTicket"
-                  className="h-16 px-6 py-3 justify-start items-center gap-3 inline-flex text-[#faf1e5] text-base font-medium font-['Mona Sans'] leading-normal hover:!text-white hover:!bg-white/10 hover:!rounded-none"
+                  className="h-20 px-6 py-3 justify-start items-center gap-3 inline-flex text-[#faf1e5] text-base font-medium font-['Mona Sans'] leading-normal hover:!text-white hover:!bg-white/10 hover:!rounded-none"
                 >
-                  🎟 Standard Ticket
+                  <div className="flex gap-2">
+                    <span>🎟</span>
+                    <span>Standard Ticket</span>
+                  </div>
                 </SelectItem>
               </SelectContent>
             </Select>
             {/* Save Changes Button (Bottom Right) */}
 
-            <Button className="px-6 py-2 bg-[#084be7] justify-center items-center flex rounded-none ">
+            <Button className="h-20 px-6 py-2 bg-[#084be7] justify-center items-center flex rounded-none text-center text-white text-base font-bold font-['Mona Sans']">
               Save Changes
             </Button>
           </div>
