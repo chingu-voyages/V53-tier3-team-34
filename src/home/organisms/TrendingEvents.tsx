@@ -39,7 +39,9 @@ const TrendingEvents: React.FC = () => {
     fetchTrendingEvents();
 
     return () => {
-      abortController.abort();
+      if (abortController.signal) {
+        abortController.abort();
+      }
     };
   }, []);
 

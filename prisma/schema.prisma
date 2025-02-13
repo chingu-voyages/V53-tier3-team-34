@@ -7,6 +7,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum ActivityType {
+  festival
+  dj
+  firework
+  drink
+  food
+  game
+  sport
+  art
+  ktv
+  meet
+  party
+  afternoonTea
+  film
+  theatre
+}
+
 model User {
   id       String    @id @default(uuid())
   email    String    @unique
@@ -16,42 +33,32 @@ model User {
 }
 
 model Event {
-  id                   String     @id @default(uuid())
+  id                   String        @id @default(uuid())
   title                String
   startDateTime        DateTime
-  endDateTime          DateTime 
+  endDateTime          DateTime
   image                Bytes?
   imageUrl             String?
   style                String?
   description          String?
   guestHonor           String?
   host                 String?
-  requireGuestApproval Boolean    @default(false)
+  requireGuestApproval Boolean       @default(false)
   authorId             String
-  createdAt            DateTime   @default(now())
-  updatedAt            DateTime   @updatedAt
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
   address              String?
   costPerPerson        Float?
-  isOutdoor            Boolean    @default(false)
-  isPublic             Boolean    @default(false)
+  isOutdoor            Boolean       @default(false)
+  isPublic             Boolean       @default(false)
   reason               String?
   maxGuestLimit        Int?
   userGuestLimit       Int?
   chips                Chip[]
-  author               User       @relation(fields: [authorId], references: [id])
+  author               User          @relation(fields: [authorId], references: [id])
   rsvpMoods            RSVPMood[]
-  
-  activityId    String?    @unique 
-  activity      Activity? 
+  activity             ActivityType?
 }
-
-model Activity {
-  id      String   @id @default(uuid())
-  name    String   @unique  
-  eventId String   @unique 
-  event   Event    @relation(fields: [eventId], references: [id]) 
-}
-
 
 model RSVPMood {
   value   String  @unique
@@ -61,10 +68,11 @@ model RSVPMood {
 }
 
 model Chip {
-  value      String  @unique
+  value      String
   inputValue String
-  eventId    String?
-  Event      Event?  @relation(fields: [eventId], references: [id])
+  eventId    String 
+  Event      Event  @relation(fields: [eventId], references: [id])
+  @@unique([value, eventId])
 }
 
 model Session {

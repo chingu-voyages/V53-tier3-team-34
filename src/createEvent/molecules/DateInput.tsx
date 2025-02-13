@@ -404,4 +404,4 @@ const DateInput: React.FC<DateInputProps> = memo(({ value, onChange }) => {
 
 DateInput.displayName = "DateInput";
 
-export { DateInput };
+export default DateInput;

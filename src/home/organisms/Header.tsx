@@ -33,7 +33,7 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
     <header className="bg-black text-white p-8 lg:px-16 lg:py-9">
       <div className="flex items-center justify-between lg:justify-start">
         {/* Logo */}
-        <div className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2">
           <Image
             src="/assets/images/logo.svg"
             alt="Partiyo Logo"
@@ -43,7 +43,7 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
           <span className={`text-xl font-bold ${peralta.className}`}>
             Partiyo
           </span>
-        </div>
+        </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center justify-center flex-1 mx-8">

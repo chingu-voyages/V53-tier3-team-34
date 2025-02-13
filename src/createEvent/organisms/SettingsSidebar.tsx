@@ -148,27 +148,27 @@ const SettingsSidebar: React.FC<SettingsSidebarProps> = ({
           {/*  End Payment Methods Section */}
 
           {/* Start  Price Section */}
-          <div className="flex flex-col  items-end  justify-between  space-x-3  p-3 ">
+          <div className="flex flex-col items-end justify-between space-x-3  p-3 ">
             <Select defaultValue="supportOurEvent">
-              <SelectTrigger className="w-60 rounded-none border-none text-white p-3  bg-[rgba(255,255,255,0.40)]">
+              <SelectTrigger className="w-60 rounded-none border-none text-white p-3 bg-[rgba(255,255,255,0.40)]">
                 <SelectValue placeholder="Theme" />
               </SelectTrigger>
               <SelectContent className="w-60 rounded-none border-none  bg-[#26282b]">
                 <SelectItem
                   value="supportOurEvent"
-                  className="h-16 px-6 py-3 justify-start items-center gap-3 inline-flex text-[#faf1e5] text-base font-medium font-['Mona Sans'] leading-normal hover:!text-white hover:!bg-white/10 hover:rounded-none"
+                  className="h-16 px-6 py-3 justify-start items-center gap-3 inline-flex text-[#faf1e5] text-base font-medium font-['Mona Sans'] leading-normal hover:!text-white hover:!bg-white/10 hover:!rounded-none"
                 >
                   💙 Support Our Event
                 </SelectItem>
                 <SelectItem
                   value="free"
-                  className="h-16 px-6 py-3 justify-start items-center gap-3 inline-flex text-[#faf1e5] text-base font-medium font-['Mona Sans'] leading-normal hover:!text-white hover:!bg-white/10 hover:rounded-none"
+                  className="h-16 px-6 py-3 justify-start items-center gap-3 inline-flex text-[#faf1e5] text-base font-medium font-['Mona Sans'] leading-normal hover:!text-white hover:!bg-white/10 hover:!rounded-none"
                 >
                   👼🏻 Free
                 </SelectItem>
                 <SelectItem
                   value="standardTicket"
-                  className="h-16 px-6 py-3 justify-start items-center gap-3 inline-flex text-[#faf1e5] text-base font-medium font-['Mona Sans'] leading-normal hover:!text-white hover:!bg-white/10 hover:rounded-none"
+                  className="h-16 px-6 py-3 justify-start items-center gap-3 inline-flex text-[#faf1e5] text-base font-medium font-['Mona Sans'] leading-normal hover:!text-white hover:!bg-white/10 hover:!rounded-none"
                 >
                   🎟 Standard Ticket
                 </SelectItem>

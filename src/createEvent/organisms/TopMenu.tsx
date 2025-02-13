@@ -31,7 +31,9 @@ const TopMenu: React.FC<TopMenuProps> = memo(({ onSettingsClick }) => {
       >
         <button
           type="button"
-          className="flex items-center gap-[18px] px-4 leading-tight"
+          className={`flex items-center gap-[18px] px-4 py-6 leading-tight ${
+            isClicked.style && "bg-black/20"
+          }`}
           onClick={() => handleClick("style")}
         >
           <div
@@ -42,7 +44,9 @@ const TopMenu: React.FC<TopMenuProps> = memo(({ onSettingsClick }) => {
         <span className={`w-px h-14 ${theme.dividerColor}`} />
         <button
           type="button"
-          className="flex items-center gap-[18px] px-4 py-6 bg-white/30 leading-tight"
+          className={`flex items-center gap-[18px] px-4 py-6 leading-tight ${
+            isClicked.settings && "bg-black/20"
+          }`}
           onClick={onSettingsClick}
         >
           <svg
@@ -66,7 +70,9 @@ const TopMenu: React.FC<TopMenuProps> = memo(({ onSettingsClick }) => {
         <Link href="/events/preview">
           <button
             type="button"
-            className="flex items-center gap-[18px] px-4 py-6 leading-tight"
+            className={`flex items-center gap-[18px] px-4 py-6 leading-tight ${
+              isClicked.preview && "bg-black/20"
+            }`}
             onClick={() => handleClick("preview")}
           >
             <svg

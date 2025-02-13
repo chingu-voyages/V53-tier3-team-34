@@ -58,6 +58,7 @@ export async function createEvent(eventFormData: EventFormData) {
           data: filteredChips,
         },
       },
+      activity: eventFormData.activity,
     },
   });
 }

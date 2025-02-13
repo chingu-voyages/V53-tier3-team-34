@@ -99,7 +99,7 @@ const ChipsList: React.FC<ChipsListProps> = ({ selectedChips, onChange }) => {
           ),
       )}
 
-      <div className="flex flex-row flex-wrap gap-2">
+      <div className="flex flex-row flex-wrap gap-2 lg:max-w-lg">
         {displayedChips.map((chip) => (
           <Chip
             key={`chip${chip.value}`}

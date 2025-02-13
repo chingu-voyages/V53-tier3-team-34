@@ -2,11 +2,7 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 
-interface AnimatedButtonProps {
-  onClick: (e: React.MouseEvent) => void;
-}
-
-const AnimatedButton: React.FC<AnimatedButtonProps> = ({ onClick }) => {
+const AnimatedButton: React.FC = () => {
   const [isClicked, setIsClicked] = useState(false);
 
   const hearts = [
@@ -18,12 +14,12 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({ onClick }) => {
 
   return (
     <motion.button
+      type="submit"
       className="relative text-white text-l font-bold px-6 py-4 rounded-none bg-[#084be7] w-max inline self-end"
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
       onMouseEnter={() => setIsClicked(true)}
       onMouseLeave={() => setIsClicked(false)}
-      onClick={onClick}
     >
       <span className="relative z-10">Done</span>
 
@@ -37,8 +33,7 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({ onClick }) => {
               left: heart.left,
               width: heart.size,
               height: heart.size,
-              backgroundImage:
-                "url(https://assets.codepen.io/64/heart+%286%29+%281%29.png)",
+              backgroundImage: "url(/assets/images/events/heart.png)",
               filter:
                 "invert(87%) sepia(68%) saturate(1260%) hue-rotate(50deg) brightness(120%) contrast(100%)",
             }}
