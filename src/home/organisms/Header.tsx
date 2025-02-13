@@ -46,7 +46,7 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center justify-center flex-1 mx-8">
+        <div className="hidden lg:flex items-center justify-center flex-1 mx-8">
           <div
             className={`flex bg-gray-900 rounded-none flex-1 max-w-max h-16 ${
               isInputFocused && "border border-white"
@@ -144,7 +144,7 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
         </div>
 
         {/* Desktop Actions */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden xl:flex items-center gap-4">
           <Link href="/login">
             <Button
               type="button"
@@ -155,12 +155,12 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
           </Link>
           {/* Added Create event button and changed the blue button text to browse event */}
           <Link href="/events/create">Create Event</Link>
-          <BlueButton text="Browse Events" href="/events" />
+          <BlueButton text="Browse Events" href="/" />
         </div>
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden"
+          className="xl:hidden"
           type="button"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
@@ -173,9 +173,9 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="absolute top-16 left-0 right-0 bg-black p-4 md:hidden">
+          <div className="absolute z-50 top-24 left-0 right-0 bg-black p-4 xl:hidden">
             <div className="flex flex-col gap-4">
-              <Link href="/search">
+              <Link href="/search" className="lg:hidden">
                 <p>Search</p>
               </Link>
               <Link href="/login">
@@ -183,6 +183,9 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
               </Link>
               <Link href="/events/create">
                 <p>Create Events</p>
+              </Link>
+              <Link href="/">
+                <p>Browse Events</p>
               </Link>
             </div>
           </div>

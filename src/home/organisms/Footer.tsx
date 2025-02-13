@@ -7,10 +7,10 @@ const inter = Inter({ subsets: ["latin"], weight: ["400", "500"] });
 const peralta = Peralta({ weight: "400", subsets: ["latin"] });
 const Footer: React.FC = () => {
   return (
-    <footer className="w-full bg-black p-4 md:p-8 lg:p-16 flex flex-col gap-16">
-      <div className="flex justify-between flex-col gap-16 lg:gap-[15rem] lg:flex-row ">
+    <footer className="w-full bg-black p-4 md:p-6 lg:p-16 flex flex-col gap-8 lg:gap-16">
+      <div className="flex justify-between flex-col gap-8 md:gap-12 lg:gap-16 md:flex-row ">
         {/* Left Section */}
-        <div className="flex flex-col gap-16">
+        <div className="flex flex-col gap-8 lg:gap-16">
           {/* Logo Section */}
           <Link href="/" className="flex items-center gap-4">
             <Image
@@ -136,10 +136,10 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Right Section - Navigation */}
-        <div className="flex gap-12 flex-col md:flex-row">
-          <div className="flex flex-row gap-12">
+        <div className="flex gap-4 md:gap-8 lg:gap-12 flex-col md:flex-row">
+          <div className="flex flex-row justify-between gap-12 ">
             {/* Company Links */}
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2 md:gap-4 lg:gap-6">
               <h3
                 className={`text-white text-2xl font-bold ${monaSans.className}`}
               >
@@ -160,7 +160,7 @@ const Footer: React.FC = () => {
             </div>
 
             {/* Support Links */}
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2 md:gap-4 lg:gap-6">
               <h3
                 className={`text-white text-2xl font-bold ${monaSans.className}`}
               >
@@ -176,7 +176,7 @@ const Footer: React.FC = () => {
           </div>
 
           {/* Partner Links */}
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-2 md:gap-4 lg:gap-6">
             <h3
               className={`text-white text-2xl font-bold ${monaSans.className}`}
             >
@@ -193,7 +193,7 @@ const Footer: React.FC = () => {
       </div>
       {/* Copyright */}
       <div className={`text-white text-2xl font-medium ${inter.className}`}>
-        Copyright 2025, The Partiyo Inc.
+        Copyright &#169; 2025, The Partiyo Inc.
       </div>
     </footer>
   );
