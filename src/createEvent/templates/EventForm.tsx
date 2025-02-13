@@ -180,7 +180,9 @@ const EventForm = () => {
     }
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (
+    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>,
+  ) => {
     clearIndexedDB();
     try {
       e.preventDefault();
@@ -210,6 +212,20 @@ const EventForm = () => {
         range.to ? range.to : new Date(range.from.getTime() + 15 * 60 * 1000),
       ),
     }));
+  }, []);
+
+  const handleActivityChange = useCallback((activityValue: string | null) => {
+    const activeConfig = activities.find((act) => act.value === activityValue);
+
+    if (activeConfig) {
+      setSelectedActivity(activityValue);
+      const dataActivity = { name: activeConfig.text };
+
+      setFormData((prevState) => ({
+        ...prevState,
+        activity: dataActivity,
+      }));
+    }
   }, []);
 
   useEffect(() => {
@@ -244,6 +260,7 @@ const EventForm = () => {
         if (typeof window !== "undefined") {
           try {
             console.log("Chips data from eventPage", formData.chips);
+            console.log("Activity data from eventPage", formData.activity);
             await saveEventToIndexedDB(formData);
           } catch (error) {
             console.error("Failed to save event data to IndexedDB", error);
@@ -255,42 +272,42 @@ const EventForm = () => {
     }
   }, [formData, isFormMounted]);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const saveDataWithActivity = async () => {
-        try {
-          const activeConfig = activities.find(
-            (act) => act.value === selectedActivity,
-          );
-          const dataActivity1 = {
-            name: activeConfig?.text,
-          };
-          if (activeConfig) {
-            const dataActivity = {
-              name: activeConfig.text,
-            };
+  // useEffect(() => {
+  //   if (typeof window !== "undefined" && isFormMounted) {
+  //     const saveDataWithActivity = async () => {
+  //       try {
+  //         const activeConfig = activities.find(
+  //           (act) => act.value === selectedActivity,
+  //         );
+  //         const dataActivity1 = {
+  //           name: activeConfig?.text,
+  //         };
+  //         if (activeConfig) {
+  //           const dataActivity = {
+  //             name: activeConfig.text,
+  //           };
 
-            console.log(selectedActivity);
-            setFormData((prevState) => ({
-              ...prevState,
-              activity: dataActivity,
-            }));
-            await saveEventToIndexedDB({ ...formData, activity: dataActivity });
-            console.log("Chips data from eventPage", {
-              ...formData,
-              activity: dataActivity,
-            });
-          }
-          console.log(dataActivity1);
-          console.log(formData.activity);
-        } catch (error) {
-          console.error("Failed to save event data to IndexedDB", error);
-        }
-      };
+  //           console.log(selectedActivity);
+  //           setFormData((prevState) => ({
+  //             ...prevState,
+  //             activity: dataActivity,
+  //           }));
+  //           await saveEventToIndexedDB({ ...formData, activity: dataActivity });
+  //           console.log("Chips data from eventPage", {
+  //             ...formData,
+  //             activity: dataActivity,
+  //           });
+  //         }
+  //         console.log(dataActivity1);
+  //         console.log(formData.activity);
+  //       } catch (error) {
+  //         console.error("Failed to save event data to IndexedDB", error);
+  //       }
+  //     };
 
-      saveDataWithActivity();
-    }
-  }, [formData, selectedActivity]);
+  //     saveDataWithActivity();
+  //   }
+  // }, [formData, isFormMounted, selectedActivity]);
 
   return (
     <div className="flex flex-col min-h-screen items-stretch">
@@ -470,7 +487,7 @@ const EventForm = () => {
               />
               <ActivitySelector
                 selectedActivity={selectedActivity}
-                onChange={setSelectedActivity}
+                onChange={handleActivityChange}
               />
 
               <Input
@@ -535,7 +552,7 @@ const EventForm = () => {
         >
           Done
         </Button> */}
-        <AnimatedButton onClick={handleSubmit} />
+        <AnimatedButton onClick={(e) => handleSubmit(e)} />
       </form>
       {isSidebarOpen && (
         <SettingsSidebar handleToggleSidebar={handleToggleSidebar} />

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 
 interface AnimatedButtonProps {
-  onClick: (e: React.MouseEvent) => void;
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const AnimatedButton: React.FC<AnimatedButtonProps> = ({ onClick }) => {
