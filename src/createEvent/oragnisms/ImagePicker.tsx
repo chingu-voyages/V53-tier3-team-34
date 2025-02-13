@@ -191,8 +191,6 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
                       key={image.id}
                       src={image.imageUrl}
                       alt="Gallery image"
-                      width={340}
-                      height={308}
                       className="h-[308px] w-[340px] object-cover cursor-pointer"
                       onClick={() => onImageSelect(image.imageUrl)}
                     />

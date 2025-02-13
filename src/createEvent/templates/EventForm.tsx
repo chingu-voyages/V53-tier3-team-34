@@ -272,43 +272,6 @@ const EventForm = () => {
     }
   }, [formData, isFormMounted]);
 
-  // useEffect(() => {
-  //   if (typeof window !== "undefined" && isFormMounted) {
-  //     const saveDataWithActivity = async () => {
-  //       try {
-  //         const activeConfig = activities.find(
-  //           (act) => act.value === selectedActivity,
-  //         );
-  //         const dataActivity1 = {
-  //           name: activeConfig?.text,
-  //         };
-  //         if (activeConfig) {
-  //           const dataActivity = {
-  //             name: activeConfig.text,
-  //           };
-
-  //           console.log(selectedActivity);
-  //           setFormData((prevState) => ({
-  //             ...prevState,
-  //             activity: dataActivity,
-  //           }));
-  //           await saveEventToIndexedDB({ ...formData, activity: dataActivity });
-  //           console.log("Chips data from eventPage", {
-  //             ...formData,
-  //             activity: dataActivity,
-  //           });
-  //         }
-  //         console.log(dataActivity1);
-  //         console.log(formData.activity);
-  //       } catch (error) {
-  //         console.error("Failed to save event data to IndexedDB", error);
-  //       }
-  //     };
-
-  //     saveDataWithActivity();
-  //   }
-  // }, [formData, isFormMounted, selectedActivity]);
-
   return (
     <div className="flex flex-col min-h-screen items-stretch">
       {/* Placed onchange and image url from image upload in image picker  */}
@@ -376,7 +339,6 @@ const EventForm = () => {
         {!session && (
           <Link href="/register">
             <Button
-              // className="px-6 py-2 h-16 bg-[#084be7] text-center text-white text-base font-bold leading-normal"
               className="px-6 py-2 h-16 bg-[#084be7] text-white text-center text-base font-bold leading-normal w-max inline self-end rounded-none"
               type="button"
             >
@@ -387,14 +349,13 @@ const EventForm = () => {
       </header>
 
       <form
-        // onSubmit={handleSubmit}
         className={`p-2 pt-0 md:pb-9 md:px-16 flex flex-col gap-3 ${theme.pageBgImage} bg-cover bg-center `}
       >
-        <div className="flex flex-col md:flex-row justify-center space-y-3 md:space-y-0 md:space-x-11">
-          <div className="flex flex-col">
+        <div className="flex flex-col justify-between md:flex-row justify-center space-y-3 md:space-y-0 md:space-x-11">
+          <div className="flex flex-col w-1/2">
             {/* Pass handleToggleSidebar to TopMenu */}
             <TopMenu onSettingsClick={handleToggleSidebar} />
-            <div className="flex flex-col space-y-3">
+            <div className="flex flex-col space-y-3 ">
               {/* Moved onchange and imageUrl props to image picker component */}
               <ImageUpload
                 showImagePicker={handleShowImagePicker}
@@ -511,7 +472,7 @@ const EventForm = () => {
             </div>
           </div>
 
-          <div className="flex flex-col space-y-3 pt-0 md:pt-28">
+          <div className="flex flex-col w-1/2 space-y-3 pt-0 md:pt-28">
             <ChipsList
               selectedChips={formData.chips}
               onChange={handleChipsChange}
@@ -546,12 +507,6 @@ const EventForm = () => {
           </div>
         </div>
 
-        {/* <Button
-          type="submit"
-          className="px-6 py-2 h-16 bg-[#084be7] text-white text-center text-base font-bold leading-normal w-max inline self-end rounded-none"
-        >
-          Done
-        </Button> */}
         <AnimatedButton onClick={(e) => handleSubmit(e)} />
       </form>
       {isSidebarOpen && (

@@ -32,7 +32,7 @@ const ActivitySelector: React.FC<ActivitySelectorProps> = ({
       <button
         type="button"
         className={`
-          w-full flex items-center gap-3 backdrop-blur-2xl px-4 py-3 rounded-md text-xl font-medium leading-loose
+          w-full flex items-center gap-3 backdrop-blur-2xl px-3 rounded-md text-xl font-medium leading-loose
           ${theme.inputBgColor}
           ${theme.textColor}
           ${theme.placeholderTextColor}
@@ -75,7 +75,7 @@ const ActivitySelector: React.FC<ActivitySelectorProps> = ({
         <div className="absolute w-full bg-gray-800 shadow-lg rounded-lg mt-2 z-10 max-h-40 overflow-y-auto">
           <button
             key="default"
-            className="flex items-center p-3 hover:bg-gray-600 cursor-pointer"
+            className="flex w-full items-center p-3 hover:bg-gray-600 cursor-pointer"
             onClick={() => handleSelectChange("default")}
             type="button"
           >
@@ -103,7 +103,7 @@ const ActivitySelector: React.FC<ActivitySelectorProps> = ({
           {activities.map((activity) => (
             <button
               key={activity.value}
-              className="flex items-center p-3 hover:bg-gray-600 cursor-pointer"
+              className="flex w-full items-center p-3 hover:bg-gray-600 cursor-pointer"
               onClick={() => handleSelectChange(activity.value)}
               type="button"
             >
