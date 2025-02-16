@@ -15,6 +15,16 @@ interface RSVPProps {
 const RSVP: React.FC<RSVPProps> = memo(
   ({ selectedRVSPMoods, requireGuestApproval, onChange }) => {
     const { theme } = useCreateEventTheme();
+
+    const updatedRVSPMoods = selectedRVSPMoods.map((mood): RSVPMood => {
+      const moodName =
+        rsvpMoods.find((rsvpMood) => rsvpMood.value === mood.value)?.name || "";
+      return {
+        ...mood,
+        name: moodName,
+      };
+    });
+
     return (
       <div
         className={`flex flex-col gap-2 p-2 backdrop-blur-2xl ${theme.inputBgColor}`}
@@ -31,17 +41,13 @@ const RSVP: React.FC<RSVPProps> = memo(
             </Button>
           ) : (
             <>
-              {rsvpMoods.map((mood) => (
+              {updatedRVSPMoods.map((mood) => (
                 <RSVPEmojiPicker
                   key={mood.value}
                   mood={mood}
                   theme={theme}
                   onChange={onChange}
-                  selectedRSVPEmoji={
-                    selectedRVSPMoods.find(
-                      (selectedMood) => selectedMood.value === mood.value,
-                    )?.emoji
-                  }
+                  selectedRSVPEmoji={mood.emoji}
                 />
               ))}
             </>
