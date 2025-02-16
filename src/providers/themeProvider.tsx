@@ -16,11 +16,13 @@ import {
 } from "react";
 
 interface ThemeContextType {
+  themeName: ThemeName;
   theme: Theme;
   setThemeName: (themeName: ThemeName) => void;
 }
 
 const defaultTheme: ThemeContextType = {
+  themeName: "light",
   theme: themeStyles.light,
   setThemeName: () => {},
 };
@@ -51,7 +53,11 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
 
   return (
     <ThemeContext.Provider
-      value={{ theme: currentTheme, setThemeName: changeTheme }}
+      value={{
+        themeName: themeName,
+        theme: currentTheme,
+        setThemeName: changeTheme,
+      }}
     >
       {children}
     </ThemeContext.Provider>

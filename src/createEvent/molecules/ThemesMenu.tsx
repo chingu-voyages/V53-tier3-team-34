@@ -1,11 +1,18 @@
 import { type StyleMood, styleMoods } from "@/createEvent/config/styleMoods";
 import { useCreateEventTheme } from "@/providers/themeProvider";
 import { type ThemeName, themeStyles } from "../../providers/themeConfig";
-const ThemesMenu: React.FC = () => {
+interface ThemesMenuProps {
+  ref: React.RefObject<HTMLDivElement | null>;
+}
+
+const ThemesMenu: React.FC<ThemesMenuProps> = ({ ref }) => {
   const { theme, setThemeName } = useCreateEventTheme();
 
   return (
-    <div className="bg-white text-black absolute p-6 flex flex-col space-y-5 h-80 overflow-x-auto z-10 top-[100px]">
+    <div
+      ref={ref}
+      className="bg-white text-black absolute p-6 flex flex-col space-y-5 h-80 overflow-x-auto z-10 top-[100px]"
+    >
       <div className="space-y-3">
         <h1 className="text-black text-2xl font-medium leading-loose">
           Pick A Style

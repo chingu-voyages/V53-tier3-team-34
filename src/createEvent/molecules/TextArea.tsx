@@ -28,7 +28,7 @@ const TextArea: React.FC<TextAreaProps> = memo(
         ${theme.inputHoverBgColor}
         placeholder:text-xl
         focus:border focus:${theme.focusInputBorderColor}
-        w-full p-2
+        p-2
         outline-none
         `}
       />

@@ -66,14 +66,26 @@ export default {
       animation: {
         "infinite-scroll":
           "infinite-scroll var(--scroll-duration) linear infinite",
+          "float": "float 2s infinite",
+          "pulse-scale": "pulse-scale 1s infinite",
       },
       keyframes: {
         "infinite-scroll": {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(-100%)" },
         },
-      },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" }
+        },
+        "pulse-scale": {
+          "0%, 100%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.05)" }
+        }
+      }
     },
   },
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
+
+

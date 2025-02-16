@@ -1,4 +1,4 @@
-export type MoodType = "attending" | "maybe" | "regretfully";
+import { MoodType } from "@prisma/client";
 
 export interface RSVPMood {
   name: string;
@@ -9,32 +9,33 @@ export interface RSVPMood {
 export const rsvpMoods: RSVPMood[] = [
   {
     name: "Attending",
-    value: "attending",
-    emoji: null,
+    value: MoodType.ATTENDING,
+    emoji: "1f970",
   },
   {
     name: "Maybe",
-    value: "maybe",
-    emoji: "1f9d0",
+    value: MoodType.MAYBE,
+    emoji: "1f9d0", // thinking face emoji
   },
   {
     name: "Regretfully",
-    value: "regretfully",
-    emoji: "1f614",
+    value: MoodType.REGRETFULLY,
+    emoji: "1f614", // pensive face emoji
   },
 ];
 
+// Default values without the "name" property
 export const defaultFormValuesRSVPMoods: Omit<RSVPMood, "name">[] = [
   {
-    value: "attending",
+    value: MoodType.ATTENDING,
     emoji: null,
   },
   {
-    value: "maybe",
+    value: MoodType.MAYBE,
     emoji: "1f9d0",
   },
   {
-    value: "regretfully",
+    value: MoodType.REGRETFULLY,
     emoji: "1f614",
   },
 ];

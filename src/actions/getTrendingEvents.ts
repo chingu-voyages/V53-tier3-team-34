@@ -1,13 +1,12 @@
-import { NextResponse } from "next/server";
+"use server";
 import prisma from "../../prisma/client";
 
-const getTrendingEvents = async () => {
+export default async function getTrendingEvents() {
   try {
-    console.log("Fetching events...");
     const events = await prisma.event.findMany({
       where: {
         endDateTime: {
-          lt: new Date(),
+          gt: new Date(),
         },
         isPublic: true,
       },
@@ -25,20 +24,12 @@ const getTrendingEvents = async () => {
     });
 
     if (events) {
-      return NextResponse.json(events, { status: 200 });
+      return events;
     }
 
-    return NextResponse.json(
-      { message: "No events found", data: events },
-      { status: 404 },
-    );
+    return [];
   } catch (error) {
     console.error("Error fetching events:", error);
-    return NextResponse.json(
-      { message: "Error fetching events" },
-      { status: 500 },
-    );
+    return [];
   }
-};
-
-export default getTrendingEvents;
+}

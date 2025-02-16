@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
         {/* Left Section */}
         <div className="flex flex-col gap-8 lg:gap-16">
           {/* Logo Section */}
-          <div className="flex items-center gap-4">
+          <Link href="/" className="flex items-center gap-4">
             <Image
               src="/assets/images/logo.svg"
               alt="Partiyo Logo"
@@ -24,7 +24,7 @@ const Footer: React.FC = () => {
             >
               Partiyo
             </span>
-          </div>
+          </Link>
 
           {/* Social Icons */}
           <div className="flex align-center justify-start gap-4">

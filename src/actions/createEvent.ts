@@ -2,6 +2,7 @@
 
 import prisma from "@/../prisma/client";
 import getUserSession from "@/actions/getUserSession";
+import { rsvpMoods } from "@/createEvent/config/rvspMood";
 import type { EventFormData } from "@/createEvent/templates/EventForm";
 
 export async function createEvent(eventFormData: EventFormData) {
@@ -21,8 +22,14 @@ export async function createEvent(eventFormData: EventFormData) {
     };
   }
 
-  const filteredRVSPMoods = eventFormData.rsvpMoods.filter((mood) => {
-    return mood.value && mood.emoji;
+  const filteredRVSPMoods = eventFormData.rsvpMoods.map((mood) => {
+    return {
+      value: mood.value,
+      emoji:
+        mood.emoji === null
+          ? rsvpMoods.find((m) => m.value === mood.value)?.emoji || null
+          : mood.emoji,
+    };
   });
 
   const filteredChips = eventFormData.chips.filter((chip) => {
@@ -37,7 +44,6 @@ export async function createEvent(eventFormData: EventFormData) {
       description: eventFormData.description,
       imageUrl: eventFormData.imageUrl,
       style: eventFormData.style,
-      reason: eventFormData.reason || "",
       guestHonor: eventFormData.guestHonor,
       host: eventFormData.host,
       userGuestLimit: eventFormData.userGuestLimit,
@@ -58,6 +64,7 @@ export async function createEvent(eventFormData: EventFormData) {
           data: filteredChips,
         },
       },
+      activity: eventFormData.activity,
     },
   });
 }

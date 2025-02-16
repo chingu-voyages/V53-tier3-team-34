@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Menu, Search, X } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { Peralta } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,6 +17,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ onSearch }) => {
+  const { data: session } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
@@ -33,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
     <header className="bg-black text-white p-8 lg:px-16 lg:py-9">
       <div className="flex items-center justify-between lg:justify-start">
         {/* Logo */}
-        <div className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2">
           <Image
             src="/assets/images/logo.svg"
             alt="Partiyo Logo"
@@ -43,7 +45,7 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
           <span className={`text-xl font-bold ${peralta.className}`}>
             Partiyo
           </span>
-        </div>
+        </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden lg:flex items-center justify-center flex-1 mx-8">
@@ -145,17 +147,19 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
 
         {/* Desktop Actions */}
         <div className="hidden xl:flex items-center gap-4">
-          <Link href="/login">
-            <Button
-              type="button"
-              className="text-center text-white text-base font-medium font-['Mona Sans'] leading-normal bg-inherit"
-            >
-              Log In
-            </Button>
-          </Link>
+          {!session && (
+            <Link href="/login">
+              <Button
+                type="button"
+                className="text-center text-white text-base font-medium font-['Mona Sans'] leading-normal bg-inherit"
+              >
+                Log In
+              </Button>
+            </Link>
+          )}
           {/* Added Create event button and changed the blue button text to browse event */}
           <Link href="/events/create">Create Event</Link>
-          <BlueButton text="Browse Events" href="/" />
+          <BlueButton text="Browse Events" href="/events/public" />
         </div>
 
         {/* Mobile Menu Button */}
@@ -178,13 +182,15 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
               <Link href="/search" className="lg:hidden">
                 <p>Search</p>
               </Link>
-              <Link href="/login">
-                <p>Log In</p>
-              </Link>
+              {!session && (
+                <Link href="/login">
+                  <p>Log In</p>
+                </Link>
+              )}
               <Link href="/events/create">
                 <p>Create Events</p>
               </Link>
-              <Link href="/">
+              <Link href="/events/public">
                 <p>Browse Events</p>
               </Link>
             </div>

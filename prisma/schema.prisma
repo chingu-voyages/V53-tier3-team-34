@@ -7,53 +7,98 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum ActivityType {
+  FESTIVAL
+  DJ
+  FIREWORK
+  DRINK
+  FOOD
+  GAME
+  SPORT
+  ART
+  KTV
+  MEET
+  PARTY
+  AFTERNOON_TEA
+  FILM
+  THEATRE
+}
+
+enum MoodType {
+  ATTENDING
+  MAYBE
+  REGRETFULLY
+}
+
+enum ChipType {
+  MUSIC_STYLED
+  FOOD_SERVED
+  BYOY
+  DRESS_CODE
+  SPECIAL_GROUP
+  REGISTRY
+}
+
+enum ResponseStatus {
+  PENDING // For events requiring approval
+  APPROVED // For approved join requests
+  REJECTED // For rejected join requests
+  RSVPED // For events with RSVP moods
+  CANCELLED // If user cancels their RSVP/request
+}
+
 model User {
-  id       String    @id @default(uuid())
-  email    String    @unique
-  password String
-  events   Event[]
-  sessions Session[]
+  id             String          @id @default(uuid())
+  email          String          @unique
+  password       String
+  events         Event[]
+  sessions       Session[]
+  eventResponses EventResponse[]
 }
 
 model Event {
-  id                   String     @id @default(uuid())
+  id                   String          @id @default(uuid())
   title                String
   startDateTime        DateTime
-  endDateTime          DateTime 
+  endDateTime          DateTime
   image                Bytes?
   imageUrl             String?
   style                String?
   description          String?
   guestHonor           String?
   host                 String?
-  requireGuestApproval Boolean    @default(false)
+  requireGuestApproval Boolean         @default(false)
   authorId             String
-  createdAt            DateTime   @default(now())
-  updatedAt            DateTime   @updatedAt
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
   address              String?
   costPerPerson        Float?
-  isOutdoor            Boolean    @default(false)
-  isPublic             Boolean    @default(false)
-  reason               String?
+  isOutdoor            Boolean         @default(false)
+  isPublic             Boolean         @default(false)
   maxGuestLimit        Int?
   userGuestLimit       Int?
   chips                Chip[]
-  author               User       @relation(fields: [authorId], references: [id])
+  author               User            @relation(fields: [authorId], references: [id])
   rsvpMoods            RSVPMood[]
+  activity             ActivityType?
+  responses            EventResponse[]
 }
 
 model RSVPMood {
-  value   String  @unique
-  emoji   String?
-  eventId String?
-  Event   Event?  @relation(fields: [eventId], references: [id])
+  id            Int             @id @default(autoincrement())
+  value         MoodType
+  emoji         String?
+  eventId       String
+  Event         Event           @relation(fields: [eventId], references: [id])
+  EventResponse EventResponse[]
 }
 
 model Chip {
-  value      String  @unique
+  id         Int    @id @default(autoincrement())
+  value      ChipType
   inputValue String
-  eventId    String?
-  Event      Event?  @relation(fields: [eventId], references: [id])
+  eventId    String
+  Event      Event  @relation(fields: [eventId], references: [id])
 }
 
 model Session {
@@ -68,4 +113,21 @@ model ImageType {
   id            String @id @default(uuid())
   imageUrl      String
   imageChipType String
+}
+
+model EventResponse {
+  id             String         @id @default(uuid())
+  eventId        String
+  userId         String
+  status         ResponseStatus
+  rsvpMoodId     Int?
+  numberOfGuests Int            @default(1)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  event    Event     @relation(fields: [eventId], references: [id])
+  user     User      @relation(fields: [userId], references: [id])
+  rsvpMood RSVPMood? @relation(fields: [rsvpMoodId], references: [id])
+
+  @@unique([eventId, userId]) // One response per user per event
 }

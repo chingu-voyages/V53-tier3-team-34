@@ -4,6 +4,7 @@ import prisma from "../../../../prisma/client";
 export async function GET() {
   try {
     const allImages = await prisma.imageType.findMany();
+    console.log(allImages);
 
     if (allImages) {
       return NextResponse.json(allImages, { status: 200 });
