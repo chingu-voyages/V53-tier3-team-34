@@ -71,7 +71,7 @@ const Hero4: React.FC = () => {
       </motion.div>
       <MotionBlueButton
         text={session?.user ? "Browse Events" : "Join Now"}
-        href={session?.user ? "/events" : "/register"}
+        href={session?.user ? "/events/public" : "/register"}
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         exit={{ opacity: 0 }}

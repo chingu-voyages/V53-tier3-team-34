@@ -31,7 +31,8 @@ export default function Signin() {
         redirect: false,
       });
 
-      if (res?.status !== 201) {
+      console.log(res);
+      if (res?.status !== 200) {
         return alert("Invalid credentials. Please try again.");
       }
 

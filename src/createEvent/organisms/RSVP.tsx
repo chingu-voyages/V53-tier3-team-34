@@ -3,8 +3,9 @@ import RSVPEmojiPicker from "../molecules/RSVPEmojiPicker";
 
 import { Button } from "@/components/ui/button";
 import { useCreateEventTheme } from "@/providers/themeProvider";
+import type { MoodType } from "@prisma/client";
 import { memo } from "react";
-import { type MoodType, type RSVPMood, rsvpMoods } from "../config/rvspMood";
+import { type RSVPMood, rsvpMoods } from "../config/rvspMood";
 
 interface RSVPProps {
   requireGuestApproval: boolean;

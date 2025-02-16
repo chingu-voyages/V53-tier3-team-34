@@ -1,23 +1,9 @@
-export type activityType =
-  | "festival"
-  | "dj"
-  | "firework"
-  | "drink"
-  | "food"
-  | "game"
-  | "sport"
-  | "art"
-  | "ktv"
-  | "meet"
-  | "party"
-  | "afternoonTea"
-  | "film"
-  | "theatre";
+import { ActivityType } from "@prisma/client";
 
 export interface ActivityModel {
   icon: React.ReactNode;
   text: string;
-  value: activityType;
+  value: ActivityType;
 }
 
 export const activities: ActivityModel[] = [
@@ -38,7 +24,7 @@ export const activities: ActivityModel[] = [
       </svg>
     ),
     text: "Festival",
-    value: "festival",
+    value: ActivityType.FESTIVAL,
   },
   {
     icon: (
@@ -57,7 +43,7 @@ export const activities: ActivityModel[] = [
       </svg>
     ),
     text: "DJ",
-    value: "dj",
+    value: ActivityType.DJ,
   },
   {
     icon: (
@@ -83,7 +69,7 @@ export const activities: ActivityModel[] = [
       </svg>
     ),
     text: "Firework",
-    value: "firework",
+    value: ActivityType.FIREWORK,
   },
   {
     icon: (
@@ -102,7 +88,7 @@ export const activities: ActivityModel[] = [
       </svg>
     ),
     text: "Drink",
-    value: "drink",
+    value: ActivityType.DRINK,
   },
   {
     icon: (
@@ -145,7 +131,7 @@ export const activities: ActivityModel[] = [
       </svg>
     ),
     text: "Food",
-    value: "food",
+    value: ActivityType.FOOD,
   },
   {
     icon: (
@@ -170,7 +156,7 @@ export const activities: ActivityModel[] = [
       </svg>
     ),
     text: "Sport",
-    value: "sport",
+    value: ActivityType.SPORT,
   },
   {
     icon: (
@@ -189,7 +175,7 @@ export const activities: ActivityModel[] = [
       </svg>
     ),
     text: "Game",
-    value: "game",
+    value: ActivityType.GAME,
   },
   {
     icon: (
@@ -208,7 +194,7 @@ export const activities: ActivityModel[] = [
       </svg>
     ),
     text: "Art",
-    value: "art",
+    value: ActivityType.ART,
   },
   {
     icon: (
@@ -227,7 +213,7 @@ export const activities: ActivityModel[] = [
       </svg>
     ),
     text: "KTV",
-    value: "ktv",
+    value: ActivityType.KTV,
   },
   {
     icon: (
@@ -246,7 +232,7 @@ export const activities: ActivityModel[] = [
       </svg>
     ),
     text: "Meet",
-    value: "meet",
+    value: ActivityType.MEET,
   },
   {
     icon: (
@@ -265,7 +251,7 @@ export const activities: ActivityModel[] = [
       </svg>
     ),
     text: "Party",
-    value: "party",
+    value: ActivityType.PARTY,
   },
   {
     icon: (
@@ -284,7 +270,7 @@ export const activities: ActivityModel[] = [
       </svg>
     ),
     text: "Film",
-    value: "film",
+    value: ActivityType.FILM,
   },
   {
     icon: (
@@ -303,7 +289,7 @@ export const activities: ActivityModel[] = [
       </svg>
     ),
     text: "Afternoon Tea",
-    value: "afternoonTea",
+    value: ActivityType.AFTERNOON_TEA,
   },
   {
     icon: (
@@ -322,6 +308,6 @@ export const activities: ActivityModel[] = [
       </svg>
     ),
     text: "Theatre",
-    value: "theatre",
+    value: ActivityType.THEATRE,
   },
 ];

@@ -1,25 +1,19 @@
+"use server";
 import prisma from "../../prisma/client";
-import getUserSession from "./getUserSession";
 
-const getEvent = async (eventId: string) => {
-  const session = await getUserSession();
-
-  if (!session?.user) {
-    return null;
-  }
-
-  try {
-    const event = await prisma.event.findUnique({
-      where: {
-        id: eventId,
-        authorId: session.userID,
+export default async function getEventDetail(eventID: string) {
+  return await prisma.event.findUnique({
+    where: {
+      id: eventID,
+    },
+    include: {
+      chips: true,
+      rsvpMoods: true,
+      author: {
+        select: {
+          id: true,
+        },
       },
-    });
-    return event;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
-
-export default getEvent;
+    },
+  });
+}

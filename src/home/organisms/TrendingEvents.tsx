@@ -1,11 +1,11 @@
 "use client";
+import getTrendingEvents from "@/actions/getTrendingEvents";
 import { defaultEvents } from "@/app/(pages)/events/public/dummyEvents";
 import { motion } from "framer-motion";
 import { Mona_Sans } from "next/font/google";
 import type React from "react";
 import { useEffect, useState } from "react";
 import EventCard, { type EventCardInfo } from "../molecules/EventCard";
-
 const monaSans = Mona_Sans({
   weight: "600",
   subsets: ["latin"],
@@ -18,14 +18,9 @@ const TrendingEvents: React.FC = () => {
   const itemWidth = 292; // Width of each event card
 
   useEffect(() => {
-    const abortController = new AbortController();
     const fetchTrendingEvents = async () => {
       try {
-        const response = await fetch("/api/events/getTrendingEvents", {
-          signal: abortController.signal,
-        });
-        if (!response.ok) throw new Error("Failed to fetch trending events");
-        const data = await response.json();
+        const data = await getTrendingEvents();
         if (data.length === 0) {
           setTrendingEvents(defaultEvents);
         } else {
@@ -37,12 +32,6 @@ const TrendingEvents: React.FC = () => {
     };
 
     fetchTrendingEvents();
-
-    return () => {
-      if (abortController.signal) {
-        abortController.abort();
-      }
-    };
   }, []);
 
   useEffect(() => {

@@ -5,11 +5,12 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { useCreateEventTheme } from "@/providers/themeProvider";
-import { activities, type activityType } from "../config/activityConfig";
+import type { ActivityType } from "@prisma/client";
+import { activities } from "../config/activityConfig";
 
 interface ActivitySelectorProps {
   selectedActivity: string | null;
-  onChange: (activityValue: activityType) => void;
+  onChange: (activityValue: ActivityType) => void;
 }
 
 const ActivitySelector: React.FC<ActivitySelectorProps> = ({

@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useCreateEventTheme } from "@/providers/themeProvider";
+import type { ChipType } from "@prisma/client";
 import { Inter } from "next/font/google";
 import type React from "react";
 import { type ChangeEvent, useEffect, useState } from "react";
@@ -11,7 +12,7 @@ import type { EventFormData } from "../templates/EventForm";
 interface ChipsListProps {
   selectedChips: EventFormData["chips"];
   onChange: (
-    chipValue: string,
+    chipValue: ChipType,
     inputValue: string,
     isSelected: boolean,
   ) => void;

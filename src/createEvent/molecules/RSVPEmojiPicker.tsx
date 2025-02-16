@@ -3,6 +3,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import type { MoodType } from "@prisma/client";
 import EmojiPicker, {
   Emoji,
   EmojiStyle,
@@ -10,7 +11,7 @@ import EmojiPicker, {
 } from "emoji-picker-react";
 import type React from "react";
 import type { Theme } from "../../providers/themeConfig";
-import type { MoodType, RSVPMood } from "../config/rvspMood";
+import type { RSVPMood } from "../config/rvspMood";
 
 interface RVSPEmojiPickerProps {
   mood: RSVPMood;

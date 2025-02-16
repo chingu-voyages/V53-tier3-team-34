@@ -5,18 +5,14 @@ import {
   getEventFromIndexedDB,
   saveEventToIndexedDB,
 } from "@/app/(pages)/events/create/indexedDBActions";
-import { Button } from "@/components/ui/button";
 import ImagePicker from "@/createEvent/organisms/ImagePicker";
 import { useCreateEventTheme } from "@/providers/themeProvider";
+import { ActivityType, ChipType, MoodType } from "@prisma/client";
 import { useSession } from "next-auth/react";
-import { Peralta } from "next/font/google";
-import Image from "next/image";
-import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { z } from "zod";
-import type { activityType } from "../config/activityConfig";
 import { icons } from "../config/icons";
-import { type MoodType, defaultFormValuesRSVPMoods } from "../config/rvspMood";
+import { defaultFormValuesRSVPMoods } from "../config/rvspMood";
 import {
   type DateRange,
   getDateAdjustedForTimezone,
@@ -33,29 +29,7 @@ import {
   SettingsSidebar,
   TopMenu,
 } from "../organisms";
-
-const peralta = Peralta({
-  weight: "400",
-  subsets: ["latin"],
-});
-
-// Define your valid activity types as an enum
-const activityTypeEnum = z.enum([
-  "festival",
-  "dj",
-  "firework",
-  "drink",
-  "food",
-  "game",
-  "sport",
-  "art",
-  "ktv",
-  "meet",
-  "party",
-  "afternoonTea",
-  "film",
-  "theatre",
-]);
+import Header from "../organisms/Header";
 
 const eventFormSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -64,7 +38,6 @@ const eventFormSchema = z.object({
   description: z.string().nullable(),
   style: z.string().nullable(),
   imageUrl: z.string().url().nullable(),
-  reason: z.string().nullable(),
   guestHonor: z.string().nullable(),
   host: z.string().nullable(),
   userGuestLimit: z.number().nullable(),
@@ -76,12 +49,14 @@ const eventFormSchema = z.object({
   requireGuestApproval: z.boolean().default(false),
   rsvpMoods: z.array(
     z.object({
-      value: z.enum(["attending", "maybe", "regretfully"]),
+      value: z.nativeEnum(MoodType),
       emoji: z.string().nullable(),
     }),
   ),
-  chips: z.array(z.object({ value: z.string(), inputValue: z.string() })),
-  activity: activityTypeEnum.nullable(),
+  chips: z.array(
+    z.object({ value: z.nativeEnum(ChipType), inputValue: z.string() }),
+  ),
+  activity: z.nativeEnum(ActivityType).nullable(),
 });
 
 export type EventFormData = z.infer<typeof eventFormSchema>;
@@ -92,7 +67,7 @@ export type BooleanKeys<T> = {
 
 const EventForm = () => {
   const { data: session } = useSession();
-  const { theme } = useCreateEventTheme();
+  const { themeName, theme } = useCreateEventTheme();
   const [isFormMounted, setIsFormMounted] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -103,8 +78,7 @@ const EventForm = () => {
       new Date(new Date().getTime() + 15 * 60 * 1000),
     ),
     description: null,
-    style: null,
-    reason: null,
+    style: themeName,
     imageUrl: null,
     guestHonor: null,
     host: null,
@@ -148,6 +122,10 @@ const EventForm = () => {
     setFormData((prevState) => ({
       ...prevState,
       [name]: !prevState[name], // Toggle the value
+      rsvpMoods:
+        name === "requireGuestApproval" && prevState[name]
+          ? defaultFormValuesRSVPMoods
+          : [],
     }));
   }, []);
 
@@ -160,35 +138,32 @@ const EventForm = () => {
     }));
   }, []);
 
-  const handleChipsChange = useCallback(
-    (chipValue: string, inputValue: string, isSelected: boolean) => {
-      setFormData((prevState) => {
-        const chips = prevState.chips;
-        const existingChipIndex = chips.findIndex(
-          (chip) => chip.value === chipValue,
-        );
+  const handleChipsChange = (
+    chipValue: ChipType,
+    inputValue: string,
+    isSelected: boolean,
+  ) => {
+    const chips = formData.chips;
+    const existingChipIndex = chips.findIndex(
+      (chip) => chip.value === chipValue,
+    );
 
-        if (!isSelected) {
-          chips.splice(existingChipIndex, 1);
-        } else if (existingChipIndex === -1) {
-          chips.push({ value: chipValue, inputValue });
-        } else {
-          const chip = chips[existingChipIndex];
-          chip.inputValue = inputValue;
-        }
+    if (!isSelected) {
+      chips.splice(existingChipIndex, 1);
+    } else if (existingChipIndex === -1) {
+      chips.push({ value: chipValue, inputValue });
+    } else {
+      const chip = chips[existingChipIndex];
+      chip.inputValue = inputValue;
+    }
 
-        // console.log(chips);
+    const updatedData = {
+      ...formData,
+      chips: chips,
+    };
 
-        const updatedData = {
-          ...prevState,
-          chips: chips, // React state maintains 'chips'
-        };
-
-        return updatedData;
-      });
-    },
-    [],
-  );
+    setFormData(updatedData);
+  };
 
   const handleImageChange = useCallback((imageURL?: string) => {
     if (imageURL) {
@@ -235,7 +210,7 @@ const EventForm = () => {
     }));
   }, []);
 
-  const onChangeActivity = useCallback((activityValue: activityType) => {
+  const onChangeActivity = useCallback((activityValue: ActivityType) => {
     setFormData((prevState) => ({
       ...prevState,
       activity: activityValue,
@@ -273,8 +248,8 @@ const EventForm = () => {
       const saveData = async () => {
         if (typeof window !== "undefined") {
           try {
-            console.log("Chips data from eventPage", formData.chips);
-            console.log("Activity data from eventPage", formData.activity);
+            // console.log("Chips data from eventPage", formData.chips);
+            // console.log("Activity data from eventPage", formData.activity);
             await saveEventToIndexedDB(formData);
           } catch (error) {
             console.error("Failed to save event data to IndexedDB", error);
@@ -295,31 +270,8 @@ const EventForm = () => {
         isVisible={showImagePicker}
         onClose={() => handleShowImagePicker(false)}
       />
-      <header className="flex justify-between items-center bg-red-600 p-2 md:py-9 md:px-16">
-        <Link href="/" className="flex items-center">
-          <Image
-            src="/assets/images/logo.svg"
-            alt="Partiyo Logo"
-            width={56}
-            height={56}
-          />
-          <h1
-            className={`text-white pl-2 text-4xl font-normal ${peralta.className} leading-tight`}
-          >
-            Partiyo
-          </h1>
-        </Link>
-        {!session && (
-          <Link href="/register">
-            <Button
-              className="px-6 py-2 h-16 bg-[#084be7] text-white text-center text-base font-bold leading-normal w-max inline self-end rounded-none"
-              type="button"
-            >
-              Sign In
-            </Button>
-          </Link>
-        )}
-      </header>
+
+      <Header />
 
       <form
         onSubmit={handleSubmit}
@@ -355,17 +307,6 @@ const EventForm = () => {
                 showCompare={false}
                 align="start"
                 onUpdate={updateDateRange}
-              />
-
-              <Input
-                icon={icons.cake}
-                name="reason"
-                placeholder="Reason to Celebrate"
-                value={formData.reason || ""}
-                onChange={handleChange}
-                isRequired={true}
-                parentClassName="h-10"
-                className="text-xl placeholder:text-xl font-medium leading-loose"
               />
 
               <Input

@@ -25,10 +25,10 @@ const EventCard: React.FC<EventCardProps> = ({
   textColor,
 }) => {
   return (
-    <Link href={`/events/${id}`}>
+    <Link href={`/events/${id}`} className="self-start">
       <motion.div
         className={
-          "flex flex-col gap-2 align-start min-w-[292px] max-w-[292px] self-start"
+          "flex flex-col gap-2 align-start min-w-[292px] max-w-[292px]"
         }
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -79,7 +79,14 @@ const EventCard: React.FC<EventCardProps> = ({
             textColor ? textColor : "text-[#084be7]"
           } text-base text-wrap leading-loose break-words ${inter.className}`}
         >
-          {startDateTime.toString()}
+          {new Date(startDateTime).toLocaleString("en-GB", {
+            hour12: true,
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
         </div>
         <div
           className={`${

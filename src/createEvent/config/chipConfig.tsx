@@ -1,7 +1,8 @@
+import { ChipType } from "@prisma/client";
 export interface ChipModel {
   icon: React.ReactNode;
   text: string;
-  value: string;
+  value: ChipType;
   inputValue?: string;
   maxCountCharacters: number;
   placeholderText?: string;
@@ -36,7 +37,7 @@ export const chips: ChipModel[] = [
       </svg>
     ),
     text: "Music Styled",
-    value: "musicStyled",
+    value: ChipType.MUSIC_STYLED,
     maxCountCharacters: 200,
     placeholderText: "Www.Spotify.com",
   },
@@ -66,7 +67,7 @@ export const chips: ChipModel[] = [
       </svg>
     ),
     text: "Food Served",
-    value: "foodServed",
+    value: ChipType.FOOD_SERVED,
     maxCountCharacters: 200,
     placeholderText: "Chinese Food like Dumplings",
   },
@@ -91,7 +92,7 @@ export const chips: ChipModel[] = [
       </svg>
     ),
     text: "BYOY",
-    value: "byoy",
+    value: ChipType.BYOY,
     maxCountCharacters: 200,
     placeholderText:
       "Yes, it's BYOB! Feel free to bring whatever you’d like to drink.",
@@ -114,7 +115,7 @@ export const chips: ChipModel[] = [
       </svg>
     ),
     text: "Dress Code",
-    value: "dressCode",
+    value: ChipType.DRESS_CODE,
     maxCountCharacters: 200,
     placeholderText: "It’s a red theme—get creative with your outfit!",
   },
@@ -142,7 +143,7 @@ export const chips: ChipModel[] = [
       </svg>
     ),
     text: "Registry",
-    value: "registry",
+    value: ChipType.REGISTRY,
     maxCountCharacters: 200,
     placeholderText: "[Insert Registry Link]",
     placeholderClassName: "italic  placeholder-[#094ce7]",
@@ -174,7 +175,7 @@ export const chips: ChipModel[] = [
       </svg>
     ),
     text: "Special Group",
-    value: "specialGroup",
+    value: ChipType.SPECIAL_GROUP,
     maxCountCharacters: 200,
     placeholderText:
       "No, this is a casual get-together for friends and family.",

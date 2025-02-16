@@ -18,15 +18,10 @@ const Signup = () => {
     event.preventDefault();
     setIsLoading(true);
     try {
-      const res = await RegisterUser({
+      await RegisterUser({
         email,
         password,
       });
-
-      if (res.status !== 201) {
-        // console.error("Signup submit server error:", res);
-        return alert("We could not create your account. Please try again.");
-      }
 
       const referer = document.referrer;
 
