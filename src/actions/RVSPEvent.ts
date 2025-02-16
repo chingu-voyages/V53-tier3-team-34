@@ -19,14 +19,40 @@ const RVSPEvent = async (eventID: string, rsvpMoodId: number) => {
   }
 
   try {
-    await prisma.eventResponse.create({
-      data: {
-        eventId: eventID,
-        userId: session.userID,
-        status: "RSVPED",
-        rsvpMoodId: rsvpMoodId,
+    const existingResponse = await prisma.eventResponse.findUnique({
+      where: {
+        eventId_userId: {
+          eventId: eventID,
+          userId: session.userID,
+        },
       },
     });
+
+    if (existingResponse) {
+      if (existingResponse.rsvpMoodId !== rsvpMoodId) {
+        await prisma.eventResponse.update({
+          where: {
+            eventId_userId: {
+              eventId: eventID,
+              userId: session.userID,
+            },
+          },
+          data: {
+            rsvpMoodId: rsvpMoodId,
+            status: "RSVPED",
+          },
+        });
+      }
+    } else {
+      await prisma.eventResponse.create({
+        data: {
+          eventId: eventID,
+          userId: session.userID,
+          status: "RSVPED",
+          rsvpMoodId: rsvpMoodId,
+        },
+      });
+    }
   } catch (error) {
     console.error("Error in RVSP Event : ", error);
     throw new Error("Something went wrong. Please try again.");
