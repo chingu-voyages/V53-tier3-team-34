@@ -10,9 +10,11 @@ export default async function getFilteredEvents(
       where: {
         address: {
           contains: location,
+          mode: "insensitive",
         },
         title: {
           contains: title,
+          mode: "insensitive",
         },
         isPublic: true,
       },

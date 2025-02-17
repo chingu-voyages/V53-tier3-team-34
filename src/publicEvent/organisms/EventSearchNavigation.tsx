@@ -1,5 +1,5 @@
 "use client";
-import queriedEvents from "@/app/(pages)/events/public/queryEvents";
+import getFilteredEvents from "@/actions/getFilteredEvents";
 import type { EventCardInfo } from "@/home/molecules/EventCard";
 import { useSearchParams } from "next/navigation";
 import type React from "react";
@@ -15,7 +15,7 @@ const EventSearchNavigation: React.FC = () => {
 
   useEffect(() => {
     const fetchEvents = async () => {
-      const foundEvents = await queriedEvents({ title, location });
+      const foundEvents = await getFilteredEvents(title, location);
       setEvents(foundEvents);
     };
     fetchEvents();
