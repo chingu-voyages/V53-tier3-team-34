@@ -3,23 +3,67 @@ import getFilteredEvents from "@/actions/getFilteredEvents";
 import type { EventCardInfo } from "@/home/molecules/EventCard";
 import { useSearchParams } from "next/navigation";
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import EventList from "./EventList";
 import EventNotFound from "./EventNotFound";
 
 const EventSearchNavigation: React.FC = () => {
   const searchParams = useSearchParams();
-  const title = searchParams.get("title") || "";
-  const location = searchParams.get("location") || "";
+  const title = searchParams.get("title")?.trim() || "";
+  const location = searchParams.get("location")?.trim() || "";
+  const fromDate = searchParams.get("from") || "";
+  const toDate = searchParams.get("to") || "";
+  const minPrice = searchParams.get("price[0]") || "";
+  const maxPrice = searchParams.get("price[1]") || "";
   const [events, setEvents] = useState<EventCardInfo[]>([]);
 
+  const price = useMemo<[number, number]>(
+    () => [
+      minPrice ? Number.parseFloat(minPrice) : 0,
+      maxPrice ? Number.parseFloat(maxPrice) : Number.POSITIVE_INFINITY,
+    ],
+    [minPrice, maxPrice],
+  );
+
+  // useEffect(() => {
+  //   // Avoid fetching if no search filters are provided
+  //   if (
+  //     (!title && !location) ||
+  //     (price[0] === 0 && price[1] === Number.POSITIVE_INFINITY)
+  //   ) {
+  //     setEvents([]);
+  //     return;
+  //   }
+
+  //   const fetchEvents = async () => {
+  //     const foundEvents = await getFilteredEvents(title, location, price);
+  //     setEvents(foundEvents);
+  //   };
+
+  //   fetchEvents();
+  // }, [title, location, price]);
+
+  const from = searchParams.get("from") || "";
+  const to = searchParams.get("to") || "";
+
+  const chipText = searchParams.get("chipText") || "";
+
   useEffect(() => {
-    const fetchEvents = async () => {
-      const foundEvents = await getFilteredEvents(title, location);
-      setEvents(foundEvents);
-    };
+    async function fetchEvents() {
+      const filteredEvents = await getFilteredEvents(
+        title,
+        location,
+        price,
+        from,
+        to,
+        chipText,
+      );
+
+      setEvents(filteredEvents);
+    }
+
     fetchEvents();
-  }, [title, location]);
+  }, [title, location, price, from, to, chipText]);
 
   return (
     <section className="flex flex-col items-center">

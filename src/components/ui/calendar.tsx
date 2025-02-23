@@ -5,13 +5,7 @@ import { cn } from "@/lib/utils";
 import { differenceInCalendarDays } from "date-fns";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import * as React from "react";
-import {
-  DayPicker,
-  type DayPickerProps,
-  labelNext,
-  labelPrevious,
-  useDayPicker,
-} from "react-day-picker";
+import { DayPicker, type DayPickerProps, useDayPicker } from "react-day-picker";
 
 export type CalendarProps = DayPickerProps & {
   /**
