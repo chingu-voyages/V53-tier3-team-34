@@ -329,7 +329,7 @@ const EventForm = () => {
             if (response?.eventId && formData.id === "0") {
               setFormData((prev) => ({ ...prev, id: response.eventId }));
             }
-            console.log("Id for response", response.eventId);
+            console.log("Id for response", response.eventBody);
             console.log("Id for eventId", formData.id);
             // console.log("Chips data from eventPage", formData.chips);
             // console.log("Activity data from eventPage", formData.activity);

@@ -190,6 +190,7 @@ export async function createOrUpdateEvent(eventFormData: EventFormData) {
       };
     }
     let eventId = null;
+    let eventBody = null;
 
     const filteredRVSPMoods = eventFormData.rsvpMoods.map((mood) => {
       return {
@@ -241,6 +242,7 @@ export async function createOrUpdateEvent(eventFormData: EventFormData) {
         },
       });
       eventId = updatedEvent.id;
+      eventBody = updatedEvent;
     } else {
       // Create new event
       // Prepare data for new event
@@ -270,8 +272,9 @@ export async function createOrUpdateEvent(eventFormData: EventFormData) {
       });
       console.log("New Event Created:", newEvent.id);
       eventId = newEvent.id;
+      eventBody = newEvent;
     }
-    return { status: 200, eventId };
+    return { status: 200, eventId, eventBody };
   } catch (error) {
     console.error("Error creating/updating event:", error);
     return { status: 500, body: "Internal Server Error" };
