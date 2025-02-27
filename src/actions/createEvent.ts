@@ -291,6 +291,18 @@ export async function createOrUpdateEvent(eventFormData: EventFormData) {
       return { status: 401, body: "Unauthorized" };
     }
 
+    const filteredRVSPMoods = eventFormData.rsvpMoods.map((mood) => {
+      return {
+        value: mood.value,
+        emoji:
+          mood.emoji === null
+            ? rsvpMoods.find((m) => m.value === mood.value)?.emoji || null
+            : mood.emoji,
+      };
+    });
+    const filteredChips = eventFormData.chips.filter(
+      (chip) => chip.value && chip.inputValue,
+    );
     let eventId = null;
 
     let existingEvent = null;
