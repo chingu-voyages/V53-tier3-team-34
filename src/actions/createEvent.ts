@@ -265,7 +265,7 @@ export async function createOrUpdateEvent(eventFormData: EventFormData) {
           activity: eventFormData.activity,
         },
       });
-
+      console.log("New Event Created:", newEvent.id);
       return { eventId: newEvent.id };
     }
   } catch (error) {
