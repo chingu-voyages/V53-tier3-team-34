@@ -14,6 +14,8 @@ import EventDetail from "../_organisms/EventDetail";
 import Footer from "../_organisms/Footer";
 import TopMenu from "../_organisms/TopMenu";
 
+import ShareModal from "../_organisms/ShareModal";
+
 export interface ChipInfo extends Chip {
   icon: React.ReactNode;
   label: string;
@@ -30,12 +32,21 @@ export interface PreviewFormData extends EventFormData {
 
 const PreviewEvent = () => {
   const { theme, setThemeName } = useCreateEventTheme();
+  // const [isClicked, setIsClicked] = useState({
+  //   previewing: true,
+  //   copy: false,
+  // });
+
   const [isClicked, setIsClicked] = useState({
     previewing: true,
     copy: false,
+    showShareModal: false,
   });
 
+  const [shareLink, setShareLink] = useState("");
+
   const [eventData, setEventData] = useState<PreviewFormData>({
+    id: "0", // Default ID is 0
     title: "",
     startDateTime: new Date(),
     endDateTime: new Date(new Date().setHours(new Date().getHours() + 1)),
@@ -51,6 +62,7 @@ const PreviewEvent = () => {
     costPerPerson: null,
     isPublic: false,
     requireGuestApproval: false,
+    status: "TEMPORARY",
     rsvpMoods: [],
     chips: [],
     activity: null,
@@ -66,7 +78,7 @@ const PreviewEvent = () => {
             cachedData.startDateTime = getDateAdjustedForTimezone(
               new Date(cachedData.startDateTime),
             );
-            // console.log("Chips Data in Preview page", cachedData.chips);
+            console.log("Chips Data in Preview page", cachedData);
 
             cachedData.endDateTime = getDateAdjustedForTimezone(
               new Date(cachedData.endDateTime),
@@ -146,11 +158,31 @@ const PreviewEvent = () => {
     loadData(); // Run the async function
   }, [setThemeName]);
 
-  const handleClick = (target: "previewing" | "copy") => {
-    setIsClicked((prevState) => ({
-      previewing: target === "previewing" ? !prevState.previewing : false,
-      copy: target === "copy" ? !prevState.copy : false,
-    }));
+  // const handleClick = (target: "previewing" | "copy") => {
+  //   setIsClicked((prevState) => ({
+  //     previewing: target === "previewing" ? !prevState.previewing : false,
+  //     copy: target === "copy" ? !prevState.copy : false,
+  //   }));
+  // };
+
+  const handleClick = async (target: "previewing" | "copy") => {
+    if (target === "copy") {
+      console.log(eventData.id);
+      const generatedLink = `https://yourdomain.com/event/${eventData.id}`;
+
+      setShareLink(generatedLink);
+      setIsClicked((prevState) => ({
+        ...prevState,
+        showShareModal: true,
+        copy: true,
+      }));
+    } else {
+      setIsClicked((prevState) => ({
+        ...prevState,
+        previewing: true,
+        showShareModal: false,
+      }));
+    }
   };
 
   if (!eventData) {
@@ -173,6 +205,18 @@ const PreviewEvent = () => {
       <main
         className={`text-white h-max lg:h-full flex flex-col items-center justify-between bg-cover ${theme.pageBgImage}`}
       >
+        {isClicked.showShareModal && (
+          <ShareModal
+            shareLink={shareLink}
+            onClose={() =>
+              setIsClicked((prevState) => ({
+                ...prevState,
+                showShareModal: false,
+              }))
+            }
+          />
+        )}
+
         <div className="flex flex-col items-start text-white px-20">
           <TopMenu isClicked={isClicked} handleClick={handleClick} />
           <EventDetail eventData={eventData} />

@@ -1,5 +1,5 @@
 "use client";
-import { createEvent } from "@/actions/createEvent";
+import { createOrUpdateEvent } from "@/actions/createEvent";
 import {
   clearIndexedDB,
   getEventFromIndexedDB,
@@ -31,7 +31,36 @@ import {
 } from "../organisms";
 import Header from "../organisms/Header";
 
+// const eventFormSchema = z.object({
+//   title: z.string().min(1, "Title is required"),
+//   startDateTime: z.date(),
+//   endDateTime: z.date(),
+//   description: z.string().nullable(),
+//   style: z.string().nullable(),
+//   imageUrl: z.string().url().nullable(),
+//   guestHonor: z.string().nullable(),
+//   host: z.string().nullable(),
+//   userGuestLimit: z.number().nullable(),
+//   maxGuestLimit: z.number().nullable(),
+//   address: z.string().nullable(),
+//   isOutdoor: z.boolean().default(false),
+//   costPerPerson: z.number().nullable(),
+//   isPublic: z.boolean().default(false),
+//   requireGuestApproval: z.boolean().default(false),
+//   rsvpMoods: z.array(
+//     z.object({
+//       value: z.nativeEnum(MoodType),
+//       emoji: z.string().nullable(),
+//     }),
+//   ),
+//   chips: z.array(
+//     z.object({ value: z.nativeEnum(ChipType), inputValue: z.string() }),
+//   ),
+//   activity: z.nativeEnum(ActivityType).nullable(),
+// });
+
 const eventFormSchema = z.object({
+  id: z.string().default("0"), // Add ID with default value 0
   title: z.string().min(1, "Title is required"),
   startDateTime: z.date(),
   endDateTime: z.date(),
@@ -47,6 +76,7 @@ const eventFormSchema = z.object({
   costPerPerson: z.number().nullable(),
   isPublic: z.boolean().default(false),
   requireGuestApproval: z.boolean().default(false),
+  status: z.enum(["TEMPORARY", "PERMANENT"]).default("TEMPORARY"),
   rsvpMoods: z.array(
     z.object({
       value: z.nativeEnum(MoodType),
@@ -71,7 +101,31 @@ const EventForm = () => {
   const [isFormMounted, setIsFormMounted] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  // const [formData, setFormData] = useState<EventFormData>({
+  //   title: "",
+  //   startDateTime: getDateAdjustedForTimezone(new Date()),
+  //   endDateTime: getDateAdjustedForTimezone(
+  //     new Date(new Date().getTime() + 15 * 60 * 1000),
+  //   ),
+  //   description: null,
+  //   style: themeName,
+  //   imageUrl: null,
+  //   guestHonor: null,
+  //   host: null,
+  //   userGuestLimit: null,
+  //   maxGuestLimit: null,
+  //   address: null,
+  //   isOutdoor: false,
+  //   costPerPerson: null,
+  //   isPublic: false,
+  //   requireGuestApproval: false,
+  //   rsvpMoods: defaultFormValuesRSVPMoods,
+  //   chips: [],
+  //   activity: null,
+  // });
+
   const [formData, setFormData] = useState<EventFormData>({
+    id: "0", // Default ID is 0
     title: "",
     startDateTime: getDateAdjustedForTimezone(new Date()),
     endDateTime: getDateAdjustedForTimezone(
@@ -89,6 +143,7 @@ const EventForm = () => {
     costPerPerson: null,
     isPublic: false,
     requireGuestApproval: false,
+    status: "TEMPORARY",
     rsvpMoods: defaultFormValuesRSVPMoods,
     chips: [],
     activity: null,
@@ -175,24 +230,45 @@ const EventForm = () => {
     }
   }, []);
 
-  const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    clearIndexedDB();
+  // const handleSubmit = async (
+  //   e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>,
+  // ) => {
+  //   clearIndexedDB();
+  //   try {
+  //     e.preventDefault();
+  //     eventFormSchema.parse(formData); // Will throw an error if validation fails
+  //     if (!session) {
+  //       saveEventToIndexedDB(formData);
+  //       console.log(formData);
+  //       return;
+  //     }
+  //     console.log("Form is valid! Submitting...");
+  //     console.log("Form Data:", formData);
+  //     await createEvent(formData);
+  //     // Proceed with submission logic
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!session) {
+      alert("You must be signed in to finalize the event.");
+      return;
+    }
+
     try {
-      e.preventDefault();
-      eventFormSchema.parse(formData); // Will throw an error if validation fails
-      if (!session) {
-        saveEventToIndexedDB(formData);
-        console.log(formData);
-        return;
+      setFormData((prev) => ({ ...prev, status: "PERMANENT" }));
+      eventFormSchema.parse(formData);
+      const response = await createOrUpdateEvent(formData);
+      if (response?.eventId && formData.id === "0") {
+        setFormData((prev) => ({ ...prev, id: response.eventId }));
       }
-      console.log("Form is valid! Submitting...");
-      console.log("Form Data:", formData);
-      await createEvent(formData);
-      // Proceed with submission logic
-    } catch (e) {
-      console.log(e);
+      clearIndexedDB();
+    } catch (error) {
+      console.log("Error finalizing event:", error);
     }
   };
 
@@ -248,9 +324,19 @@ const EventForm = () => {
       const saveData = async () => {
         if (typeof window !== "undefined") {
           try {
+            eventFormSchema.parse(formData);
+            const response = await createOrUpdateEvent(formData);
+            if (response?.eventId && formData.id === "0") {
+              setFormData((prev) => ({ ...prev, id: response.eventId }));
+            }
+            console.log("Id for eventId", formData.id);
             // console.log("Chips data from eventPage", formData.chips);
             // console.log("Activity data from eventPage", formData.activity);
-            await saveEventToIndexedDB(formData);
+            if (response?.eventId && formData.id === "0") {
+              await saveEventToIndexedDB({ ...formData, id: response.eventId });
+            } else {
+              await saveEventToIndexedDB(formData);
+            }
           } catch (error) {
             console.error("Failed to save event data to IndexedDB", error);
           }

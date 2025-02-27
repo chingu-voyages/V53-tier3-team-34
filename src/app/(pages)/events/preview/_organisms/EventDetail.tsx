@@ -77,7 +77,7 @@ const EventDetail: React.FC<EventDetailProps> = ({
   ];
 
   return (
-    <div className="gap-6 grid grid-flow-row-dense auto-rows-auto lg:grid-flow-col-dense w-full items-start justify-center gap-10 items-stretch justify-items-start ">
+    <div className="gap-6 h-full pb-3 grid grid-flow-row-dense auto-rows-auto lg:grid-flow-col-dense w-full items-start justify-center gap-10 items-stretch justify-items-start ">
       {/* 1) Image in a relative container */}
       <Image
         src={imageUrl || "/assets/images/events/defaultEvent.png"}

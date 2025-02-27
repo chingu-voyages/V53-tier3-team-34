@@ -12,7 +12,7 @@ const TopMenu: React.FC<TopMenuProps> = ({ isClicked, handleClick }) => {
   const { theme } = useCreateEventTheme();
   return (
     <div
-      className={`mb-4 backdrop-blur-2xl max-w-screen md:w-max justify-start items-center flex overflow-hidden  ${theme.inputBgColor} ${theme.textColor} text-base `}
+      className={` backdrop-blur-2xl max-w-screen md:w-max justify-start items-center flex overflow-hidden  ${theme.inputBgColor} ${theme.textColor} text-base `}
     >
       {/* “Previewing” Button */}
       <button
@@ -103,6 +103,14 @@ const TopMenu: React.FC<TopMenuProps> = ({ isClicked, handleClick }) => {
       {/* Divider line */}
       <span className={`w-px h-14 ${theme.dividerColor}`} />
       {/* “Copy” Button */}
+      {/* <button
+        type="button"
+        className={`flex items-center gap-[18px] px-4 py-6 leading-tight self-stretch ${
+          isClicked.copy && "bg-black/20"
+        }`}
+        onClick={() => handleClick("copy")}
+      > */}
+
       <button
         type="button"
         className={`flex items-center gap-[18px] px-4 py-6 leading-tight self-stretch ${

@@ -1,27 +1,193 @@
-"use server";
+// "use server";
 
+// import prisma from "@/../prisma/client";
+// import getUserSession from "@/actions/getUserSession";
+// import { rsvpMoods } from "@/createEvent/config/rvspMood";
+// import type { EventFormData } from "@/createEvent/templates/EventForm";
+
+// export async function createEvent(eventFormData: EventFormData) {
+//   const session = await getUserSession();
+
+//   if (!eventFormData) {
+//     return {
+//       status: 400,
+//       body: "Bad request",
+//     };
+//   }
+
+//   if (!session?.user) {
+//     return {
+//       status: 401,
+//       body: "Unauthorized",
+//     };
+//   }
+
+//   const filteredRVSPMoods = eventFormData.rsvpMoods.map((mood) => {
+//     return {
+//       value: mood.value,
+//       emoji:
+//         mood.emoji === null
+//           ? rsvpMoods.find((m) => m.value === mood.value)?.emoji || null
+//           : mood.emoji,
+//     };
+//   });
+
+//   const filteredChips = eventFormData.chips.filter((chip) => {
+//     return chip.value && chip.inputValue;
+//   });
+
+//   await prisma.event.create({
+//     data: {
+//       title: eventFormData.title,
+//       startDateTime: eventFormData.startDateTime,
+//       endDateTime: eventFormData.endDateTime,
+//       description: eventFormData.description,
+//       imageUrl: eventFormData.imageUrl,
+//       style: eventFormData.style,
+//       guestHonor: eventFormData.guestHonor,
+//       host: eventFormData.host,
+//       userGuestLimit: eventFormData.userGuestLimit,
+//       maxGuestLimit: eventFormData.maxGuestLimit,
+//       address: eventFormData.address,
+//       isOutdoor: eventFormData.isOutdoor,
+//       costPerPerson: eventFormData.costPerPerson,
+//       isPublic: eventFormData.isPublic,
+//       requireGuestApproval: eventFormData.requireGuestApproval,
+//       authorId: session.userID,
+//       rsvpMoods: {
+//         createMany: {
+//           data: filteredRVSPMoods,
+//         },
+//       },
+//       chips: {
+//         createMany: {
+//           data: filteredChips,
+//         },
+//       },
+//       activity: eventFormData.activity,
+//     },
+//   });
+// }
+
+// "use server";
+// import prisma from "@/../prisma/client";
+// import getUserSession from "@/actions/getUserSession";
+// import { rsvpMoods } from "@/createEvent/config/rvspMood";
+// import type { EventFormData } from "@/createEvent/templates/EventForm";
+// import { EventStatus, PrismaClient } from "@prisma/client";
+
+// export async function createOrUpdateEvent(eventFormData: EventFormData) {
+//   const session = await getUserSession();
+//   const userId = session?.userID;
+
+//   if (!eventFormData) {
+//     return { status: 400, body: "Bad request" };
+//   }
+
+//   if (!session?.user && eventFormData.status === EventStatus.PERMANENT) {
+//     return {
+//       status: 401,
+//       body: "Unauthorized",
+//     };
+//   }
+//   const filteredRVSPMoods = eventFormData.rsvpMoods.map((mood) => {
+//     return {
+//       value: mood.value,
+//       emoji:
+//         mood.emoji === null
+//           ? rsvpMoods.find((m) => m.value === mood.value)?.emoji || null
+//           : mood.emoji,
+//     };
+//   });
+//   const filteredChips = eventFormData.chips.filter(
+//     (chip) => chip.value && chip.inputValue,
+//   );
+
+//   let existingEvent = null;
+//   if (eventFormData.id !== "0") {
+//     existingEvent = await prisma.event.findUnique({
+//       where: { id: eventFormData.id },
+//     });
+//   }
+
+//   if (existingEvent) {
+//     // Update existing event
+//     await prisma.event.update({
+//       where: { id: existingEvent.id },
+//       data: {
+//         title: eventFormData.title,
+//         startDateTime: eventFormData.startDateTime,
+//         endDateTime: eventFormData.endDateTime,
+//         description: eventFormData.description,
+//         imageUrl: eventFormData.imageUrl,
+//         style: eventFormData.style,
+//         guestHonor: eventFormData.guestHonor,
+//         host: eventFormData.host,
+//         userGuestLimit: eventFormData.userGuestLimit,
+//         maxGuestLimit: eventFormData.maxGuestLimit,
+//         address: eventFormData.address,
+//         isOutdoor: eventFormData.isOutdoor,
+//         costPerPerson: eventFormData.costPerPerson,
+//         isPublic: eventFormData.isPublic,
+//         requireGuestApproval: eventFormData.requireGuestApproval,
+//         rsvpMoods: { deleteMany: {}, createMany: { data: filteredRVSPMoods } },
+//         chips: { deleteMany: {}, createMany: { data: filteredChips } },
+//         activity: eventFormData.activity,
+//         status: eventFormData.status, // Keep status updated
+//       },
+//     });
+//   } else {
+//     // Create new event
+//     const newEvent = await prisma.event.create({
+//       data: {
+//         title: eventFormData.title,
+//         startDateTime: eventFormData.startDateTime,
+//         endDateTime: eventFormData.endDateTime,
+//         description: eventFormData.description,
+//         imageUrl: eventFormData.imageUrl,
+//         style: eventFormData.style,
+//         guestHonor: eventFormData.guestHonor,
+//         host: eventFormData.host,
+//         userGuestLimit: eventFormData.userGuestLimit,
+//         maxGuestLimit: eventFormData.maxGuestLimit,
+//         address: eventFormData.address,
+//         isOutdoor: eventFormData.isOutdoor,
+//         costPerPerson: eventFormData.costPerPerson,
+//         isPublic: eventFormData.isPublic,
+//         requireGuestApproval: eventFormData.requireGuestApproval,
+//         status: "TEMPORARY", // Default status
+//         rsvpMoods: { createMany: { data: filteredRVSPMoods } },
+//         chips: { createMany: { data: filteredChips } },
+//         activity: eventFormData.activity,
+//         authorId: userId || undefined, // If userId exists, set it; otherwise, it's undefined
+//       },
+//     });
+
+//     return { eventId: newEvent.id }; // Return new ID
+//   }
+// }
+
+"use server";
 import prisma from "@/../prisma/client";
 import getUserSession from "@/actions/getUserSession";
 import { rsvpMoods } from "@/createEvent/config/rvspMood";
 import type { EventFormData } from "@/createEvent/templates/EventForm";
+import { EventStatus, Prisma } from "@prisma/client";
 
-export async function createEvent(eventFormData: EventFormData) {
+export async function createOrUpdateEvent(eventFormData: EventFormData) {
   const session = await getUserSession();
+  const userId = session?.userID;
 
   if (!eventFormData) {
-    return {
-      status: 400,
-      body: "Bad request",
-    };
+    return { status: 400, body: "Bad request" };
   }
 
-  if (!session?.user) {
+  if (!session?.user && eventFormData.status === EventStatus.PERMANENT) {
     return {
       status: 401,
       body: "Unauthorized",
     };
   }
-
   const filteredRVSPMoods = eventFormData.rsvpMoods.map((mood) => {
     return {
       value: mood.value,
@@ -31,40 +197,71 @@ export async function createEvent(eventFormData: EventFormData) {
           : mood.emoji,
     };
   });
+  const filteredChips = eventFormData.chips.filter(
+    (chip) => chip.value && chip.inputValue,
+  );
 
-  const filteredChips = eventFormData.chips.filter((chip) => {
-    return chip.value && chip.inputValue;
-  });
+  let existingEvent = null;
+  if (eventFormData.id !== "0") {
+    existingEvent = await prisma.event.findUnique({
+      where: { id: eventFormData.id },
+    });
+  }
 
-  await prisma.event.create({
-    data: {
-      title: eventFormData.title,
-      startDateTime: eventFormData.startDateTime,
-      endDateTime: eventFormData.endDateTime,
-      description: eventFormData.description,
-      imageUrl: eventFormData.imageUrl,
-      style: eventFormData.style,
-      guestHonor: eventFormData.guestHonor,
-      host: eventFormData.host,
-      userGuestLimit: eventFormData.userGuestLimit,
-      maxGuestLimit: eventFormData.maxGuestLimit,
-      address: eventFormData.address,
-      isOutdoor: eventFormData.isOutdoor,
-      costPerPerson: eventFormData.costPerPerson,
-      isPublic: eventFormData.isPublic,
-      requireGuestApproval: eventFormData.requireGuestApproval,
-      authorId: session.userID,
-      rsvpMoods: {
-        createMany: {
-          data: filteredRVSPMoods,
-        },
+  if (existingEvent) {
+    // Update existing event
+    await prisma.event.update({
+      where: { id: existingEvent.id },
+      data: {
+        title: eventFormData.title,
+        startDateTime: eventFormData.startDateTime,
+        endDateTime: eventFormData.endDateTime,
+        description: eventFormData.description,
+        imageUrl: eventFormData.imageUrl,
+        style: eventFormData.style,
+        guestHonor: eventFormData.guestHonor,
+        host: eventFormData.host,
+        userGuestLimit: eventFormData.userGuestLimit,
+        maxGuestLimit: eventFormData.maxGuestLimit,
+        address: eventFormData.address,
+        isOutdoor: eventFormData.isOutdoor,
+        costPerPerson: eventFormData.costPerPerson,
+        isPublic: eventFormData.isPublic,
+        requireGuestApproval: eventFormData.requireGuestApproval,
+        rsvpMoods: { deleteMany: {}, createMany: { data: filteredRVSPMoods } },
+        chips: { deleteMany: {}, createMany: { data: filteredChips } },
+        activity: eventFormData.activity,
+        status: eventFormData.status, // Keep status updated
       },
-      chips: {
-        createMany: {
-          data: filteredChips,
-        },
+    });
+  } else {
+    // Create new event
+    // Prepare data for new event
+    const newEvent = await prisma.event.create({
+      data: {
+        title: eventFormData.title,
+        startDateTime: eventFormData.startDateTime,
+        endDateTime: eventFormData.endDateTime,
+        description: eventFormData.description,
+        imageUrl: eventFormData.imageUrl,
+        style: eventFormData.style,
+        guestHonor: eventFormData.guestHonor,
+        host: eventFormData.host,
+        userGuestLimit: eventFormData.userGuestLimit,
+        maxGuestLimit: eventFormData.maxGuestLimit,
+        address: eventFormData.address,
+        isOutdoor: eventFormData.isOutdoor,
+        costPerPerson: eventFormData.costPerPerson,
+        isPublic: eventFormData.isPublic,
+        requireGuestApproval: eventFormData.requireGuestApproval,
+        status: "TEMPORARY",
+        authorId: userId || "gest",
+        rsvpMoods: { createMany: { data: filteredRVSPMoods } },
+        chips: { createMany: { data: filteredChips } },
+        activity: eventFormData.activity,
       },
-      activity: eventFormData.activity,
-    },
-  });
+    });
+
+    return { eventId: newEvent.id };
+  }
 }
