@@ -172,7 +172,7 @@ import prisma from "@/../prisma/client";
 import getUserSession from "@/actions/getUserSession";
 import { rsvpMoods } from "@/createEvent/config/rvspMood";
 import type { EventFormData } from "@/createEvent/templates/EventForm";
-import { EventStatus, Prisma } from "@prisma/client";
+import { EventStatus } from "@prisma/client";
 
 export async function createOrUpdateEvent(eventFormData: EventFormData) {
   const session = await getUserSession();
