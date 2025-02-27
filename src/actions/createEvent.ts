@@ -1,5 +1,3 @@
-"use server";
-
 // import prisma from "@/../prisma/client";
 // import getUserSession from "@/actions/getUserSession";
 // import { rsvpMoods } from "@/createEvent/config/rvspMood";
@@ -166,7 +164,7 @@
 //     return { eventId: newEvent.id }; // Return new ID
 //   }
 // }
-
+"use server";
 import prisma from "@/../prisma/client";
 import getUserSession from "@/actions/getUserSession";
 import { rsvpMoods } from "@/createEvent/config/rvspMood";
@@ -264,7 +262,7 @@ export async function createOrUpdateEvent(eventFormData: EventFormData) {
           isPublic: eventFormData.isPublic,
           requireGuestApproval: eventFormData.requireGuestApproval,
           status: "TEMPORARY",
-          authorId: userId || "gest",
+          authorId: userId ?? undefined,
           rsvpMoods: { createMany: { data: filteredRVSPMoods } },
           chips: { createMany: { data: filteredChips } },
           activity: eventFormData.activity,
