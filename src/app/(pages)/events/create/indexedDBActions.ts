@@ -30,8 +30,7 @@ export const saveEventToIndexedDB = async (
   store.clear();
 
   return await new Promise((resolve, reject) => {
-    // const eventToStore = { ...eventData, id: Date.now() };
-    const eventToStore = { ...eventData };
+    const eventToStore = { ...eventData, id: "0" };
     store.put(eventToStore); // Insert the event
 
     transaction.oncomplete = () => resolve("Event saved");

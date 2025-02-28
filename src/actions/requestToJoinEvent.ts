@@ -11,6 +11,7 @@ export default async function requestToJoinEvent(eventID: string) {
   const event = await prisma.event.findUnique({
     where: {
       id: eventID,
+      status: "PERMANENT",
     },
   });
 

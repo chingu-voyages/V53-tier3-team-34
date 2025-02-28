@@ -165,10 +165,10 @@ const PreviewEvent = () => {
   //   }));
   // };
 
-  const handleClick = async (target: "previewing" | "copy") => {
+  const handleClick = (target: "previewing" | "copy") => {
     if (target === "copy") {
       console.log(eventData.id);
-      const generatedLink = `https://yourdomain.com/event/${eventData.id}`;
+      const generatedLink = `http://${window.location.hostname}/events/join/${eventData.id}`;
 
       setShareLink(generatedLink);
       setIsClicked((prevState) => ({
@@ -200,10 +200,10 @@ const PreviewEvent = () => {
   }
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col min-h-screen">
       <Header />
       <main
-        className={`text-white h-max lg:h-full flex flex-col items-center justify-between bg-cover ${theme.pageBgImage}`}
+        className={`flex-1 text-white flex flex-col items-center justify-between bg-cover ${theme.pageBgImage}`}
       >
         {isClicked.showShareModal && (
           <ShareModal

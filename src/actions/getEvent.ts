@@ -5,6 +5,7 @@ export default async function getEventDetail(eventID: string) {
   return await prisma.event.findUnique({
     where: {
       id: eventID,
+      status: "PERMANENT",
     },
     include: {
       chips: true,

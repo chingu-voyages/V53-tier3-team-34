@@ -9,6 +9,7 @@ export default async function getTrendingEvents() {
           gt: new Date(),
         },
         isPublic: true,
+        status: "PERMANENT",
       },
       orderBy: {
         maxGuestLimit: "desc",
