@@ -11,6 +11,7 @@ const RVSPEvent = async (eventID: string, rsvpMoodId: number) => {
   const event = await prisma.event.findUnique({
     where: {
       id: eventID,
+      status: "PERMANENT",
     },
   });
 
