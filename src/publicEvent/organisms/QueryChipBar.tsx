@@ -10,70 +10,98 @@ import {
 } from "@/components/ui/popover";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
-import { addDays, format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import { Inter } from "next/font/google";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-// Date picker component imports
-import * as React from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { DateRange } from "react-day-picker";
 import { useDebounce } from "use-debounce";
 
+const inter = Inter({ subsets: ["latin"], weight: ["400", "500"] });
+
+interface FilterState {
+  chipText: string;
+  price: number[];
+  date: DateRange;
+}
 export default function QueryChipBar() {
+  // States
   const router = useRouter();
   const queryParams = useSearchParams();
-
-  // States
-  const [chipText, setChipText] = useState("");
-  const [priceClicked, setPriceClicked] = useState(false);
-  const [price, setPrice] = useState([0, 1000]);
-  const [date, setDate] = useState<DateRange | undefined>({
-    from: new Date(),
-    to: addDays(new Date(), 1),
+  const [filterState, setFilterState] = useState<FilterState>({
+    chipText: "",
+    price: [0, 1000],
+    date: {
+      from: new Date(),
+      to: undefined,
+    },
   });
+
+  const [priceClicked, setPriceClicked] = useState(false);
 
   const location = queryParams.get("location") || "";
   const title = queryParams.get("title") || "";
-  const [debouncedPrice] = useDebounce(price, 500);
 
   // Memoized Handlers
   const handleClick = useCallback((text: string) => {
-    setChipText(text);
+    setFilterState((prevState) => ({ ...prevState, chipText: text }));
   }, []);
 
   const handlePriceClick = useCallback(() => {
-    setPriceClicked((prev) => !prev);
-  }, []);
+    setPriceClicked(!priceClicked);
+  }, [priceClicked]);
 
   const handlePriceChange = useCallback((newValue: number[]) => {
-    if (newValue[0] < newValue[1]) setPrice(newValue);
+    if (newValue[0] < newValue[1]) {
+      setFilterState((prevState) => ({ ...prevState, price: newValue }));
+    }
   }, []);
 
-  // Update URL Parameters on State Changes
+  const handleDateChange = useCallback((range: DateRange) => {
+    setFilterState((prevState) => ({
+      ...prevState,
+      date: range,
+    }));
+  }, []);
+
+  const memoizedState = useMemo(
+    () => ({
+      title,
+      location,
+      filterState,
+    }),
+    [title, location, filterState],
+  );
+
+  const [debouncedState] = useDebounce(memoizedState, 500);
+
   useEffect(() => {
     const params = new URLSearchParams();
-
+    const { title, location, filterState } = debouncedState;
     if (title) params.set("title", title);
     if (location) params.set("location", location);
-    if (date?.from) {
-      params.set("from", format(date.from, "yyyy-MM-dd"));
+
+    if (filterState.date?.from) {
+      params.set("from", format(filterState.date.from, "yyyy-MM-dd"));
       params.set(
         "to",
-        date.to
-          ? format(date.to, "yyyy-MM-dd")
-          : format(date.from, "yyyy-MM-dd"),
+        filterState.date.to
+          ? format(filterState.date.to, "yyyy-MM-dd")
+          : format(filterState.date.from, "yyyy-MM-dd"),
       );
     }
-    if (price[0] !== 0 || price[1] !== 1000) {
-      params.set("minPrice", price[0].toString());
-      params.set("maxPrice", price[1].toString());
+    if (filterState.price[0] !== 0 || filterState.price[1] !== 1000) {
+      params.set("minPrice", filterState.price[0].toString());
+      params.set("maxPrice", filterState.price[1].toString());
     }
-    if (chipText) params.set("chipText", chipText);
+    if (filterState.chipText) params.set("chipText", filterState.chipText);
 
+    // Update URL when debounced parameters change
     router.push(`/events/public?${params.toString()}`);
-  }, [title, location, date, price, chipText, router]);
+  }, [debouncedState, router]);
 
+  const { price, date } = filterState;
   return (
     <div>
       <div className="flex gap-5 mb-5">
@@ -106,7 +134,7 @@ export default function QueryChipBar() {
                   width={24}
                   height={24}
                 />
-                {date?.from ? (
+                {date.from ? (
                   date.to ? (
                     <>
                       {format(date.from, "LLL dd, y")} -{" "}
@@ -122,33 +150,21 @@ export default function QueryChipBar() {
             </PopoverTrigger>
             <PopoverContent className="w-auto border-none p-0" align="start">
               <Calendar
-                initialFocus
                 mode="range"
                 defaultMonth={date?.from}
                 selected={date}
-                onSelect={setDate}
+                onSelect={handleDateChange}
                 numberOfMonths={1}
-                className="bg-black p-4 text-white w-auto lg:min-w-[350px]"
-                classNames={{
-                  root: "w-full",
-                  months: "w-full flex justify-center",
-                  month: "w-full",
-                  table: "w-full border-collapse",
-                  head_row: "w-full flex justify-between text-gray-400",
-                  row: "w-full flex justify-between",
-                  day: "w-10 h-8 flex items-center justify-center rounded-md transition-colors duration-300 ease-in-out hover:bg-gray-700",
-                  day_selected:
-                    "bg-white text-black rounded-md h-8 w-10 p-2 flex items-center justify-center",
-                  day_range_start:
-                    "bg-white text-black rounded-md h-8 w-10 p-2 flex items-center justify-center",
-                  day_range_end:
-                    "bg-white text-black rounded-md h-8 w-10 p-2 flex items-center justify-center",
-                  day_range_middle:
-                    "bg-white bg-opacity-30 text-black rounded-md h-8 w-10 p-2 flex items-center justify-center",
-                  caption: "text-white font-semibold w-full text-center",
-                  head: "text-gray-400 w-full",
-                  nav: "text-white flex justify-between w-full mb-2",
-                }}
+                captionLabelClassName="text-sm font-medium"
+                rangeStartClassName="!bg-[#084be7] [&>button]:!bg-[#084be7] [&>button]:rounded-r-none text-white"
+                rangeMiddleClassName="!rounded-none !bg-blue-200 !text-black"
+                rangeEndClassName="!bg-[#084be7] [&>button]:!bg-[#084be7] [&>button]:rounded-l-none text-white"
+                todayClassName="[&>button]:bg-red-500 text-white"
+                monthCaptionClassName={`text-center text-black text-base font-normal leading-normal font-normal ${inter.className}`}
+                weekdayClassName={`w-12 h-4 text-center text-[#7a7878] text-xs font-medium ${inter.className}`}
+                dayClassName={`w-12 h-12 text-center text-[#d1d1d1] text-base font-medium ${inter.className} leading-normal`}
+                className="!w-max"
+                required
               />
             </PopoverContent>
           </Popover>
