@@ -33,11 +33,11 @@ const TopMenu: React.FC<TopMenuProps> = memo(
     return (
       <div className="relative flex flex-col w-min font-['Mona Sans'] font-medium">
         <div
-          className={`backdrop-blur-2xl max-w-screen md:w-max justify-start items-center flex overflow-hidden ${theme.inputBgColor} ${theme.textColor} text-base `}
+          className={`backdrop-blur-2xl max-w-screen sm:w-max justify-start items-center flex overflow-hidden ${theme.inputBgColor} ${theme.textColor} text-base `}
         >
           <button
             type="button"
-            className={`flex items-center gap-[18px] px-4 py-6 leading-tight self-stretch ${
+            className={`flex flex-col sm:flex-row items-center gap-1 sm:gap-[18px] px-4 py-3 sm:py-6 sm:px-4leading-tight sm:self-stretch ${
               isClicked.style && "bg-black/20"
             }`}
             onClick={() => handleClick("style")}
@@ -50,7 +50,7 @@ const TopMenu: React.FC<TopMenuProps> = memo(
           <span className={`w-px h-14 ${theme.dividerColor}`} />
           <button
             type="button"
-            className={`flex items-center gap-[18px] px-4 py-6 leading-tight self-stretch ${
+            className={`flex flex-col sm:flex-row self-center items-center gap-1 sm:gap-[18px] px-4 py-3 sm:py-6 leading-tight sm:self-stretch ${
               isSettingsOpen && "bg-black/20"
             }`}
             onClick={onSettingsClick}
@@ -61,6 +61,7 @@ const TopMenu: React.FC<TopMenuProps> = memo(
               viewBox="0 0 52 52"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              className="h-10 w-10 sm:h-[52px] sm:w-[52px]"
             >
               <title>Settings</title>
               <path
@@ -76,7 +77,7 @@ const TopMenu: React.FC<TopMenuProps> = memo(
           <Link href="/events/preview">
             <button
               type="button"
-              className={`flex items-center gap-[18px] px-4 py-6 leading-tight self-stretch ${
+              className={`flex flex-col sm:flex-row self-center items-center gap-1 sm:gap-[18px] px-4 py-3 sm:py-6 leading-tight sm:self-stretch ${
                 isClicked.preview && "bg-black/20"
               }`}
               onClick={() => handleClick("preview")}
@@ -87,6 +88,7 @@ const TopMenu: React.FC<TopMenuProps> = memo(
                 viewBox="0 0 52 52"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
+                className="h-10 w-10 sm:h-[52px] sm:w-[52px]"
               >
                 <title>Preview</title>
                 <mask

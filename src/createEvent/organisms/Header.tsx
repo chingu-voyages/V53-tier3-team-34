@@ -19,9 +19,10 @@ const Header = () => {
           alt="Partiyo Logo"
           width={56}
           height={56}
+          className="w-[40px] h-[40px] md:w-[56px] md:h-[56px]"
         />
         <h1
-          className={`text-white pl-2 text-4xl font-normal ${peralta.className} leading-tight`}
+          className={`text-white pl-2 text-2xl md:text-4xl font-normal ${peralta.className} leading-tight`}
         >
           Partiyo
         </h1>

@@ -217,7 +217,7 @@ const PreviewEvent = () => {
           />
         )}
 
-        <div className="flex flex-col items-start text-white px-20">
+        <div className="flex flex-col items-start text-white justify-center">
           <TopMenu isClicked={isClicked} handleClick={handleClick} />
           <EventDetail eventData={eventData} />
         </div>

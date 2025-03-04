@@ -12,7 +12,7 @@ interface ImageUploadProps {
 const ImageUpload: React.FC<ImageUploadProps> = memo(
   ({ showImagePicker, imageURL }) => {
     return (
-      <div className="relative inline-block">
+      <div className="relative inline-block w-full max-w-screen lg:max-w-[486px]">
         <EventImage image={imageURL} />
         <Button
           type="button"

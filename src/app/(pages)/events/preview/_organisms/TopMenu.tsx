@@ -12,12 +12,12 @@ const TopMenu: React.FC<TopMenuProps> = ({ isClicked, handleClick }) => {
   const { theme } = useCreateEventTheme();
   return (
     <div
-      className={` backdrop-blur-2xl max-w-screen md:w-max justify-start items-center flex overflow-hidden  ${theme.inputBgColor} ${theme.textColor} text-base `}
+      className={`backdrop-blur-2xl max-w-screen sm:w-max justify-start items-center flex overflow-hidden ${theme.inputBgColor} ${theme.textColor} text-base `}
     >
       {/* “Previewing” Button */}
       <button
         type="button"
-        className={`flex items-center gap-[18px] px-4 py-6 leading-tight self-stretch ${
+        className={`flex flex-col sm:flex-row items-center gap-1 sm:gap-[18px] px-4 py-3 sm:py-6 sm:px-4leading-tight sm:self-stretch ${
           isClicked.previewing && "bg-black/20"
         }`}
       >
@@ -27,6 +27,7 @@ const TopMenu: React.FC<TopMenuProps> = ({ isClicked, handleClick }) => {
           height="52"
           viewBox="0 0 53 52"
           fill="none"
+          className="h-10 w-10 sm:h-[52px] sm:w-[52px]"
         >
           <title>Previewing</title>
           <mask
@@ -65,7 +66,7 @@ const TopMenu: React.FC<TopMenuProps> = ({ isClicked, handleClick }) => {
       {/* “Back” Button */}
       <button
         type="button"
-        className="flex items-center gap-[18px] px-4 py-6 leading-tight self-stretch"
+        className="flex flex-col sm:flex-row self-center items-center gap-1 sm:gap-[18px] px-4 py-3 sm:py-6 leading-tight sm:self-stretch"
         onClick={() => history.back()}
       >
         {/* <ArrowLeftIcon className="h-4 w-4" /> */}
@@ -75,6 +76,7 @@ const TopMenu: React.FC<TopMenuProps> = ({ isClicked, handleClick }) => {
           height="52"
           viewBox="0 0 53 52"
           fill="none"
+          className="h-10 w-10 sm:h-[52px] sm:w-[52px]"
         >
           <rect
             width="4.33333"
@@ -113,7 +115,7 @@ const TopMenu: React.FC<TopMenuProps> = ({ isClicked, handleClick }) => {
 
       <button
         type="button"
-        className={`flex items-center gap-[18px] px-4 py-6 leading-tight self-stretch ${
+        className={`flex flex-col sm:flex-row self-center items-center gap-1 sm:gap-[18px] px-4 py-3 sm:py-6 leading-tight sm:self-stretch ${
           isClicked.copy && "bg-black/20"
         }`}
         onClick={() => handleClick("copy")}
@@ -125,6 +127,7 @@ const TopMenu: React.FC<TopMenuProps> = ({ isClicked, handleClick }) => {
           height="52"
           viewBox="0 0 52 52"
           fill="none"
+          className="h-10 w-10 sm:h-[52px] sm:w-[52px]"
         >
           <title>Copy</title>
           <path

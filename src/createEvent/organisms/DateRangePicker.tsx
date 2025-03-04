@@ -123,10 +123,10 @@ export const DateRangePicker: FC<DateRangePickerProps> = ({
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className={`${theme.inputBgColor} hover:${theme.inputBgColor} rounded-none border-none justify-start backdrop-blur-2xl ${theme.focusInputBorderColor} h-28 px-2`}
+          className={`${theme.inputBgColor} hover:${theme.inputBgColor} rounded-none border-none justify-start backdrop-blur-2xl ${theme.focusInputBorderColor} h-max px-2`}
         >
-          <div className="text-left p-0 mt-0">
-            <div className="text-white text-4xl font-medium font-['Mona Sans'] leading-10 align-left">
+          <div className="text-left p-0 mt-0 text-wrap">
+            <div className="text-white text-2xl md:text-4xl font-medium font-['Mona Sans'] leading-10 align-left">
               <div>
                 {formatDate(range.from, locale)}
                 {range.to && " - "}

@@ -319,16 +319,16 @@ const EventForm = () => {
 
       <form
         onSubmit={handleSubmit}
-        className={`p-2 pt-0 md:pb-9 md:px-16 flex flex-col items-center gap-3 ${theme.pageBgImage} bg-cover bg-center`}
+        className={`p-2 pt-0 md:pb-9 md:px-16 flex flex-col items-center gap-3 ${theme.pageBgImage} bg-cover bg-center min-h-screen min-w-screen`}
       >
-        <div className="w-max flex flex-col justify-between md:flex-row md:justify-center space-y-3 md:space-y-0 md:space-x-11">
-          <div className="flex flex-col w-1/2">
+        <div className="w-dvw flex flex-col justify-between lg:flex-row md:justify-center px-2 md:px-4 lg:px-0 gap-3 lg:gap-4 xl:gap-11">
+          <div className="flex flex-col lg:max-w-1/2">
             {/* Pass handleToggleSidebar to TopMenu */}
             <TopMenu
               onSettingsClick={handleToggleSidebar}
               isSettingsOpen={isSidebarOpen}
             />
-            <div className="flex flex-col space-y-3">
+            <div className="flex flex-col gap-3">
               {/* Moved onchange and imageUrl props to image picker component */}
               <ImageUpload
                 showImagePicker={handleShowImagePicker}
@@ -342,7 +342,7 @@ const EventForm = () => {
                 onChange={handleChange}
                 isRequired={true}
                 parentClassName="h-24"
-                className="text-6xl placeholder:text-6xl leading-10 h-24 font-semibold"
+                className="text-4xl md:text-6xl placeholder:text-4xl md:placeholder:text-6xl leading-10 h-max font-semibold"
               />
 
               <DateRangePicker
@@ -361,7 +361,7 @@ const EventForm = () => {
                 preText="Guest of Honor"
                 placeholder="(Maria Tash)"
                 parentClassName="h-10"
-                className="text-xl placeholder:text-xl font-medium leading-loose"
+                className="text-lg md:text-xl placeholder:text-lg md:placeholder:text-xl font-medium leading-loose"
               />
 
               <Input
@@ -372,7 +372,7 @@ const EventForm = () => {
                 onChange={handleChange}
                 name="host"
                 parentClassName="h-10"
-                className="text-xl placeholder:text-xl font-medium leading-loose"
+                className="text-lg md:text-xl placeholder:text-lg md:placeholder:text-xl font-medium leading-loose"
               />
 
               <Input
@@ -384,7 +384,7 @@ const EventForm = () => {
                 name="maxGuestLimit"
                 type="number"
                 parentClassName="h-10"
-                className="text-xl placeholder:text-xl font-medium leading-loose"
+                className="text-lg md:text-xl placeholder:text-lg md:placeholder:text-xl font-medium leading-loose"
               />
 
               <Input
@@ -396,7 +396,7 @@ const EventForm = () => {
                 name="userGuestLimit"
                 type="number"
                 parentClassName="h-10"
-                className="text-xl placeholder:text-xl font-medium leading-loose"
+                className="text-lg md:text-xl placeholder:text-lg md:placeholder:text-xl font-medium leading-loose"
               />
 
               <Input
@@ -406,7 +406,7 @@ const EventForm = () => {
                 value={formData.address || ""}
                 onChange={handleChange}
                 parentClassName="h-10"
-                className="text-xl placeholder:text-xl font-medium leading-loose"
+                className="text-lg md:text-xl placeholder:text-lg md:placeholder:text-xl font-medium leading-loose"
               />
 
               <ActivitySelector
@@ -422,7 +422,7 @@ const EventForm = () => {
                 name="costPerPerson"
                 type="number"
                 parentClassName="h-10"
-                className="text-xl placeholder:text-xl font-medium leading-loose"
+                className="text-lg md:text-xl placeholder:text-lg md:placeholder:text-xl font-medium leading-loose"
               />
 
               <ToggleInput
@@ -435,7 +435,7 @@ const EventForm = () => {
             </div>
           </div>
 
-          <div className="flex flex-col w-1/2 space-y-3 pt-0 md:pt-28">
+          <div className="flex flex-col lg:max-w-1/2 space-y-3 pt-0 lg:pt-28">
             <ChipsList
               selectedChips={formData.chips}
               onChange={handleChipsChange}

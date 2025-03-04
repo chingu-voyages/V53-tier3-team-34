@@ -1,10 +1,10 @@
 "use client";
-
 import {
   type Theme,
   type ThemeName,
   themeStyles,
 } from "@/providers/themeConfig"; // Import the theme styles and types
+import Image from "next/image";
 import type React from "react";
 import {
   type ReactNode,
@@ -34,6 +34,7 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [themeName, setThemeName] = useState<ThemeName>("light");
   const currentTheme = themeStyles[themeName];
 
@@ -49,7 +50,19 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     } else {
       changeTheme("light");
     }
+    setIsLoading(false);
   }, [changeTheme]);
+
+  if (isLoading) {
+    return (
+      <Image
+        src="/assets/images/spinner.svg"
+        width={40}
+        height={40}
+        alt="Loading"
+      />
+    );
+  }
 
   return (
     <ThemeContext.Provider

@@ -60,13 +60,13 @@ const Input: React.FC<InputProps> = memo(
         className={`
           flex items-center gap-3 backdrop-blur-2xl p-2 h-min font-medium leading-tight
           ${theme.inputBgColor}
+          ${theme.inputHoverBgColor}
+          ${parentClassName}
           ${
             ref.current &&
             ref.current === document.activeElement &&
             `border ${theme.focusInputBorderColor}`
           }
-          ${theme.inputHoverBgColor}
-          ${parentClassName}
         `}
         onClick={handleClick}
         onKeyDown={handleClick}
@@ -79,7 +79,7 @@ const Input: React.FC<InputProps> = memo(
         {/* Pre-text label */}
         {preText && (
           <span
-            className={`text-xl font-medium leading-tight whitespace-nowrap ${theme.textColor}`}
+            className={`text-lg md:text-xl font-medium leading-tight whitespace-nowrap ${theme.textColor}`}
           >
             {preText}
           </span>
@@ -99,7 +99,7 @@ const Input: React.FC<InputProps> = memo(
             min={type === "number" ? 0 : undefined} // Only set min if type is number
             max={type === "number" ? undefined : undefined} // No max for number type (remove or leave as undefined)
             className={`
-              bg-transparent border-none outline-none 
+              bg-transparent border-none outline-none text-wrap
               ${theme.textColor}
               ${theme.placeholderTextColor}
               ${preText && "-ml-1.5"}
@@ -110,7 +110,7 @@ const Input: React.FC<InputProps> = memo(
           />
         ) : (
           <span
-            className={`bg-transparent border-none outline-none flex items-center leading-tight
+            className={`bg-transparent border-none outline-none flex items-center leading-tight text-wrap
               ${theme.textColor} 
               ${className} 
               ${preText && "-ml-1.5"}
@@ -123,7 +123,7 @@ const Input: React.FC<InputProps> = memo(
         {/* Post-text label */}
         {postText && (
           <span
-            className={`text-xl text-left whitespace-nowrap ${theme.textColor}`}
+            className={`text-lg md:text-xl text-left whitespace-nowrap ${theme.textColor}`}
           >
             {postText}
           </span>

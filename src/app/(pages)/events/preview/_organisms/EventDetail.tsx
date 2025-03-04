@@ -82,13 +82,13 @@ const EventDetail: React.FC<EventDetailProps> = ({
       <Image
         src={imageUrl || "/assets/images/events/defaultEvent.png"}
         alt="Event Banner"
-        width={600}
-        height={600}
-        className="shadow-lg object-cover row-start-1 lg:col-start-1"
+        width={300}
+        height={320}
+        className="w-full max-w-screen lg:max-w-[486px] h-[320px] lg:h-[527px] shadow-lg row-start-1 lg:col-start-1"
       />
 
       <div
-        className={`justify-self-center flex gap-10 row-start-3 lg:row-start-2 lg:col-start-1
+        className={`justify-self-center flex gap-4 sm:gap-10 row-start-3 lg:row-start-2 lg:col-start-1
         ${requireGuestApproval ? "m-auto py-2.5" : "py-10"}`}
       >
         {requireGuestApproval ? (
