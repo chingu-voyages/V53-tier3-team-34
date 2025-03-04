@@ -12,11 +12,18 @@ import { chips } from "@/createEvent/config/chipConfig";
 import Header from "@/createEvent/organisms/Header";
 import type { ThemeName } from "@/providers/themeConfig";
 import { ThemeProvider, useCreateEventTheme } from "@/providers/themeProvider";
-import type { Chip, Event, RSVPMood } from "@prisma/client";
+import {
+  type Chip,
+  type ChipType,
+  type Event,
+  MoodType,
+  type RSVPMood,
+} from "@prisma/client";
 import { SessionProvider, useSession } from "next-auth/react";
 import Image from "next/image";
 import type React from "react";
 import { useEffect, useState } from "react";
+import { getEventFromIndexedDB } from "../../../create/indexedDBActions";
 
 export interface JoinEventData extends Event {
   rsvpMoods: RSVPMoodInfo[];
@@ -37,19 +44,32 @@ const JoinEvent: React.FC<JoinEventProps> = ({ eventID }) => {
     setIsLoading(true);
     const fetchEventDetails = async () => {
       try {
-        const eventDetail = await getEventDetail(eventID);
+        const eventDetail =
+          eventID === "0"
+            ? await getEventFromIndexedDB()
+            : await getEventDetail(eventID);
         if (!eventDetail) {
           throw new Error("Event does not exist");
         }
 
         setEventData({
+          image: null,
+          authorId: null,
+          createdAt: new Date(),
+          updatedAt: new Date(),
           ...eventDetail,
           rsvpMoods: eventDetail.rsvpMoods
-            .filter((mood: RSVPMood) =>
-              ["ATTENDING", "MAYBE", "REGRETFULLY"].includes(mood.value),
+            .filter(
+              (mood: RSVPMood | { value: MoodType; emoji: string | null }) =>
+                mood.value in MoodType,
             )
             .map(
-              (mood: RSVPMood): RSVPMoodInfo => ({
+              (
+                mood: RSVPMood | { value: MoodType; emoji: string | null },
+                index: number,
+              ): RSVPMoodInfo => ({
+                id: index,
+                eventId: "0",
                 ...mood,
                 name:
                   mood.value === "ATTENDING"
@@ -60,7 +80,11 @@ const JoinEvent: React.FC<JoinEventProps> = ({ eventID }) => {
               }),
             ),
           chips: eventDetail.chips.reduce(
-            (acc: ChipInfo[], eventChip: Chip) => {
+            (
+              acc: ChipInfo[],
+              eventChip: { value: ChipType; inputValue: string } | Chip,
+              index: number,
+            ) => {
               const chipConfig = chips.find(
                 (chip) => chip.value === eventChip.value,
               );
@@ -68,6 +92,8 @@ const JoinEvent: React.FC<JoinEventProps> = ({ eventID }) => {
               if (chipConfig) {
                 console.log(chipConfig.placeholderText);
                 acc.push({
+                  id: index,
+                  eventId: "0",
                   ...eventChip,
                   label: chipConfig.text,
                   icon: chipConfig.icon,
@@ -108,7 +134,11 @@ const JoinEvent: React.FC<JoinEventProps> = ({ eventID }) => {
       return;
     }
 
-    if (session.userID === eventData?.authorId || !eventData) {
+    if (
+      session.userID === eventData?.authorId ||
+      !eventData ||
+      eventData.id === "0"
+    ) {
       return;
     }
 
@@ -134,7 +164,11 @@ const JoinEvent: React.FC<JoinEventProps> = ({ eventID }) => {
       return;
     }
 
-    if (!eventData || session.userID === eventData?.authorId) {
+    if (
+      !eventData ||
+      session.userID === eventData?.authorId ||
+      eventData.id === "0"
+    ) {
       return;
     }
 
@@ -182,7 +216,7 @@ const JoinEvent: React.FC<JoinEventProps> = ({ eventID }) => {
         <div className="flex flex-col h-screen">
           <Header />
           <main
-            className={`text-white h-max lg:h-full flex flex-col items-center justify-between bg-cover ${theme.pageBgImage}`}
+            className={`flex-1 text-white flex flex-col items-center justify-between bg-cover ${theme.pageBgImage}`}
           >
             <div className="flex flex-col items-start text-white px-4 md:px-10 lg:px-20 py-20">
               <EventDetail

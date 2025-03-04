@@ -1,5 +1,5 @@
 "use client";
-import { createEvent } from "@/actions/createEvent";
+import { createOrUpdateEvent } from "@/actions/createOrUpdateEvent";
 import {
   clearIndexedDB,
   getEventFromIndexedDB,
@@ -7,7 +7,7 @@ import {
 } from "@/app/(pages)/events/create/indexedDBActions";
 import ImagePicker from "@/createEvent/organisms/ImagePicker";
 import { useCreateEventTheme } from "@/providers/themeProvider";
-import { ActivityType, ChipType, MoodType } from "@prisma/client";
+import { ActivityType, ChipType, EventStatus, MoodType } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react";
 import { z } from "zod";
@@ -18,6 +18,7 @@ import {
   getDateAdjustedForTimezone,
 } from "../organisms/DateRangePicker";
 import "../../app/globals.css";
+import getTemporaryEventDetail from "@/actions/getTemporaryEvent";
 import { EventImage, Input, TextArea, ToggleInput } from "../molecules";
 import {
   ActivitySelector,
@@ -32,6 +33,7 @@ import {
 import Header from "../organisms/Header";
 
 const eventFormSchema = z.object({
+  id: z.string().default("0"),
   title: z.string().min(1, "Title is required"),
   startDateTime: z.date(),
   endDateTime: z.date(),
@@ -57,6 +59,7 @@ const eventFormSchema = z.object({
     z.object({ value: z.nativeEnum(ChipType), inputValue: z.string() }),
   ),
   activity: z.nativeEnum(ActivityType).nullable(),
+  status: z.nativeEnum(EventStatus).default(EventStatus.TEMPORARY),
 });
 
 export type EventFormData = z.infer<typeof eventFormSchema>;
@@ -72,6 +75,7 @@ const EventForm = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const [formData, setFormData] = useState<EventFormData>({
+    id: "0", // Default ID is 0
     title: "",
     startDateTime: getDateAdjustedForTimezone(new Date()),
     endDateTime: getDateAdjustedForTimezone(
@@ -92,6 +96,7 @@ const EventForm = () => {
     rsvpMoods: defaultFormValuesRSVPMoods,
     chips: [],
     activity: null,
+    status: "TEMPORARY",
   });
 
   // State to manage image picker
@@ -175,24 +180,45 @@ const EventForm = () => {
     }
   }, []);
 
-  const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    clearIndexedDB();
+  // const handleSubmit = async (
+  //   e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>,
+  // ) => {
+  //   clearIndexedDB();
+  //   try {
+  //     e.preventDefault();
+  //     eventFormSchema.parse(formData); // Will throw an error if validation fails
+  //     if (!session) {
+  //       saveEventToIndexedDB(formData);
+  //       console.log(formData);
+  //       return;
+  //     }
+  //     console.log("Form is valid! Submitting...");
+  //     console.log("Form Data:", formData);
+  //     await createEvent(formData);
+  //     // Proceed with submission logic
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!session) {
+      alert("You must be signed in to finalize the event.");
+      return;
+    }
+
     try {
-      e.preventDefault();
-      eventFormSchema.parse(formData); // Will throw an error if validation fails
-      if (!session) {
-        saveEventToIndexedDB(formData);
-        console.log(formData);
-        return;
+      setFormData((prev) => ({ ...prev, status: "PERMANENT" }));
+      eventFormSchema.parse(formData);
+      const response = await createOrUpdateEvent(formData);
+      if (response?.id && formData.id === "0") {
+        setFormData((prev) => ({ ...prev, id: response.id }));
       }
-      console.log("Form is valid! Submitting...");
-      console.log("Form Data:", formData);
-      await createEvent(formData);
-      // Proceed with submission logic
-    } catch (e) {
-      console.log(e);
+      clearIndexedDB();
+    } catch (error) {
+      console.log("Error finalizing event:", error);
     }
   };
 
@@ -220,49 +246,67 @@ const EventForm = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const loadData = async () => {
-        if (typeof window !== "undefined") {
-          try {
-            const savedData = await getEventFromIndexedDB();
-            console.log("Saved Data:", savedData);
-            if (savedData !== null) {
-              savedData.startDateTime = getDateAdjustedForTimezone(new Date());
-              savedData.endDateTime = getDateAdjustedForTimezone(
-                new Date(new Date().getTime() + 15 * 60 * 1000),
-              );
-              setFormData(savedData);
+        try {
+          // If the user is signed in, fetch the event data from the database first
+          if (session?.user) {
+            const eventDetailFromDB = await getTemporaryEventDetail();
+            if (eventDetailFromDB) {
+              setFormData(eventDetailFromDB);
+              return;
             }
-          } catch (error) {
-            console.error("Failed to load event data from IndexedDB", error);
-          } finally {
-            setIsFormMounted(true);
           }
+
+          // If the user is not signed in or the event data is not available, try to load the event data from IndexedDB
+          const savedData = await getEventFromIndexedDB();
+          console.log("Saved Data:", savedData);
+          if (savedData !== null) {
+            savedData.startDateTime = getDateAdjustedForTimezone(new Date());
+            savedData.endDateTime = getDateAdjustedForTimezone(
+              new Date(new Date().getTime() + 15 * 60 * 1000),
+            );
+            setFormData(savedData);
+          }
+        } catch (error) {
+          console.error("Failed to load event data from IndexedDB", error);
+        } finally {
+          setIsFormMounted(true);
         }
       };
 
       loadData();
     }
-  }, []);
+  }, [session?.user]);
 
   useEffect(() => {
     if (typeof window !== "undefined" && isFormMounted) {
       const saveData = async () => {
-        if (typeof window !== "undefined") {
-          try {
-            // console.log("Chips data from eventPage", formData.chips);
-            // console.log("Activity data from eventPage", formData.activity);
-            await saveEventToIndexedDB(formData);
-          } catch (error) {
-            console.error("Failed to save event data to IndexedDB", error);
+        try {
+          eventFormSchema.parse(formData);
+          // If the user is signed in, save the event data to the database continuously. We may apply debouncing here too.
+          if (session?.user) {
+            const response = await createOrUpdateEvent(formData);
+            // If the response ID is different from the form ID, update the form ID
+            console.log("Event ID from response", response?.id);
+            console.log("Event ID from formData", formData.id);
+            if (response?.id !== formData.id) {
+              setFormData((prev) => ({ ...prev, id: response.id }));
+            }
+          } else {
+            await saveEventToIndexedDB({ ...formData, id: "0" });
           }
+          // console.log("Chips data from eventPage", formData.chips);
+          // console.log("Activity data from eventPage", formData.activity);
+        } catch (error) {
+          console.error("Failed to save event data to IndexedDB", error);
         }
       };
 
       saveData();
     }
-  }, [formData, isFormMounted]);
+  }, [formData, isFormMounted, session?.user]);
 
   return (
-    <div className="flex flex-col min-h-screen items-stretch">
+    <div className="flex flex-col items-stretch">
       {/* Placed onchange and image url from image upload in image picker  */}
 
       <ImagePicker
@@ -275,16 +319,16 @@ const EventForm = () => {
 
       <form
         onSubmit={handleSubmit}
-        className={`p-2 pt-0 md:pb-9 md:px-16 flex flex-col items-center gap-3 ${theme.pageBgImage} bg-cover bg-center `}
+        className={`p-2 pt-0 md:pb-9 md:px-16 flex flex-col items-center gap-3 ${theme.pageBgImage} bg-cover bg-center min-h-screen min-w-screen`}
       >
-        <div className="w-max flex flex-col justify-between md:flex-row md:justify-center space-y-3 md:space-y-0 md:space-x-11">
-          <div className="flex flex-col w-1/2">
+        <div className="w-dvw flex flex-col justify-between lg:flex-row md:justify-center px-2 md:px-4 lg:px-0 gap-3 lg:gap-4 xl:gap-11">
+          <div className="flex flex-col lg:max-w-1/2">
             {/* Pass handleToggleSidebar to TopMenu */}
             <TopMenu
               onSettingsClick={handleToggleSidebar}
               isSettingsOpen={isSidebarOpen}
             />
-            <div className="flex flex-col space-y-3 ">
+            <div className="flex flex-col gap-3">
               {/* Moved onchange and imageUrl props to image picker component */}
               <ImageUpload
                 showImagePicker={handleShowImagePicker}
@@ -298,7 +342,7 @@ const EventForm = () => {
                 onChange={handleChange}
                 isRequired={true}
                 parentClassName="h-24"
-                className="text-6xl placeholder:text-6xl leading-10 h-24 font-semibold"
+                className="text-4xl md:text-6xl placeholder:text-4xl md:placeholder:text-6xl leading-10 h-max font-semibold"
               />
 
               <DateRangePicker
@@ -317,7 +361,7 @@ const EventForm = () => {
                 preText="Guest of Honor"
                 placeholder="(Maria Tash)"
                 parentClassName="h-10"
-                className="text-xl placeholder:text-xl font-medium leading-loose"
+                className="text-lg md:text-xl placeholder:text-lg md:placeholder:text-xl font-medium leading-loose"
               />
 
               <Input
@@ -328,7 +372,7 @@ const EventForm = () => {
                 onChange={handleChange}
                 name="host"
                 parentClassName="h-10"
-                className="text-xl placeholder:text-xl font-medium leading-loose"
+                className="text-lg md:text-xl placeholder:text-lg md:placeholder:text-xl font-medium leading-loose"
               />
 
               <Input
@@ -340,7 +384,7 @@ const EventForm = () => {
                 name="maxGuestLimit"
                 type="number"
                 parentClassName="h-10"
-                className="text-xl placeholder:text-xl font-medium leading-loose"
+                className="text-lg md:text-xl placeholder:text-lg md:placeholder:text-xl font-medium leading-loose"
               />
 
               <Input
@@ -352,7 +396,7 @@ const EventForm = () => {
                 name="userGuestLimit"
                 type="number"
                 parentClassName="h-10"
-                className="text-xl placeholder:text-xl font-medium leading-loose"
+                className="text-lg md:text-xl placeholder:text-lg md:placeholder:text-xl font-medium leading-loose"
               />
 
               <Input
@@ -362,7 +406,7 @@ const EventForm = () => {
                 value={formData.address || ""}
                 onChange={handleChange}
                 parentClassName="h-10"
-                className="text-xl placeholder:text-xl font-medium leading-loose"
+                className="text-lg md:text-xl placeholder:text-lg md:placeholder:text-xl font-medium leading-loose"
               />
 
               <ActivitySelector
@@ -378,7 +422,7 @@ const EventForm = () => {
                 name="costPerPerson"
                 type="number"
                 parentClassName="h-10"
-                className="text-xl placeholder:text-xl font-medium leading-loose"
+                className="text-lg md:text-xl placeholder:text-lg md:placeholder:text-xl font-medium leading-loose"
               />
 
               <ToggleInput
@@ -391,7 +435,7 @@ const EventForm = () => {
             </div>
           </div>
 
-          <div className="flex flex-col w-1/2 space-y-3 pt-0 md:pt-28">
+          <div className="flex flex-col lg:max-w-1/2 space-y-3 pt-0 lg:pt-28">
             <ChipsList
               selectedChips={formData.chips}
               onChange={handleChipsChange}

@@ -77,18 +77,18 @@ const EventDetail: React.FC<EventDetailProps> = ({
   ];
 
   return (
-    <div className="gap-6 grid grid-flow-row-dense auto-rows-auto lg:grid-flow-col-dense w-full items-start justify-center gap-10 items-stretch justify-items-start ">
+    <div className="gap-6 h-full pb-3 grid grid-flow-row-dense auto-rows-auto lg:grid-flow-col-dense w-full items-start justify-center gap-10 items-stretch justify-items-start ">
       {/* 1) Image in a relative container */}
       <Image
         src={imageUrl || "/assets/images/events/defaultEvent.png"}
         alt="Event Banner"
-        width={600}
-        height={600}
-        className="shadow-lg object-cover row-start-1 lg:col-start-1"
+        width={300}
+        height={320}
+        className="w-full max-w-screen lg:max-w-[486px] h-[320px] lg:h-[527px] shadow-lg row-start-1 lg:col-start-1"
       />
 
       <div
-        className={`justify-self-center flex gap-10 row-start-3 lg:row-start-2 lg:col-start-1
+        className={`justify-self-center flex gap-4 sm:gap-10 row-start-3 lg:row-start-2 lg:col-start-1
         ${requireGuestApproval ? "m-auto py-2.5" : "py-10"}`}
       >
         {requireGuestApproval ? (

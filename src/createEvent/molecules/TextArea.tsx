@@ -26,10 +26,11 @@ const TextArea: React.FC<TextAreaProps> = memo(
         ${theme.textColor}
         ${theme.placeholderTextColor}
         ${theme.inputHoverBgColor}
-        placeholder:text-xl
+        text-lg md:text-xl placeholder:text-lg md:placeholder:text-xl
         focus:border focus:${theme.focusInputBorderColor}
         p-2
         outline-none
+        text-wrap
         `}
       />
     );

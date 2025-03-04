@@ -29,7 +29,7 @@ const ToggleInput: React.FC<ToggleInputProps> = memo(
           className={theme.toggleSwitchColor}
         />
         <span
-          className={`text-xl font-medium leading-normal ${theme.textColor}`}
+          className={`text-lg md:text-xl font-medium leading-normal ${theme.textColor}`}
         >
           {text}
         </span>

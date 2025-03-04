@@ -25,7 +25,7 @@ const ActivitySelector: React.FC<ActivitySelectorProps> = ({
   return (
     <Select onValueChange={onChange}>
       <SelectTrigger
-        className={`rounded-none !border-none text-xl font-medium font-['Mona Sans'] leading-normal backdrop-blur-2xl p-2 ${theme.inputBgColor}
+        className={`rounded-none !border-none text-lg md:text-xl font-medium font-['Mona Sans'] leading-normal backdrop-blur-2xl p-2 ${theme.inputBgColor}
           ${theme.textColor}
           ${theme.placeholderTextColor}
           ${theme.inputHoverBgColor}`}

@@ -72,7 +72,7 @@ const ChipsList: React.FC<ChipsListProps> = ({ selectedChips, onChange }) => {
               preText={chip.preText}
               maxCount={chip.maxCountCharacters}
               parentClassName={`h-10 ${inter.className}`}
-              className={`text-xl placeholder:text-xl font-medium font-['Inter'] leading-loose ${
+              className={`text-lg md:text-xl placeholder:text-lg md:placeholder:text-xl font-medium font-['Inter'] leading-loose ${
                 chip.placeholderClassName || ""
               }`}
               postButton={

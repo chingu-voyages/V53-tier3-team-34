@@ -35,11 +35,11 @@ const RVSPEmojiPicker: React.FC<RVSPEmojiPickerProps> = ({
   };
 
   return (
-    <div>
+    <div className="text-center">
       <Popover open={disablePicker === undefined ? undefined : !disablePicker}>
         <PopoverTrigger>
           <div
-            className={`flex items-center justify-center w-28 h-28 rounded-full border-none cursor-pointer border backdrop-blur-2xl ${theme.focusInputBorderColor}`}
+            className={`flex items-center justify-center w-24 h-24 lg:w-28 lg:h-28 rounded-full border-none cursor-pointer border backdrop-blur-2xl ${theme.focusInputBorderColor}`}
           >
             {!selectedRSVPEmoji && !mood.emoji ? (
               <svg
@@ -74,7 +74,9 @@ const RVSPEmojiPicker: React.FC<RVSPEmojiPickerProps> = ({
           />
         </PopoverContent>
       </Popover>
-      <p className={`${theme.textColor} text-xl font-medium text-center p-2`}>
+      <p
+        className={`${theme.textColor} text-lg md:text-xl font-medium text-center py-2`}
+      >
         {mood.name}
       </p>
     </div>

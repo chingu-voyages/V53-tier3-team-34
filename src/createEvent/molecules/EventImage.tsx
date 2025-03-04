@@ -12,18 +12,18 @@ const EventImage: React.FC<EventImageProps> = ({ image }) => {
     <Image
       src={image}
       alt="event image"
-      width={486}
-      height={527}
-      className="w-full h-[527px]"
+      width={320}
+      height={320}
+      className="w-full max-w-screen lg:max-w-[486px] h-[320px] lg:h-[527px]"
       loading="lazy"
     />
   ) : (
     <Image
       src="/assets/images/events/defaultEvent.png"
       alt="default event image"
-      className="w-full h-[527px]"
-      width={486}
-      height={527}
+      className="w-full max-w-screen lg:max-w-[486px] h-[320px] lg:h-[527px]"
+      width={320}
+      height={320}
     />
   );
 };

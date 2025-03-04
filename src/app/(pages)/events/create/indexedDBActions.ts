@@ -30,7 +30,7 @@ export const saveEventToIndexedDB = async (
   store.clear();
 
   return await new Promise((resolve, reject) => {
-    const eventToStore = { ...eventData, id: Date.now() }; // Add a unique ID to each event
+    const eventToStore = { ...eventData, id: "0" };
     store.put(eventToStore); // Insert the event
 
     transaction.oncomplete = () => resolve("Event saved");
@@ -50,7 +50,7 @@ export const getEventFromIndexedDB =
       request.onsuccess = () => {
         let result = request.result;
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        result = result.map(({ id, ...event }) => event as EventFormData);
+        result = result.map(({ ...event }) => event as EventFormData);
 
         resolve(result.length > 0 ? result[result.length - 1] : null); // Return the last event if exists
       };
